@@ -5,6 +5,14 @@
 <link rel="stylesheet" type="text/css" href="../../js/jquery.fancybox-1.3.4/fancybox/jquery.fancybox-1.3.4.css" media="screen" />
 
 
+<!-- datePicker required styles -->
+<link rel="stylesheet" type="text/css" media="screen" href="../../css/datePicker.css">
+
+    <!-- page specific styles -->
+<link rel="stylesheet" type="text/css" media="screen" href="../../css/demo.css">
+
+
+
 
 <style>
 	.notEditable {

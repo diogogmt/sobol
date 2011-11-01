@@ -11,6 +11,12 @@
         <?php require_once('../../components/external_files.php'); ?>
 		
 		<style>
+		.notes {
+			width:300px;
+			height:300px;
+			background-color: #e5e5e5;
+			border: 1px solid black;
+		}
 		</style>
 </head>
 
@@ -95,8 +101,32 @@
 					<div style="display: none;">
 						<div id="manageNotes" style="width:1000px;height:800px;overflow:auto;">
 							Manage Notes page
+							<table>
+								<tr>
+									<td> 
+									<a href="#" class="btn" id="addSingleNote">Add Note</a>
+									</td>
+								</tr>
+								</table>
+					
+								<div class="notes" id='note1' >
+			     				<textarea>Note1 content</textarea>
+			     				<br />
+			     				<br />
+									<a href="#" class="btn" id="editNote">Edit</a>
+									<a href="#" class="btn" id="note1Del">Delete</a>
+								</div>
+								
+								<div class="notes" id='note2' style='display: none;'>
+			     				<textarea>Note2 content</textarea>
+			     				<br />
+			     				<br />
+									<a href="#" class="btn" id="editNote">Edit</a>
+									<a href="#" class="btn" id="note2Del">Delete</a>
+								</div>
+						
 						</div>
-				</div>
+				  </div>
 
 
 					<a href="#newJob" class="btn" id="addJob">Add Job</a>

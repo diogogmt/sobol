@@ -73,6 +73,9 @@
 									<input type="radio" name="status" id="radioFinished" disabled="disabled" /> Canceled
 								</div>
 							</td>
+							<td>
+								<a href="#" class="date-pick btn">Schedule date</a>
+							</td>
 
 						</tr>
 

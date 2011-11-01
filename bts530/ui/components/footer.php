@@ -9,6 +9,60 @@
 	<script type="text/javascript" src="../../js/jquery.fancybox-1.3.4/fancybox/jquery.fancybox-1.3.4.pack.js"></script>
 
 
+<!-- required plugins -->
+<script type="text/javascript" src="../../js/date.js"></script>
+<!--[if IE]><script type="text/javascript" src="scripts/jquery.bgiframe.min.js"></script><![endif]-->
+    
+    <!-- jquery.datePicker.js -->
+<script type="text/javascript" src="../../js/jquery.datePicker.js"></script>
+
+
+
+<!-- page specific scripts -->
+		<script type="text/javascript" charset="utf-8">
+            $(function()
+            {
+				$('.date-pick')
+					.datePicker(
+						{
+							createButton:false,
+							displayClose:true,
+							closeOnSelect:false,
+							selectMultiple:true
+						}
+					)
+					.bind(
+						'click',
+						function()
+						{
+							$(this).dpDisplay();
+							this.blur();
+							return false;
+						}
+					)
+					.bind(
+						'dateSelected',
+						function(e, selectedDate, $td, state)
+						{
+							console.log('You ' + (state ? '' : 'un') // wrap
+								+ 'selected ' + selectedDate);
+							
+						}
+					)
+					.bind(
+						'dpClosed',
+						function(e, selectedDates)
+						{
+							console.log('You closed the date picker and the ' // wrap
+								+ 'currently selected dates are:');
+							console.log(selectedDates);
+						}
+					);
+            });
+		</script>
+
+
+
 <script type="text/javascript">
 jQuery(document).ready(function() {
 	
@@ -205,6 +259,20 @@ $(".deleteImage").click(function() {
 		
 	</script>
 
+
+<script type="text/javascript" charset="utf-8">
+	$("#addSingleNote").click(function() {
+		$("#note2").css('display', 'block');
+	})
+	
+	$("#note1Del").click(function() {
+		$("#note1").css('display', 'none');
+	})
+	
+	$("#note2Del").click(function() {
+		$("#note2").css('display', 'none');
+	})
+</script>
 
 
 
