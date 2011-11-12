@@ -1,11 +1,11 @@
 var vows = require('vows'),
     assert = require('assert');
 
-var theGoodThings = require('estimate');
+var estimate = require('estimate');
 
-var Strawberry   = theGoodThings.Strawberry,
-    Banana       = theGoodThings.Banana,
-    PeeledBanana = theGoodThings.PeeledBanana;
+var Strawberry   = estimate.Strawberry,
+    Banana       = estimate.Banana,
+    PeeledBanana = estimate.PeeledBanana;
 
 vows.describe('The Good Things').addBatch({
     'A strawberry': {

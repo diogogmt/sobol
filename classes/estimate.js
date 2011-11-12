@@ -1,4 +1,4 @@
-    //Creating an empty estimate
+    //Creating an empty estimate class
     function estimate() {
     var estimateID = 0; //some Mongo DB method for assigning ID should go here
     var estimateSubtotal = 0;
