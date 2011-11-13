@@ -1,6 +1,9 @@
 var vows = require('vows'),
     assert = require('assert');
 
+var job = require('../classes/job.js');
+var Job = job.Job;
+
 // Create a Test Suite
 vows.describe('Division by Zero').addBatch({
     'when dividing a number by zero': {
@@ -22,14 +25,14 @@ vows.describe('Division by Zero').addBatch({
             }
         }
     },
-    'A Customer': {
-        topic: new(Customer),
+    'A Job': {
+        topic: new(Job),
 
-        'is red': function (strawberry) {
-            assert.equal (strawberry.color, '#ff0000');
+        'is active': function (topic) {
+            assert.equal (topic.jobStatus, 'Active');
         },
-        'and tasty': function (strawberry) {
-            assert.isTrue (strawberry.isTasty());
+        'and is function active': function (topic) {
+            assert.isTrue (topic.isActive());
         }
     }
 }).run(); // Run it
