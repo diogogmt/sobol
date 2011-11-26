@@ -29,7 +29,7 @@ vows.describe('Division by Zero').addBatch({
         topic: new(Job),
 
         'is active': function (topic) {
-            assert.equal (topic.jobStatus, 'Active');
+            assert.equal (topic.getStatus(), 'Active');
         },
         'and is function active': function (topic) {
             assert.isTrue (topic.isActive());
