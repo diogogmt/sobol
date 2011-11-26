@@ -42,3 +42,9 @@ exports.Job = function () {
 exports.Job.prototype = {
     isActive: function () { return true }
 };
+
+
+
+
+// cannot add estimate if status is locked
+// check how many estimates are in the set
