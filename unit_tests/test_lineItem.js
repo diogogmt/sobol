@@ -1,7 +1,7 @@
 var vows = require('vows'),
   assert = require('assert');
 
-var model = require('../BTS530/model.js);
+var model = require('../classes/model.js);
 
 var estimateLineItem = model.estimateLineItem;
 var Media = model.Media; 
@@ -13,7 +13,7 @@ var lineItemOptions = {
   quantity: '1',
   cost: '$300',
   total: '$300',
-  media: Media(),
+  media:git@github.com:uali1/Team3repo.git Media(),
 }
 
 vows.describe('Line Item').addBatch({
