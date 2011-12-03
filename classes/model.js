@@ -1,5 +1,5 @@
 Job = function (options) {
-	job = job || {};
+    job = job || {};
     var id = job.id || 0;
     var name = job.name || "";
     var description = job.description || "";
@@ -9,21 +9,21 @@ Job = function (options) {
     var estimateSet = job.estimateSet || new Array();
 
     Object.defineProperty(this, "Id", {
-		value: id,
-		writable: false,
-	});
+        value: id,
+        writable: false,
+    });
 
-	Object.defineProperty(this, "name", {
-		get: function () { return name; },
-		set: function (newName) { name = newName; },
-		enumerable: true,
-	});
+    Object.defineProperty(this, "name", {
+        get: function () { return name; },
+        set: function (newName) { name = newName; },
+        enumerable: true,
+    });
 
-	Object.defineProperty(this, "description", {
-		get: function () { return description; },
-		set: function (newDesc) { description = newDesc; },
-		enumerable: true,
-	});
+    Object.defineProperty(this, "description", {
+        get: function () { return description; },
+        set: function (newDesc) { description = newDesc; },
+        enumerable: true,
+    });
 
     Object.defineProperty(this, "creationDate", {
         get: function () { return creationDate; },
