@@ -4,7 +4,7 @@ options = options || {};
 var ID = options.ID || 0; //some Mongo DB method for assigning ID should go here
 var Subtotal options.Subtotal || 0;
 var FinalTotal options.FinalTotal || 0;
-var Status options.Status || 1; //Setting the estimate status to active by default
+var Status options.Status || 1; //Setting the estimate status to active by default   Status are:     Open, Finalized, Unused
 var LineItemSet  options.LineItem || new Array();
 var CreatedDate  options.CreatedDate || new Date(); //Set estimateCreatedDate to current date;
 
