@@ -1,49 +1,49 @@
 Job = function (options) {
-    job = job || {};
-    var id = job.id || 0;
-    var name = job.name || "";
-    var description = job.description || "";
-    var creationDate = job.creationDate || new Date();
-    var status = job.status || "Active"; // Alternatives are "Active", "Completed" and "Cancelled"
-    var scheduleDates = job.scheduleDates || ""; // Delimited 
-    var estimateSet = job.estimateSet || new Array();
+    options = options || {};
+    var id = options.id || 0;
+    var name = options.name || "";
+    var description = options.description || "";
+    var creationDate = options.creationDate || new Date();
+    var status = options.status || "Active"; // Alternatives are "Active", "Completed" and "Cancelled"
+    var scheduleDates = options.scheduleDates || ""; // Delimited 
+    var estimateSet = options.estimateSet || new Array();
 
     Object.defineProperty(this, "Id", {
         value: id,
         writable: false,
     });
 
-    Object.defineProperty(this, "name", {
+    Object.defineProperty(this, "Name", {
         get: function () { return name; },
         set: function (newName) { name = newName; },
         enumerable: true,
     });
 
-    Object.defineProperty(this, "description", {
+    Object.defineProperty(this, "Description", {
         get: function () { return description; },
         set: function (newDesc) { description = newDesc; },
         enumerable: true,
     });
 
-    Object.defineProperty(this, "creationDate", {
+    Object.defineProperty(this, "CreationDate", {
         get: function () { return creationDate; },
         set: function (newCreationDate) { creationDate = newCreationDate; },
         enumerable: true,
     });
 
-    Object.defineProperty(this, "status", {
+    Object.defineProperty(this, "Status", {
         get: function () { return status; },
         set: function (newStatus) { status = newStatus; },
         enumerable: true,
     });
 
-    Object.defineProperty(this, "scheduleDates", {
+    Object.defineProperty(this, "ScheduleDates", {
         get: function () { return scheduleDates; },
         set: function (newScheduleDates) { scheduleDates = newScheduleDates; },
         enumerable: true,
     });
 
-    Object.defineProperty(this, "estimateSet", {
+    Object.defineProperty(this, "EstimateSet", {
         get: function () { return estimateSet; },
         set: function (newEstimateSet) { estimateSet = newEstimateSet; },
         enumerable: true,
