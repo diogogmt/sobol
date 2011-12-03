@@ -5,12 +5,13 @@ Job = function (options) {
     var description = options.description || "";
     var creationDate = options.creationDate || new Date();
     var status = options.status || "Active"; // Alternatives are "Active", "Completed" and "Cancelled"
-    var scheduleDates = options.scheduleDates || ""; // Delimited 
+    var scheduleDates = options.scheduleDates || new Array();
     var estimateSet = options.estimateSet || new Array();
 
     Object.defineProperty(this, "Id", {
-        value: id,
-        writable: false,
+        get: function() { return id; },
+        set: function(newId) { id = newId; },
+        enumerable: true,
     });
 
     Object.defineProperty(this, "Name", {
@@ -52,20 +53,46 @@ Job = function (options) {
 
 Job.prototype = {
     addEstimate: function (estimate) {
+        var isAdded = false;
         if (estimate instanceof Estimate) {
-            this.estimateSet.push(estimate);
+            if (this.status === "Active"){
+                this.estimateSet.push(estimate);
+                isAdded = true;
+            }
         }
+        return isAdded;
     },
     addEstimateWithOptions: function (options) {
-        var estimate = new Estimate(options);
-        this.estimateSet.push(estimate);
-    },
-    addScheduleDate: function() {
+        var isAdded = false;
+        if(this.status === "Active"){
+            var estimate = new Estimate(options);
+            this.estimateSet.push(estimate);
+            isAdded = true;
+        }
         
+        return isAdded;
     },
-
-    isActive: function() {
-        return this.status === "Active";
+    addScheduleDate: function(date) {
+        this.scheduleDates.push(date);
+    },
+    setStatus: function(status) {
+        var isSet = false;
+        if(status === "Completed")
+        {
+            var currentDate = new Date();
+            for(i=0; i<this.scheduleDates.length; i++)
+            {
+                var scheduledDate = new Date(this.scheduleDates[i]);
+                if(scheduledDate < currentDate){
+                    this.Status = status;
+                    isSet = true;
+                }
+            }
+        }else{
+            this.Status = status;
+            isSet = true;
+        }
+        return isSet;
     },
     getNumOfEstimates: function() {
         return this.estimateSet.length;
@@ -73,3 +100,9 @@ Job.prototype = {
 }
 
 exports.Job = Job;
+
+Estimate = function (){
+    
+};
+
+exports.Estimate = Estimate;
