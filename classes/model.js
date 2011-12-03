@@ -9,9 +9,6 @@ var LineItemSet = options.LineItem || new Array();
 var CreatedDate = options.CreatedDate || new Date(); //Set estimateCreatedDate to current date;
 
 Object.defineProperty(this, "ID", {
-value: ID,
-writable: false,
-enumerable: true,
 get: function () { return ID; },
 set: function (newId) { ID = newId; },
 enumerable: true,
@@ -85,3 +82,4 @@ Estimate.prototype = {
 }
 
 exports.Estimate = Estimate;
+
