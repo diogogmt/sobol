@@ -11,6 +11,7 @@ var CreatedDate  options.CreatedDate || new Date(); //Set estimateCreatedDate to
 Object.defineProperty(this, "ID", {
 value: ID,
 writable: false,
+enumerable: true,
 get: function () { return ID; },
 
 });
@@ -40,6 +41,7 @@ enumerable: true,
 Object.defineProperty(this, "CreatedDate", {
 get: function () { return CreatedDate; },
 set: function (newCreatedDate) { Status = newCreatedDate; },
+enumerable: true,
 });
 }
 
