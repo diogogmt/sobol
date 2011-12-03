@@ -53,7 +53,7 @@ var estimateLineItem4 = new estimateLineItem(estimateLineItemOptions4);
 
 vows.describe('Estimate').addBatch({
   'An Estimate': {
-    'in a safe empty state': {
+    'add one line item': {
      
 	 topic: new Estimate(estimateOptions),
       'add 1 line items': function (topic) {
@@ -65,7 +65,7 @@ vows.describe('Estimate').addBatch({
 		},
     },
 
-    'with some data': {
+    'add 2 line items': {
       topic: new Estimate(estimateOptions),
       'add 2 line items': function (topic) {
 				topic.addEstimateLineItem(estimateLineItem3);
@@ -77,7 +77,7 @@ vows.describe('Estimate').addBatch({
 		},
     },
 	
-    'with 3 jobs': {
+    'drop 1 line item': {
       topic: new Estimate(estimateOptions),
       'drop 1 line items': function (topic) {
 				topic.removeEstimateLineItem(estimateLineItem2);
@@ -87,7 +87,7 @@ vows.describe('Estimate').addBatch({
 		assert.equal(topic.FinalTotal, 86.25);
 		},
     },
-    'with 0 notes': {
+    'drop 2 line items': {
       topic: new Estimate(estimateOptions),
       'drop 2 line items': function (topic) {
 				topic.removeEstimateLineItem(estimateLineItem3);
