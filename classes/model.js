@@ -55,8 +55,8 @@ Job.prototype = {
     addEstimate: function (estimate) {
         var isAdded = false;
         if (estimate instanceof Estimate) {
-            if (this.status === "Active"){
-                this.estimateSet.push(estimate);
+            if (this.Status === "Active"){
+                this.EstimateSet.push(estimate);
                 isAdded = true;
             }
         }
@@ -64,29 +64,38 @@ Job.prototype = {
     },
     addEstimateWithOptions: function (options) {
         var isAdded = false;
-        if(this.status === "Active"){
+        if(this.Status === "Active"){
             var estimate = new Estimate(options);
-            this.estimateSet.push(estimate);
+            this.EstimateSet.push(estimate);
             isAdded = true;
         }
         
         return isAdded;
     },
     addScheduleDate: function(date) {
-        this.scheduleDates.push(date);
+        this.ScheduleDates.push(date);
     },
     setStatus: function(status) {
         var isSet = false;
+        var hasInFuture = false;
+        console.log("new instance");
         if(status === "Completed")
         {
             var currentDate = new Date();
-            for(i=0; i<this.scheduleDates.length; i++)
+            console.log("schedule dates is length: " + this.ScheduleDates.length);
+            for(i=0; i<this.ScheduleDates.length; i++)
             {
-                var scheduledDate = new Date(this.scheduleDates[i]);
-                if(scheduledDate < currentDate){
-                    this.Status = status;
-                    isSet = true;
+                console.log(this.ScheduleDates[i]);
+                var scheduledDate = new Date(this.ScheduleDates[i]);
+                console.log("sched date in future: " + (scheduledDate > currentDate));
+                if(scheduledDate > currentDate){
+                    hasInFuture = true;
+                    break;
                 }
+            }
+            if(!hasInFuture){
+                this.Status = status;
+                isSet = true;
             }
         }else{
             this.Status = status;

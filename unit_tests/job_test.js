@@ -4,14 +4,16 @@ var vows = require('vows'),
 var models = require('../classes/model.js');
 var Job = models.Job;
 
+var currentDate = new Date();
+
 var jobOptions = {
-    id: 4;
-    name: "Window installation";
-    description: "New window installation for second level of two story house";
-    creationDate: new Date(); // should be changed to some date in the past
-    status: "Active";
-    scheduleDates: "04/02/2011";
-    estimateSet: [new Estimate(), new Estimate()];
+    id: 4,
+    name: "Window installation",
+    description: "New window installation for second level of two story house",
+    creationDate: currentDate, // should be changed to some date in the past
+    status: "Active",
+    scheduleDates: ["04/02/2011"],
+    estimateSet: [new Estimate(), new Estimate()],
 }
 
 // Create a Test Suite
@@ -54,11 +56,11 @@ vows.describe('Job').addBatch({
             'description should be "New window installation for second level of two story house"' : function (topic) {
                 assert.equal(topic.Description, "New window installation for second level of two story house");
             },
-            'creationDate should be XXXXXXX': function (topic) {
-                assert.equal(topic.creationDate, XXXXXXX);
+            'creationDate should be today': function (topic) {
+                assert.equal(topic.CreationDate, currentDate);
             },
             'status should be active': function (topic) {
-                assert.equal(topic.status, "Active");
+                assert.equal(topic.Status, "Active");
             },
             'scheduleDates should be "4/2/2011"': function (topic) {
                 assert.equal(topic.ScheduleDates, "4/2/2011");
@@ -67,49 +69,57 @@ vows.describe('Job').addBatch({
                 assert.equal(topic.EstimateSet.length, 2);
             },
         },
-        'with an active status': {
+        // BEGIN A2 UNIT TESTS
+        'with no estimates and status Active': {
             topic: new Job(),
-            'is active': function (topic) {
-                assert.equal (topic.getStatus(), 'Active');
-            },
-            'and is function active': function (topic) {
-                assert.isTrue (topic.isActive());
-            }
-        },
-        'with no estimates': {
-            topic = new Job(),
 
-            'should allow estimate to be added when job status is active': function (topic) {
+            'should allow estimate to be added': function (topic) {
                 var isAdded = topic.addEstimate(new Estimate());
                 assert.isTrue(isAdded);
             },
-            'should not allow estimate to be added when job is completed': function (topic) {
-                topic.Status = "Completed";
-                var isAdded = topic.addEstimate(new Estimate());
-                assert.isFalse(isAdded);
+        },
+        'with no estimates and status Completed': {
+            topic: function () {
+                var testJob = new Job();
+                testJob.Status = "Completed";
+                return testJob;
             },
-            'should not allow estimate to be added when job is cancelled': function (topic) {
-                topic.Status = "Cancelled";
+            'should not allow estimate to be added': function (topic) {
                 var isAdded = topic.addEstimate(new Estimate());
                 assert.isFalse(isAdded);
             },
         },
-        'with three estimates': {
-            topic = new Job(jobOptions),
+        'with no estimates and status Cancelled': {
+            topic: function () {
+                var testJob = new Job();
+                testJob.Status = "Cancelled";
+                return testJob;
+            },
+            'should not allow estimate to be added': function (topic) {
+                var isAdded = topic.addEstimate(new Estimate());
+                assert.isFalse(isAdded);
+            },
+        },
+        'with scheduled job in the future': {
+            topic: function () {
+                var testJob = new Job(jobOptions);
+                testJob.addScheduleDate("01/01/2013");
+                return testJob;
+            },
 
-            'should not be allowed to be Completed if there is scheduled job in the future': function (topic) {
-                var currentDate = new Date();
-                topic.addScheduleDate("01/01/2012");
+            'should not be allowed to be Completed': function (topic) {
                 var isSet = topic.setStatus("Completed");
                 assert.isFalse(isSet);
             },
-            'should be allowed to be Completed if there are no scheduled jobs in the future': function (topic) {
-                var currentDate = new Date();
-                topic.addScheduleDate("01/01/2011");
-                var isSet = setStatus("Completed");
+        },
+        'with no scheduled jobs in the future': {
+            topic: new Job(jobOptions),
+
+            'should be allowed to be Completed': function (topic) {
+                var isSet = topic.setStatus("Completed");
                 assert.isTrue(isSet);
             },
-        }
+        },
     }
 }).run(); // Run it    
 
