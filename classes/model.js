@@ -97,10 +97,55 @@ Customer.prototype = {
       this.Jobs.push(job);
     }
   },
+  deleteJob: function (jobId) {
+    var i,
+        jobs = this.Jobs,
+        jobsLength = this.totalJobs()
+    ;
+    console.log("deleteJob");
+    console.log("jboId: " + jobId);
+    for (i = 0; i < jobsLength; i++) {
+      console.log("i: " + i);
+      console.log("jobs[" + i + "].Id: " + jobs[i].Id);
+      if (jobs[i].Id == jobId) {
+        console.log("jobs[" + i + "].Id: " + jobs[i].Id + " == " + jobId);
+        console.log("jobsLength: " + jobsLength);
+        jobs = jobs.splice(i, 1);
+        console.log("this.totalJobs(): " + this.totalJobs());
+        break;
+      }
+    }
+  },
+  totalJobs: function () {
+    return this.Jobs.length;
+  },
+
   addNote: function (note) {
     if (note instanceof Note) {
       this.Notes.push(note);
     }
+  },
+  deleteNote: function (noteId) {
+    var i,
+        notes = this.Notes,
+        notesLength = this.totalNotes()
+    ;
+    console.log("deleteNote");
+    console.log("noteId: " + noteId);
+    for (i = 0; i < notesLength; i++) {
+      console.log("i: " + i);
+      console.log("notes[" + i + "].Id: " + notes[i].Id);
+      if (notes[i].Id == noteId) {
+        console.log("notes[" + i + "].Id: " + notes[i].Id + " == " + noteId);
+        console.log("notesLength: " + notesLength);
+        notes = notes.splice(i, 1);
+        console.log("this.totalNotes(): " + this.totalNotes());
+        break;
+      }
+    }
+  },
+  totalNotes: function () {
+    return this.Notes.length;
   }
 
 }
@@ -110,8 +155,33 @@ exports.Customer = Customer;
 
 // Job
 Note = function (options) {
+  options = options || {};
 
+  var id = options.id || 0;
+  var content = options.content || "";
+
+  var d = new Date();
+  var date = options.date || d.getDay() + '-' + d.getDate() + '-' + d.getFullYear();
+
+  Object.defineProperty(this, "Id", {
+    get: function () { return id; },
+    set: function (newId) { id = newId; },
+    enumerable: true,
+  });  
+
+  Object.defineProperty(this, "Content", {
+    get: function () { return content; },
+    set: function (newContent) { id = newContent; },
+    enumerable: true,
+  });  
+
+  Object.defineProperty(this, "Date", {
+    get: function () { return date; },
+    set: function (newDate) { date = newDate; },
+    enumerable: true,
+  });  
 };
+
 
 exports.Note = Note;
 

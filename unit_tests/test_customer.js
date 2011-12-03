@@ -8,8 +8,7 @@ var models = require('../classes/model.js');
 var Customer = models.Customer;
 var Job = models.Job;
     
-var d = new Date();
-var date = d.getDay() + '-' + d.getDate() + '-' + d.getFullYear();
+
 
 
 var customerOptions = {
@@ -26,6 +25,22 @@ var customerOptions = {
   jobs: [new Job(), new Job(), new Job()],
   notes: [new Note(), new Note()],
 }
+
+var d = new Date();
+var date = d.getDay() + '-' + d.getDate() + '-' + d.getFullYear();
+
+var noteOptions = {
+  id: 1,
+  content: "A Reminder",
+  date: date,
+};
+
+var note = new Note(noteOptions);
+
+var jobOptions = {
+  
+};
+var job = new Job(jobOptions);
 
 // Create a Test Suite
 vows.describe('Customer').addBatch({
@@ -111,39 +126,34 @@ vows.describe('Customer').addBatch({
         assert.equal(topic.Notes.length, 2);  
       },
     },
-    'with 3 active jobs': {
+    'with 3 jobs': {
       topic: new Customer(customerOptions),
       'has a length of 3': function (topic) {
-        assert.equal(topic.Jobs.length, 3);
+        assert.equal(topic.totalJobs(), 3);
       },
-      'after setting one to finished, has a length of 2': function (topic) {
-        // set job1 status to finished
+      'after adding one, has a length of 4': function (topic) {
+        topic.addJob(job);
+        assert.equal(topic.totalJobs(), 1);
       },
-      'now has one finished job': function (topic) {
-        // get length of finished jobs
-      },
-      'after adding one active job, has again a length of 3': function (topic) {
-        // get length of active jobs
-      },
-      'after setting all jobs to finished, has length of 0': function (topic) {
-        // set status finished for all jobs
-      },
-      'total number o jobs should 4 by now (active and finished)': function (topic) {
-        // count the number of jobs
+      'after deleting one, has again a length of 3': function (topic) {
+        console.log("job.Id: " + job.Id);
+        topic.deleteJob(job.Id);
+        assert.equal(topic.totalJobs(), 3);
       },
     },
     'with 0 notes': {
       topic: new Customer(),
       'has a length of 0': function (topic) {
-        // get length of notes
+        assert.equal(topic.totalNotes(), 0);
       },
       'after adding one, has a length of 1': function (topic) {
-        // add a new note
-        // get length of notes
+        topic.Notes.push(note);
+        assert.equal(topic.totalNotes(), 1);
       },
       'after deleting one, has again a length of 0': function (topic) {
-        // delete note
-        // get length of notes
+        console.log("\n\nnote.Id: " + note.Id);
+        topic.deleteNote(note.Id);
+        assert.equal(topic.totalNotes(), 0);
       },
     },
     'with an archived status': {
