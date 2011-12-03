@@ -8,10 +8,25 @@ var models = require('../classes/model.js');
 var Customer = models.Customer;
 var Job = models.Job;
     
+var d = new Date();
+var date = d.getDay() + '-' + d.getDate() + '-' + d.getFullYear();
+
+
 var customerOptions = {
 	id: 99,
+	fname: 'Joe',
+	lname: 'Doe',
+	email: 'joe@doe.com',
+	phone: '(123) 345-6789',
+	street1: '70 Pond Road',
+	street2: '1760 Finch Av. West',
+	postal: 'M7T DS2',
+	date: date,
+	status: 'finished',
 	jobs: [new Job(), new Job(), new Job()],
+	notes: [new Note(), new Note()],
 }
+
 // Create a Test Suite
 vows.describe('Customer').addBatch({
 	'A Customer': {
@@ -21,39 +36,41 @@ vows.describe('Customer').addBatch({
 				assert.equal(topic.Id, 0);
        },
       'first name is empty': function (topic) {
-				// get first name
+				assert.equal(topic.FirstName, "");	
        },
       'last name is empty': function (topic) {
-				// get last name
+				assert.equal(topic.LastName, "");
        },
       'email is empty': function (topic) {
-				// get email 
+				assert.equal(topic.Email, "");
        },
       'phone is empty': function (topic) {
-				// get phone 
-       },
-      'postal is empty': function (topic) {
-				// get postal 
+				assert.equal(topic.Phone, "");
        },
       'street1 is empty': function (topic) {
-				// get street1
+				assert.equal(topic.Street1, "");
        },
       'street2 is empty': function (topic) {
-				// get street2 
+				assert.equal(topic.Street2, "");
+       },
+       'postal is empty': function (topic) {
+				assert.equal(topic.Postal, "");
        },
       'date is the current date': function (topic) {
-				// get date 
+      	
+				assert.equal(topic.Date, date);
        },
       'status is Active': function (topic) {
-				// get status name
+				assert.equal(topic.Status, 'active');
        },
       'has no jobs(should be an empty jobs array)': function (topic) {
-				// get jobs 
+				assert.equal(topic.Jobs.length, 0);
        },
       'has no notes(should be an empty notes array)': function (topic) {
-				// get notes 
+				assert.equal(topic.Notes.length, 0);
        },
 		},
+
 		'with some data': {
     	topic: new Customer(customerOptions),
 
@@ -61,37 +78,37 @@ vows.describe('Customer').addBatch({
 				assert.equal(topic.Id, 99);
     	},
       'first name should be Joe': function (topic) {
-				// get first name
+				assert.equal(topic.FirstName, "Joe");	
       },
       'last name should be Doe': function (topic) {
-				// get last name
+				assert.equal(topic.LastName, "Doe");	
       },
       'email should be joe@doe.com': function (topic) {
-				// get email 
+				assert.equal(topic.Email, "joe@doe.com");	
       },
       'phone should be (123) 345-6789': function (topic) {
-				// get phone 
-      },
-      'postal should be M7T DS2': function (topic) {
-				// get postal 
+				assert.equal(topic.Phone, "(123) 345-6789");	
       },
       'street1 should be 70 Pond Road': function (topic) {
-				// get street1
+				assert.equal(topic.Street1, "70 Pond Road");	
       },
       'street2 1760 Finch Av. West': function (topic) {
-				// get street2 
+				assert.equal(topic.Street2, "1760 Finch Av. West");	
+      },
+      'postal should be M7T DS2': function (topic) {
+				assert.equal(topic.Postal, "M7T DS2");	
       },
       'date should be the current date when the customer was created': function (topic) {
-				// get date 
+				assert.equal(topic.Date, date);	
       },
       'status should be Finished': function (topic) {
-				// get status name
+				assert.equal(topic.Status, "finished");	
       },
-      'has 1 job': function (topic) {
-				// get jobs 
+      'has 3 job': function (topic) {
+				assert.equal(topic.Jobs.length, 3);	
       },
       'has 2 notes': function (topic) {
-				// get notes 
+				assert.equal(topic.Notes.length, 2);	
 			},
 		},
 		'with 3 active jobs': {
