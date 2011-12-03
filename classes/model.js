@@ -1,49 +1,95 @@
-Customer = function (options) {
-	options = options || {};
+Estimate = function (options) {
+options = options || {};
 
-	var id = options.id || 0;
-	var postal = options.postal || "";
+var ID = options.ID || 0; //some Mongo DB method for assigning ID should go here
+var Subtotal options.Subtotal || 0;
+var FinalTotal options.FinalTotal || 0;
+var Status options.Status || 1; //Setting the estimate status to active by default
+var LineItemSet  options.LineItem || new Array();
+var CreatedDate  options.CreatedDate || new Date(); //Set estimateCreatedDate to current date;
+
+Object.defineProperty(this, "ID", {
+value: ID,
+writable: false,
+get: function () { return ID; },
+
+});
+
+Object.defineProperty(this, "Subtotal", {
+get: function () { return Subtotal; },
+enumerable: true,
+});
+
+Object.defineProperty(this, "FinalTotal", {
+get: function () { return FinalTotal; },
+enumerable: true,
+});
+
+Object.defineProperty(this, "Status", {
+get: function () { return Status; },
+set: function (newStatus) { Status = newStatus; },
+enumerable: true,
+});
+
+Object.defineProperty(this, "LineItemSet", {
+        get: function () { return LineItemSet; },
+        set: function (newLineItemSet) { LineItemSet = newLineItemSet; },
+enumerable: true,
+});
+
+Object.defineProperty(this, "CreatedDate", {
+get: function () { return CreatedDate; },
+set: function (newCreatedDate) { Status = newCreatedDate; },
+});
+}
+
+
+Estimate.prototype = {
+
+addJob: function (job) {
+    addEstimateLineItem: function (EstimateLineItem) {
+        if (EstimateLineItem instanceof EstimateLineItem) {
+            this.LineItemSet.push(EstimateLineItem);
+        }
+},
+
+    addEstimateLineItem: function (options) {
+        var estimateLineItem = new EstimateLineItem(options);
+        this.LineItemSet.push(estimate);
+    },
+
+    removeEstimateLineItem: function (estimateLineItem) {
+   		var size = LineItemSet.length;
+		
+  		for (i=0;i<=size;i++){
+				if(LineItemSet[i] == estimateLineItem)
+					{
+						LineItemSet.splice (i);
+					}
+			}
+    },	
 	
-	var jobs = options.jobs || new Array();
-
-	Object.defineProperty(this, "Id", {
-		value: id,
-		writable: false,
-	});  
-
-	Object.defineProperty(this, "Postal", {
-		get: function () { return postal; },
-		set: function (newPostal) { postal = newPostal; },
-		enumerable: true,
-	});
-
-	Object.defineProperty(this, "Jobs", {
-		get: function () { return jobs; },
-		enumerable: true,
-	});
+    calculateSubTotal: function (LineItemSet) {
+        
+		var estimateLineItem;
+		var size = LineItemSet.length;
+		var i=0;
+		
+		for (i=0;i<=size;i++){
+			estimateLineItem = LineItemSet[i];
+			Subtotal = Subtotal + estimateLineItem.total;
+			}
+		 return this.Subtotal;
+    },
 
 
-};
-
-
-Customer.prototype = {
-	
-	addJob: function (job) {
-		if (job instanceof Job) {
-			this.Jobs.push(job);
-		}
-	}
+    calculateFinalTotal: function (Subtotal) {
+        
+			FinalTotal = Subtotal * 1.15; //subtotal + taxes 
+			}
+		 return this.FinalTotal;
+    },
 
 }
 
-exports.Customer = Customer;
-
-
-// Job
-Job = function (options) {
-
-
-
-};
-
-exports.Job = Job;
+exports.Estimate = Estimate;
