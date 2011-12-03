@@ -93,7 +93,9 @@ Customer = function (options) {
 Customer.prototype = {
   
   addJob: function (job) {
-    if (job instanceof Job) {
+    // console.log("addJob");
+    // console.log("this.Status: " + this.Status);
+    if (job instanceof Job && this.Status === 'active') {
       this.Jobs.push(job);
     }
   },
@@ -102,16 +104,16 @@ Customer.prototype = {
         jobs = this.Jobs,
         jobsLength = this.totalJobs()
     ;
-    console.log("deleteJob");
-    console.log("jboId: " + jobId);
+    // console.log("deleteJob");
+    // console.log("jboId: " + jobId);
     for (i = 0; i < jobsLength; i++) {
-      console.log("i: " + i);
-      console.log("jobs[" + i + "].Id: " + jobs[i].Id);
+      // console.log("i: " + i);
+      // console.log("jobs[" + i + "].Id: " + jobs[i].Id);
       if (jobs[i].Id == jobId) {
-        console.log("jobs[" + i + "].Id: " + jobs[i].Id + " == " + jobId);
-        console.log("jobsLength: " + jobsLength);
+        // console.log("jobs[" + i + "].Id: " + jobs[i].Id + " == " + jobId);
+        // console.log("jobsLength: " + jobsLength);
         jobs = jobs.splice(i, 1);
-        console.log("this.totalJobs(): " + this.totalJobs());
+        // console.log("this.totalJobs(): " + this.totalJobs());
         break;
       }
     }
@@ -130,16 +132,16 @@ Customer.prototype = {
         notes = this.Notes,
         notesLength = this.totalNotes()
     ;
-    console.log("deleteNote");
-    console.log("noteId: " + noteId);
+    // console.log("deleteNote");
+    // console.log("noteId: " + noteId);
     for (i = 0; i < notesLength; i++) {
-      console.log("i: " + i);
-      console.log("notes[" + i + "].Id: " + notes[i].Id);
+      // console.log("i: " + i);
+      // console.log("notes[" + i + "].Id: " + notes[i].Id);
       if (notes[i].Id == noteId) {
-        console.log("notes[" + i + "].Id: " + notes[i].Id + " == " + noteId);
-        console.log("notesLength: " + notesLength);
+        // console.log("notes[" + i + "].Id: " + notes[i].Id + " == " + noteId);
+        // console.log("notesLength: " + notesLength);
         notes = notes.splice(i, 1);
-        console.log("this.totalNotes(): " + this.totalNotes());
+        // console.log("this.totalNotes(): " + this.totalNotes());
         break;
       }
     }
@@ -185,12 +187,80 @@ Note = function (options) {
 
 exports.Note = Note;
 
-// Job
-Job = function (options) {
 
+Job = function (options) {
+    options = options || {};
+    var id = options.id || 0;
+    var name = options.name || "";
+    var description = options.description || "";
+    var creationDate = options.creationDate || new Date();
+    var status = options.status || "Active"; // Alternatives are "Active", "Completed" and "Cancelled"
+    var scheduleDates = options.scheduleDates || ""; // Delimited 
+    var estimateSet = options.estimateSet || new Array();
+
+    Object.defineProperty(this, "Id", {
+        value: id,
+        writable: false,
+    });
+
+    Object.defineProperty(this, "Name", {
+        get: function () { return name; },
+        set: function (newName) { name = newName; },
+        enumerable: true,
+    });
+
+    Object.defineProperty(this, "Description", {
+        get: function () { return description; },
+        set: function (newDesc) { description = newDesc; },
+        enumerable: true,
+    });
+
+    Object.defineProperty(this, "CreationDate", {
+        get: function () { return creationDate; },
+        set: function (newCreationDate) { creationDate = newCreationDate; },
+        enumerable: true,
+    });
+
+    Object.defineProperty(this, "Status", {
+        get: function () { return status; },
+        set: function (newStatus) { status = newStatus; },
+        enumerable: true,
+    });
+
+    Object.defineProperty(this, "ScheduleDates", {
+        get: function () { return scheduleDates; },
+        set: function (newScheduleDates) { scheduleDates = newScheduleDates; },
+        enumerable: true,
+    });
+
+    Object.defineProperty(this, "EstimateSet", {
+        get: function () { return estimateSet; },
+        set: function (newEstimateSet) { estimateSet = newEstimateSet; },
+        enumerable: true,
+    });
 };
 
+Job.prototype = {
+    addEstimate: function (estimate) {
+        if (estimate instanceof Estimate) {
+            this.estimateSet.push(estimate);
+        }
+    },
+    addEstimateWithOptions: function (options) {
+        var estimate = new Estimate(options);
+        this.estimateSet.push(estimate);
+    },
+    addScheduleDate: function() {
+        
+    },
+
+    isActive: function() {
+        return this.status === "Active";
+    },
+    getNumOfEstimates: function() {
+        return this.estimateSet.length;
+    }
+}
+
 exports.Job = Job;
-
-
 

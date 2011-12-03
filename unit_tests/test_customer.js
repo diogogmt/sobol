@@ -21,7 +21,7 @@ var customerOptions = {
   street2: '1760 Finch Av. West',
   postal: 'M7T DS2',
   date: date,
-  status: 'finished',
+  status: 'active',
   jobs: [new Job(), new Job(), new Job()],
   notes: [new Note(), new Note()],
 }
@@ -116,8 +116,8 @@ vows.describe('Customer').addBatch({
       'date should be the current date when the customer was created': function (topic) {
         assert.equal(topic.Date, date); 
       },
-      'status should be Finished': function (topic) {
-        assert.equal(topic.Status, "finished"); 
+      'status should be Active': function (topic) {
+        assert.equal(topic.Status, "active"); 
       },
       'has 3 job': function (topic) {
         assert.equal(topic.Jobs.length, 3); 
@@ -133,10 +133,10 @@ vows.describe('Customer').addBatch({
       },
       'after adding one, has a length of 4': function (topic) {
         topic.addJob(job);
-        assert.equal(topic.totalJobs(), 1);
+        assert.equal(topic.totalJobs(), 4);
       },
       'after deleting one, has again a length of 3': function (topic) {
-        console.log("job.Id: " + job.Id);
+        // console.log("job.Id: " + job.Id);
         topic.deleteJob(job.Id);
         assert.equal(topic.totalJobs(), 3);
       },
@@ -151,15 +151,21 @@ vows.describe('Customer').addBatch({
         assert.equal(topic.totalNotes(), 1);
       },
       'after deleting one, has again a length of 0': function (topic) {
-        console.log("\n\nnote.Id: " + note.Id);
+        // console.log("\n\nnote.Id: " + note.Id);
         topic.deleteNote(note.Id);
         assert.equal(topic.totalNotes(), 0);
       },
     },
-    'with an archived status': {
-      topic: new Customer(),
-      'should not be able to add a new job': function (topic) {
-        // try to add a new job to customer
+    'with an archived status and 0 jobs': {
+      topic: function () {
+        var c = new Customer();
+        c.Status = 'archived';
+        return c;
+      },
+      'should not be able to add a new job, job length should be 0': function (topic) {
+        // console.log("topic.Status: " + topic.Status);
+        topic.addJob(job);
+        assert.equal(topic.totalJobs(), 0);
       },
     },
    },
