@@ -13,7 +13,7 @@ get: function () { return ID; },
 set: function (newId) { ID = newId; },
 enumerable: true,
 });
-
+/*
 Object.defineProperty(this, "Subtotal", {
 get: function () { return Subtotal; },
 enumerable: true,
@@ -23,7 +23,7 @@ Object.defineProperty(this, "FinalTotal", {
 get: function () { return FinalTotal; },
 enumerable: true,
 });
-
+*/
 Object.defineProperty(this, "Status", {
 get: function () { return Status; },
 set: function (newStatus) { Status = newStatus; },
@@ -56,39 +56,53 @@ Estimate.prototype = {
 
     addEstimateLineItem: function (newestimateLineItem) {
         if (newestimateLineItem instanceof estimateLineItem) {
-            this.estimateLineItemSet.push(newestimateLineItem);
+			if(this.estimateLineItemSet != null)
+				{
+				this.estimateLineItemSet.push(newestimateLineItem);
+				}
 		    }
 	},
 
     removeEstimateLineItem: function (LineItemid) {
   
-		var size = estimateLineItemSet.length;
+		var size = 0;
+			
+		if(this.estimateLineItemSet != null){
 		
-  		for (i=0;i<=size;i++){
-				if(estimates[i].id == LineItemid)
+			size = this.estimateLineItemSet.length;
+
+			  		for (i=0;i<=size;i++){
+				if(this.estimates[i].id == LineItemid)
 					{
-						estimates.splice (i);
+						this.estimates.splice (i);
 					}
+				}
 			}
     },	
 
     calculateSubTotal: function () {
         
 		var estimateLineItem;
-		var size = estimateLineItemSet.length;
+		var size = 0;
 		var i=0;
-		
-		for (i=0;i<=size;i++){
-			estimateLineItem = estimateLineItemSet[i];
-			var Subtotal = Subtotal + estimateLineItem.total;
+		var Subtotal;		
+			if(this.estimateLineItemSet != null)
+			{
+			 size = this.estimateLineItemSet.length;
+			
+			for (i=0;i<=size;i++){
+			estimateLineItem = this.estimateLineItemSet[i];
+			var total = estimateLineItem.total();
+			Subtotal = Subtotal + total;
 			}
-		 return this.Subtotal;
+			return this.Subtotal;			
+			}
     },
 	
     calculateFinalTotal: function (Subtotal) {
-        
-			var Subtotal = calculateSubTotal();
-			var FinalTotal = Subtotal * 1.15; //subtotal + taxes 
+			var FinalTotal;
+			var Subtotal = this.calculateSubTotal();
+			FinalTotal = Subtotal * 1.15; //subtotal + taxes 
 			return this.FinalTotal;
     },
 }
