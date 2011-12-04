@@ -100,24 +100,21 @@ vows.describe('Job').addBatch({
                 assert.isFalse(isAdded);
             },
         },
-        'with scheduled job in the future': {
-            topic: function () {
-                var testJob = new Job(jobOptions);
-                testJob.addScheduleDate("01/01/2013");
-                return testJob;
-            },
-
-            'should not be allowed to be Completed': function (topic) {
-                var isSet = topic.setStatus("Completed");
-                assert.isFalse(isSet);
-            },
-        },
         'with no scheduled jobs in the future': {
             topic: new Job(jobOptions),
 
             'should be allowed to be Completed': function (topic) {
                 var isSet = topic.setStatus("Completed");
                 assert.isTrue(isSet);
+            },
+        },
+        'with scheduled job in the future': {
+            topic: new Job(jobOptions),
+
+            'should not be allowed to be Completed': function (topic) {
+                topic.addScheduleDate("01/01/2013");
+                var isSet = topic.setStatus("Completed");
+                assert.isFalse(isSet);
             },
         },
     }

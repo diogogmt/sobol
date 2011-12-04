@@ -73,6 +73,7 @@ Job.prototype = {
         return isAdded;
     },
     addScheduleDate: function(date) {
+        console.log("Adding date: " + date);
         this.ScheduleDates.push(date);
     },
     setStatus: function(status) {
