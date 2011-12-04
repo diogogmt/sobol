@@ -3,7 +3,7 @@ Job = function (options) {
     var id = options.id || 0;
     var name = options.name || "";
     var description = options.description || "";
-    var creationDate = options.creationDate || new Date();
+    var creationDate = options.creationDate || "";
     var status = options.status || "Active"; // Alternatives are "Active", "Completed" and "Cancelled"
     var scheduleDates = options.scheduleDates || new Array();
     var estimateSet = options.estimateSet || new Array();
@@ -73,22 +73,17 @@ Job.prototype = {
         return isAdded;
     },
     addScheduleDate: function(date) {
-        console.log("Adding date: " + date);
         this.ScheduleDates.push(date);
     },
     setStatus: function(status) {
         var isSet = false;
         var hasInFuture = false;
-        console.log("new instance");
         if(status === "Completed")
         {
             var currentDate = new Date();
-            console.log("schedule dates is length: " + this.ScheduleDates.length);
             for(i=0; i<this.ScheduleDates.length; i++)
             {
-                console.log(this.ScheduleDates[i]);
                 var scheduledDate = new Date(this.ScheduleDates[i]);
-                console.log("sched date in future: " + (scheduledDate > currentDate));
                 if(scheduledDate > currentDate){
                     hasInFuture = true;
                     break;

@@ -35,7 +35,7 @@ vows.describe('Job').addBatch({
                 assert.equal(topic.CreationDate, "");
             },
             'status is active' : function (topic) {
-                assert.equal(topic.status, "Active");
+                assert.equal(topic.Status, "Active");
             },
             'scheduleDates is empty' : function (topic) {
                 assert.equal(topic.ScheduleDates, "");
@@ -63,7 +63,7 @@ vows.describe('Job').addBatch({
                 assert.equal(topic.Status, "Active");
             },
             'scheduleDates should be "4/2/2011"': function (topic) {
-                assert.equal(topic.ScheduleDates, "4/2/2011");
+                assert.isArray(topic.ScheduleDates, ["04/02/2011"] );
             },
             'estimateSet should have 2 estimates': function (topic) {
                 assert.equal(topic.EstimateSet.length, 2);
@@ -118,12 +118,4 @@ vows.describe('Job').addBatch({
             },
         },
     }
-}).run(); // Run it    
-
-
-/*
-- should allow estimate to be added when job status is active
-- should not allow estimate to be added when job status is completed
-- add estimate, check how many estimates are in the set
-- delete estimate, check how many estimates are in the set
-*/
+}).run(); // Run it
