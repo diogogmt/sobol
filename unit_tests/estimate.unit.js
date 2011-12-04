@@ -4,7 +4,7 @@ var vows = require('vows'),
 var models = require('../classes/model.js');
 
 var Estimate = models.Estimate;
-var EstimateLineItem = models.EstimateLineItem;
+var EstimateLineItem = models.estimateLineItem;
 
 var estimateOptions = {
 ID : 201,
@@ -19,6 +19,8 @@ name: 'Test1',
 description: 'Test Item 1',
 quantity: 5,
 cost: 5,
+total: 0,
+media: null,
 }
 
 var estimateLineItemOptions2= {
@@ -27,6 +29,8 @@ name: 'Test2',
 description: 'Test Item 2',
 quantity: 5,
 cost: 5,
+total: 0,
+media: null,
 }
 
 var estimateLineItemOptions3= {
@@ -35,6 +39,8 @@ name: 'Test3',
 description: 'Test Item 3',
 quantity: 5,
 cost: 5,
+total: 0,
+media: null,
 }
 
 var estimateLineItemOptions4= {
@@ -43,6 +49,8 @@ name: 'Test4',
 description: 'Test Item 4',
 quantity: 5,
 cost: 5,
+total: 0,
+media: null,
 }
 
 var estimateLineItem1 = new estimateLineItem(estimateLineItemOptions1);
