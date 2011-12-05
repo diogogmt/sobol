@@ -16,11 +16,13 @@ enumerable: true,
 
 Object.defineProperty(this, "Subtotal", {
 get: function () { return Subtotal; },
+set: function (newSubtotal) { Subtotal = newSubtotal; },
 enumerable: true,
 });
 
 Object.defineProperty(this, "FinalTotal", {
 get: function () { return FinalTotal; },
+set: function (newFinalTotal) { FinalTotal = newFinalTotal; },
 enumerable: true,
 });
 
@@ -32,16 +34,14 @@ enumerable: true,
 
 
   Object.defineProperty(this, "EstimateLineItemSet", {
-    get: function () { return EstimateLineItemSet; },
-	set: function (newEstimateLineItemSet) { EstimateLineItemSet = newEstimateLineItemSet; },
-    enumerable: true,
+    get: function () { return estimateLineItemSet; },
+	set: function (newEstimateLineItemSet) { estimateLineItemSet = newEstimateLineItemSet; },
+	enumerable: true,
   });
-
-
 
 Object.defineProperty(this, "CreatedDate", {
 get: function () { return CreatedDate; },
-set: function (newCreatedDate) { Status = newCreatedDate; },
+set: function (newCreatedDate) { CreatedDate = newCreatedDate; },
 enumerable: true,
 });
 
@@ -50,13 +50,14 @@ enumerable: true,
 Estimate.prototype = {
 
     addEstimateLineItem: function (newestimateLineItem) {
-        if (newestimateLineItem instanceof estimateLineItem) {
+        if (newestimateLineItem instanceof EstimateLineItem) {
 			if(this.estimateLineItemSet != null)
 				{
 				this.estimateLineItemSet.push(newestimateLineItem);
 				}
 		    }
-	},
+
+		},
 
     removeEstimateLineItem: function (LineItemid) {
   
@@ -100,7 +101,7 @@ Estimate.prototype = {
     calculateFinalTotal: function (Subtotal) {
 			this.FinalTotal=0;
 			Subtotal = this.calculateSubTotal();
-			this.FinalTotal = Subtotal * 1.15; //subtotal + taxes 
+			this.FinalTotal = this.Subtotal * 1.15; //subtotal + taxes 
 			
 //			this.FinalTotal = 100;  //this is just for testing that this method is actually being called and is returning something
 			return this.FinalTotal;
@@ -114,7 +115,32 @@ exports.Estimate = Estimate;
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-estimateLineItem = function(options) {
+EstimateLineItem = function (options) {
+  options = options || {};
+
+  var id = options.id || 0;
+  var total = options.total || 0;
+
+    Object.defineProperty(this, "id", {
+    get: function () { return id; },
+    set: function (newid) { id = newid; },
+    enumerable: true,
+  });
+    
+  Object.defineProperty(this, "total", {
+    get: function () { return total; },
+    set: function (newtotal) { total = newtotal; },
+    enumerable: true,
+  });
+
+};
+
+exports.EstimateLineItem = EstimateLineItem;
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// old copy paste of Umar's code
+/*
+EstimateLineItem = function (options) {
 options = options || {};
 
 var id = options.id || 0;
@@ -126,11 +152,16 @@ var total = options.total || 0;
 var media = options.media || null;
 
 Object.defineProperty(this, "Id", {
-value: id,
-writable: false,
+get: function () { return Id; },
+set: function (newId) { Id = newId; },
+enumerable: true,
 });
 
- 
+Object.defineProperty(this, "name", {
+get: function () {return name; },
+set: function (newName) {name = newName;},
+enumerable: true,
+});
 
 Object.defineProperty(this, "description", {
 get: function () {return description; },
@@ -139,7 +170,7 @@ enumerable: true,
 });
 
 Object.defineProperty(this, "quantity", {
-get: function () {return description; },
+get: function () {return quantity; },
 set: function (newQuan) {quantity = newQuan;},
 enumerable: true,
 });
@@ -153,7 +184,7 @@ enumerable: true,
 Object.defineProperty(this, "total", {
 get: function () {return total; },
 set: function (newTotal) {total = newTotal;},
-enumerbale: true,
+enumerable: true,
 });
 
 Object.defineProperty(this, "media", {
@@ -163,17 +194,21 @@ enumerable: true,
 });
 };
 
-//////////////////////////////
 
-estimateLineItem.prototype = {
-
-
-    calculateTotal: function () {
+EstimateLineItem.prototype = {
+  
+      calculateTotal: function () {
         
 			
 			this.total = this.quantity * this.cost; 
 			return this.total;
     },
+  
+
 }
 
-exports.estimateLineItem = estimateLineItem; 
+exports.EstimateLineItem = EstimateLineItem;
+*/
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
