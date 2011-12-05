@@ -48,17 +48,7 @@ var lineItem4 = new EstimateLineItem(estimateLineItemOptions6);
 var lineItem5 = new EstimateLineItem(estimateLineItemOptions2);
 
 
-
 var estimateOptions = {
-  
-  ID : 201,
-  Status : 1, //Setting the estimate status to active
-  estimateLineItemSet : [new EstimateLineItem(estimateLineItemOptions1), new EstimateLineItem(estimateLineItemOptions2)],
-  CreatedDate : new Date(), //Set estimateCreatedDate to current date; 
-  };
-  
-  
-var estimateOptions2 = {
   
   ID : 202,
   Status : 1, //Setting the estimate status to active
@@ -68,7 +58,6 @@ var estimateOptions2 = {
   };  
   
   
-
 // Create a Test Suite
 vows.describe('Estimate').addBatch({
  'An Estimate': {
@@ -77,13 +66,13 @@ vows.describe('Estimate').addBatch({
       topic: new Estimate(estimateOptions),
 
       'id should be 201': function (topic) {
-        assert.equal(topic.ID, 201);
+        assert.equal(topic.ID, 202);
       },
       'status should be 1': function (topic) {
         assert.equal(topic.Status, 1);
       },
 	  'should be 2 line items': function (topic) {
-        assert.equal(topic.estimateLineItemSet.length, 2);
+        assert.equal(topic.estimateLineItemSet.length, 4);
       },
     },
 
@@ -91,12 +80,43 @@ vows.describe('Estimate').addBatch({
      
 	 topic: new Estimate(estimateOptions),
       'calculate subtotal': function (topic) {
-				topic.calculateFinalTotal(10);
+				topic.calculateFinalTotal(20);
 		'check that Subtotal is correct'
+		assert.equal(topic.FinalTotal, 23.00);
+		},
+    },
+
+	   'drop 2 line items': {
+	    topic: new Estimate(estimateOptions ),
+       'drop 2 line items': function (topic) {
+				topic.removeEstimateLineItem(lineItem2.id);
+				topic.removeEstimateLineItem(lineItem1.id);
+				topic.calculateSubTotal();
+				topic.calculateFinalTotal(topic.Subtotal);
+		'Should be 2 line items'
+		assert.equal(topic.estimateLineItemSet.length, 2);
+		'check that Subtotal is correct'
+		assert.equal(topic.Subtotal, 10);
+		'check that Final total is correct'
 		assert.equal(topic.FinalTotal, 11.50);
 		},
     },
 	
+	  'drop 1 line item': {
+      topic: new Estimate(estimateOptions ),
+      'drop 1 line items': function (topic) {
+				topic.removeEstimateLineItem(lineItem5.id);
+				topic.calculateSubTotal();
+				topic.calculateFinalTotal(topic.Subtotal);
+		'Should be 1 line items'
+		assert.equal(topic.estimateLineItemSet.length, 1);
+		'check that Subtotal is correct'
+		assert.equal(topic.Subtotal, 5);
+		'check that Final total is correct'
+		assert.equal(topic.FinalTotal, 5.75);
+		},
+    },
+		
 	'add one line item': {
      
 	 topic: new Estimate(estimateOptions),
@@ -106,11 +126,11 @@ vows.describe('Estimate').addBatch({
 				topic.calculateFinalTotal(topic.Subtotal);
 		
 		'Should be 3 line items'
-		assert.equal(topic.estimateLineItemSet.length, 3);
+		assert.equal(topic.estimateLineItemSet.length, 2);
 		'check that Subtotal is correct'
-		assert.equal(topic.Subtotal, 15);
+		assert.equal(topic.Subtotal, 10);
 		'check that Final total is correct'
-		assert.equal(topic.FinalTotal, 17.25);
+		assert.equal(topic.FinalTotal, 11.50);
 		},
     },
 
@@ -122,45 +142,14 @@ vows.describe('Estimate').addBatch({
 				topic.calculateSubTotal();
 				topic.calculateFinalTotal(topic.Subtotal);
 		'Should be 5 line items'
-		assert.equal(topic.estimateLineItemSet.length, 5); //should really be 4
-		'check that Subtotal is correct'
-		assert.equal(topic.Subtotal, 25);
-		'check that Final total is correct'
-		assert.equal(topic.FinalTotal, 28.75);
-		},
-    },
-	
-    'drop 1 line item': {
-      topic: new Estimate(estimateOptions ),
-      'drop 1 line items': function (topic) {
-				topic.removeEstimateLineItem(lineItem5.id);
-				topic.calculateSubTotal();
-				topic.calculateFinalTotal(topic.Subtotal);
-		'Should be 1 line items'
-		assert.equal(topic.estimateLineItemSet.length, 4);
+		assert.equal(topic.estimateLineItemSet.length, 4); //should really be 4
 		'check that Subtotal is correct'
 		assert.equal(topic.Subtotal, 20);
 		'check that Final total is correct'
 		assert.equal(topic.FinalTotal, 23.00);
 		},
     },
-    'drop 2 line items': {
-      topic: new Estimate(estimateOptions),
-	  
-      'drop 2 line items': function (topic) {
-				topic.removeEstimateLineItem(lineItem2.id);
-				topic.removeEstimateLineItem(lineItem3.id);
-				topic.calculateSubTotal();
-				topic.calculateFinalTotal(topic.Subtotal);
-		'Should be 2 line items'
-		assert.equal(topic.estimateLineItemSet.length, 2);
-		'check that Subtotal is correct'
-		assert.equal(topic.Subtotal, 10);
-		'check that Final total is correct'
-		assert.equal(topic.FinalTotal, 11.50);
-		},
-    },
-
+	
    },
 }).export(module); // Run it*/
 
