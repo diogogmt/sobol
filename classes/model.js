@@ -80,7 +80,7 @@ Estimate.prototype = {
 		var estimateLineItem;
 		var size = 0;
 		var i=0;
-		Subtotal=0;		
+		this.Subtotal=0;		
 			if(this.estimateLineItemSet != null)
 			{
 			 size = this.estimateLineItemSet.length;
@@ -88,20 +88,25 @@ Estimate.prototype = {
 			for (i=0;i<=size;i++){
 					estimateLineItem = this.estimateLineItemSet[i];
 					var total = estimateLineItem.total();
-					Subtotal = Subtotal + total;
+					this.Subtotal = Subtotal + total;
 					}	
 	
 			}
-    
+			
+//			this.Subtotal = 100; //this is just for testing that this method is actually being called and is returning something
 			return this.Subtotal;			
 	},
 	
     calculateFinalTotal: function (Subtotal) {
-			FinalTotal=0;
+			this.FinalTotal=0;
 			Subtotal = this.calculateSubTotal();
-			FinalTotal = Subtotal * 1.15; //subtotal + taxes 
+			this.FinalTotal = Subtotal * 1.15; //subtotal + taxes 
+			
+//			this.FinalTotal = 100;  //this is just for testing that this method is actually being called and is returning something
 			return this.FinalTotal;
+			
     },
+
 	
 }
 
@@ -117,7 +122,7 @@ var name = options.name || "";
 var description = options.description || "";
 var quantity = options.quantity || 0;
 var cost = options.cost || 0;
-//var total = options.Total || 0;
+var total = options.total || 0;
 var media = options.media || null;
 
 Object.defineProperty(this, "Id", {
@@ -125,11 +130,7 @@ value: id,
 writable: false,
 });
 
-Object.defineProperty(this, "name", {
-get: function () {return name; },
-set: function (newName) {name = newName;},
-enumerable: true,
-});
+ 
 
 Object.defineProperty(this, "description", {
 get: function () {return description; },
@@ -148,13 +149,13 @@ get: function () {return cost; },
 set: function (newCost) {cost = newCost;},
 enumerable: true,
 });
-/*
+
 Object.defineProperty(this, "total", {
 get: function () {return total; },
 set: function (newTotal) {total = newTotal;},
 enumerbale: true,
 });
-*/
+
 Object.defineProperty(this, "media", {
 get: function () {return media; },
 set: function (newMedia) {media = newMedia;},
@@ -170,13 +171,9 @@ estimateLineItem.prototype = {
     calculateTotal: function () {
         
 			
-			this.Total = this.quantity * this.cost; 
-			return this.Total;
+			this.total = this.quantity * this.cost; 
+			return this.total;
     },
 }
-
-
-
-
 
 exports.estimateLineItem = estimateLineItem; 
