@@ -2,8 +2,8 @@ Estimate = function (options) {
 options = options || {};
 
 var ID = options.ID || 0; //some Mongo DB method for assigning ID should go here
-//var Subtotal = options.Subtotal || 0;
-//var FinalTotal = options.FinalTotal || 0;
+var Subtotal = options.Subtotal || 0;
+var FinalTotal = options.FinalTotal || 0;
 var Status = options.Status || 1; //Setting the estimate status to active by default   Status are:     Open, Finalized, Unused
 var estimateLineItemSet = options.estimateLineItemSet || new Array();
 var CreatedDate = options.CreatedDate || new Date(); //Set estimateCreatedDate to current date;
@@ -13,7 +13,7 @@ get: function () { return ID; },
 set: function (newId) { ID = newId; },
 enumerable: true,
 });
-/*
+
 Object.defineProperty(this, "Subtotal", {
 get: function () { return Subtotal; },
 enumerable: true,
@@ -23,22 +23,17 @@ Object.defineProperty(this, "FinalTotal", {
 get: function () { return FinalTotal; },
 enumerable: true,
 });
-*/
+
 Object.defineProperty(this, "Status", {
 get: function () { return Status; },
 set: function (newStatus) { Status = newStatus; },
 enumerable: true,
 });
-/*
-Object.defineProperty(this, "EstimateLineItemSet", {
-        get: function () { return EstimateLineItemSet; },
-        set: function (newLineItemSet) { EstimateLineItemSet = newLineItemSet; },
-enumerable: true,
-});
-*/
+
 
   Object.defineProperty(this, "EstimateLineItemSet", {
     get: function () { return EstimateLineItemSet; },
+	set: function (newEstimateLineItemSet) { EstimateLineItemSet = newEstimateLineItemSet; },
     enumerable: true,
   });
 
@@ -85,26 +80,29 @@ Estimate.prototype = {
 		var estimateLineItem;
 		var size = 0;
 		var i=0;
-		var Subtotal;		
+		Subtotal=0;		
 			if(this.estimateLineItemSet != null)
 			{
 			 size = this.estimateLineItemSet.length;
 			
 			for (i=0;i<=size;i++){
-			estimateLineItem = this.estimateLineItemSet[i];
-			var total = estimateLineItem.total();
-			Subtotal = Subtotal + total;
+					estimateLineItem = this.estimateLineItemSet[i];
+					var total = estimateLineItem.total();
+					Subtotal = Subtotal + total;
+					}	
+	
 			}
+    
 			return this.Subtotal;			
-			}
-    },
+	},
 	
     calculateFinalTotal: function (Subtotal) {
-			var FinalTotal;
-			var Subtotal = this.calculateSubTotal();
+			FinalTotal=0;
+			Subtotal = this.calculateSubTotal();
 			FinalTotal = Subtotal * 1.15; //subtotal + taxes 
 			return this.FinalTotal;
     },
+	
 }
 
 exports.Estimate = Estimate;
@@ -119,7 +117,7 @@ var name = options.name || "";
 var description = options.description || "";
 var quantity = options.quantity || 0;
 var cost = options.cost || 0;
-var total = options.Total || 0;
+//var total = options.Total || 0;
 var media = options.media || null;
 
 Object.defineProperty(this, "Id", {
@@ -150,13 +148,13 @@ get: function () {return cost; },
 set: function (newCost) {cost = newCost;},
 enumerable: true,
 });
-
+/*
 Object.defineProperty(this, "total", {
 get: function () {return total; },
 set: function (newTotal) {total = newTotal;},
 enumerbale: true,
 });
-
+*/
 Object.defineProperty(this, "media", {
 get: function () {return media; },
 set: function (newMedia) {media = newMedia;},
@@ -172,7 +170,7 @@ estimateLineItem.prototype = {
     calculateTotal: function () {
         
 			
-			var Total = quantity * cost; 
+			this.Total = this.quantity * this.cost; 
 			return this.Total;
     },
 }

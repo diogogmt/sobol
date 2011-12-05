@@ -24,8 +24,6 @@ name: 'Test1',
 description: 'Test Item 1',
 quantity: 5,
 cost: 5,
-total: 0,
-media: null,
 };
 
 
@@ -35,8 +33,6 @@ name: 'Test2',
 description: 'Test Item 2',
 quantity: 5,
 cost: 5,
-total: 0,
-media: null,
 };
 
 
@@ -46,41 +42,72 @@ name: 'Test3',
 description: 'Test Item 3',
 quantity: 5,
 cost: 5,
-total: 0,
-media: null,
 };
+
+var estimateLineItemOptions4= {
+id: 103,
+name: 'Test4',
+description: 'Test Item 4',
+quantity: 5,
+cost: 5,
+}
 
 
 var estimateLineItem1 = new estimateLineItem(estimateLineItemOptions1);
 var estimateLineItem2 = new estimateLineItem(estimateLineItemOptions2);
 var estimateLineItem3 = new estimateLineItem(estimateLineItemOptions3);
-
+var estimateLineItem4 = new estimateLineItem(estimateLineItemOptions4);
 
 // Create a Test Suite
 vows.describe('Estimate').addBatch({
-  'A Estimate': {
-	
-    'with 3 jobs': {
-      topic: new Estimate(estimateOptions),
-      'has a length of 3': function (topic) {
-        assert.equal(topic.calculateSubTotal(), 50);
-      },
-      'after adding one, has a length of 4': function (topic) {
-        topic.addEstimateLineItem(estimateLineItem1);
-        assert.equal(topic.calculateFinalTotal(), 57.5);
-      },
-      'after deleting one, has again a length of 3': function (topic) {
-        // console.log("job.Id: " + job.Id);
-        topic.removeEstimateLineItem(estimate.Id);
-        assert.equal(topic.calculateSubTotal(), 25);
-      },
+ 'An Estimate': {
+    'add one line item': {
+     
+	 topic: new Estimate(estimateOptions),
+      'add 1 line items': function (topic) {
+				topic.addEstimateLineItem(estimateLineItem2);
+				topic.calculateSubTotal();
+				topic.calculateFinalTotal();
+		'check that Subtotal is correct'
+		assert.equal(topic.Subtotal, 50);
+		'check that Final total is correct'
+		assert.equal(topic.FinalTotal, 57.5);
+		},
+    },
 
-      'after deleting one, has again a length of 3': function (topic) {
-        // console.log("job.Id: " + job.Id);
-        topic.removeEstimateLineItem(estimate.Id);
-        assert.equal(topic.calculateFinalTotal(), 28.75);
-      },	  
-   },
+    'add 2 line items': {
+      topic: new Estimate(estimateOptions),
+      'add 2 line items': function (topic) {
+				topic.addEstimateLineItem(estimateLineItem3);
+				topic.addEstimateLineItem(estimateLineItem4);
+		'check that Subtotal is correct'
+		assert.equal(topic.Subtotal, 100);
+		'check that Final total is correct'
+		assert.equal(topic.FinalTotal, 115);
+		},
+    },
+	
+    'drop 1 line item': {
+      topic: new Estimate(estimateOptions),
+      'drop 1 line items': function (topic) {
+				topic.removeEstimateLineItem(estimateLineItem2);
+		'check that Subtotal is correct'
+		assert.equal(topic.Subtotal, 75);
+		'check that Final total is correct'
+		assert.equal(topic.FinalTotal, 86.25);
+		},
+    },
+    'drop 2 line items': {
+      topic: new Estimate(estimateOptions),
+      'drop 2 line items': function (topic) {
+				topic.removeEstimateLineItem(estimateLineItem3);
+				topic.removeEstimateLineItem(estimateLineItem4);
+		'check that Subtotal is correct'
+		assert.equal(topic.Subtotal, 25);
+		'check that Final total is correct'
+		assert.equal(topic.FinalTotal, 28.75);
+		},
+    },
 
    },
 }).export(module); // Run it
