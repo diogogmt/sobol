@@ -7,6 +7,8 @@ var models = require('../classes/model.js');
 
 var Customer = models.Customer;
 var Job = models.Job;
+var Estimate = models.Estimate;
+var LineItem = models.LineItem;
     
 
 
@@ -38,7 +40,7 @@ var noteOptions = {
 var note = new Note(noteOptions);
 
 var jobOptions = {
-  
+  id: 420,
 };
 var job = new Job(jobOptions);
 
@@ -166,6 +168,21 @@ vows.describe('Customer').addBatch({
         // console.log("topic.Status: " + topic.Status);
         topic.addJob(job);
         assert.equal(topic.totalJobs(), 0);
+      },
+    },
+    'with 1 job containing 1 estimate': {
+      topic: function () {
+        var c = new Customer();
+        var j = new Job();
+        j.Id = 420;
+        j.addEstimate(new Estimate());
+        c.addJob(j);
+        return c;
+      },
+      'should not be able to delete the job, since it has one estimate. Job length should be 1': function (topic) {
+        // console.log("topic.Status: " + topic.Status);
+        topic.deletejob(420);
+        assert.equal(topic.totalJobs(), 1);
       },
     },
    },

@@ -264,3 +264,16 @@ Job.prototype = {
 
 exports.Job = Job;
 
+Estimate = function() {
+  
+
+};
+
+exports.Estimate;
+
+LineItem = function() {
+  
+
+};
+
+exports.LineItem;
