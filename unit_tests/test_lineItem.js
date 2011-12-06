@@ -15,9 +15,9 @@ var LineItemOptions = {
 // Create a Test Suite
 vows.describe('Estimate Line Item').addBatch({
   'An Estimate Line Item': {
-    'withouth a media': {
+    'without a media item': {
       topic: new EstimateLineItem(),
-      'after adding one media, has one media': function (topic) {
+      'after adding one media item, length should be 1': function (topic) {
         topic.addMedia(new Media());
         assert.instanceOf(topic.getMedia(), Media);
       },
@@ -31,7 +31,7 @@ vows.describe('Estimate Line Item').addBatch({
       'total should be 10': function (topic) {
         assert.equal(topic.calcTotal(), 10);
       },
-      'adding another item, total should be 20': function (topic) {
+      'adding another item worth 10, total should be 20': function (topic) {
         topic.Quantity = 2;
         assert.equal(topic.calcTotal(), 20);
       }
