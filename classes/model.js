@@ -264,7 +264,7 @@ Job.prototype = {
     }
 }
 
-exports.Job = Job;
+
 
 
 
@@ -393,7 +393,6 @@ Estimate.prototype = {
 
 
 
-exports.Estimate = Estimate;
 
 EstimateLineItem = function (options){
   options = options || {};  
@@ -401,47 +400,41 @@ EstimateLineItem = function (options){
   var id = options.id || 0;
   var name = options.name || "";
   var description = options.description || "";
-  var quantity = options.quantity || 0;
+  var quantity = options.quantity || 1;
   var cost = options.cost || 0;
-  var total = options.Total || 0; 
   var media = options.media || null;
 
   Object.defineProperty(this, "Id", {
-    value: id,
-    writable: false, 
-  });
+    get: function () { return id; },
+    set: function (newId) { id = newId; },
+    enumerable: true,
+  });  
 
-  Object.defineProperty(this, "name", {
+  Object.defineProperty(this, "Name", {
     get: function () {return name; },
     set: function (newName) {name = newName;},
     enumerable: true,
   });
 
-  Object.defineProperty(this, "description", {
+  Object.defineProperty(this, "Description", {
     get: function () {return description; },
     set: function (newDesc) { description = newDesc;},
     enumerable: true,
   });
 
-  Object.defineProperty(this, "quantity", {
-    get: function () {return description; },
+  Object.defineProperty(this, "Quantity", {
+    get: function () {return quantity; },
     set: function (newQuan) {quantity = newQuan;},
     enumerable: true,
   });
 
-  Object.defineProperty(this, "cost", {
+  Object.defineProperty(this, "Cost", {
     get: function () {return cost; },
     set: function (newCost) {cost = newCost;},
     enumerable: true,
   });
 
-  Oject.defineProperty(this, "total", {
-    get: function () {return total; },
-    set: function (newTotal) {total = newTotal;},
-    enumerbale: true,
-  });
-
-  Object.defineProperty(this, "media", {
+  Object.defineProperty(this, "Media", {
     get: function () {return media; },
     set: function (newMedia) {media = newMedia;},
     enumerable: true,
@@ -449,10 +442,29 @@ EstimateLineItem = function (options){
 	
 };
 
-exports.EstimateLineItem = EstimateLineItem;
+
+EstimateLineItem.prototype = {
+  calcTotal: function () {    
+    return this.Quantity * this.Cost;
+  },
+  addMedia: function (media) {
+    if (media instanceof Media) {
+      this.Media = media;
+    }
+  },
+  deleteMedia: function () {
+    this.Media = false;
+  },
+  getMedia: function () {
+    return this.Media;
+  }
+};
 
 
-
+// Media class
+Media = function () {
+  
+};
 
 
 // Note class
@@ -484,5 +496,9 @@ Note = function (options) {
   });  
 };
 
-
+exports.Customer = Customer;
+exports.Job = Job;
+exports.Estimate = Estimate;
+exports.EstimateLineItem = EstimateLineItem;
+exports.Media = Media;
 exports.Note = Note;

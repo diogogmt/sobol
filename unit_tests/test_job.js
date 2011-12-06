@@ -118,4 +118,4 @@ vows.describe('Job').addBatch({
             },
         },
     }
-}).run(); // Run it
+}).export(module); // Run it

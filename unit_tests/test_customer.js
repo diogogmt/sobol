@@ -181,7 +181,7 @@ vows.describe('Customer').addBatch({
       },
       'should not be able to delete the job, since it has one estimate. Job length should be 1': function (topic) {
         // console.log("topic.Status: " + topic.Status);
-        topic.deletejob(420);
+        topic.deleteJob(420);
         assert.equal(topic.totalJobs(), 1);
       },
     },
