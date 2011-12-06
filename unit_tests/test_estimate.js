@@ -11,32 +11,38 @@ var date = d.getDay() + '-' + d.getDate() + '-' + d.getFullYear();
     
 var estimateLineItemOptions1 = {
 	id : 1,
-	total : 5,
+	quantity:1,
+	cost:5,
 };
 
 var estimateLineItemOptions2 = {
 	id : 2,
-	total : 5,
+	quantity:1,
+	cost:5,
 };
 
 var estimateLineItemOptions3 = {
 	id : 3,
-	total : 5,
+	quantity:1,
+	cost:5,
 };
 
 var estimateLineItemOptions4 = {
 	id : 4,
-	total : 5,
+	quantity:1,
+	cost:5,
 };
 
 var estimateLineItemOptions5 = {
 	id : 5,
-	total : 5,
+	quantity:1,
+	cost:5,
 };
 
 var estimateLineItemOptions6 = {
 	id : 6,
-	total : 5,
+	quantity:1,
+	cost:5,
 };
 
 

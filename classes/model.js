@@ -365,7 +365,7 @@ Estimate.prototype = {
       
       for (i=0;i<size;i++){
           estimateLineItem = this.estimateLineItemSet[i];
-          total = estimateLineItem.total;
+          total = estimateLineItem.calcTotal();
           this.Subtotal = this.Subtotal + total;
           } 
   
@@ -377,7 +377,6 @@ Estimate.prototype = {
 
     calculateFinalTotal: function (Subtotal) {
       this.FinalTotal=0;
-      Subtotal = this.calculateSubTotal();
       this.FinalTotal = this.Subtotal * 1.15; //subtotal + taxes 
       
       this.FinalTotal=Math.round(this.FinalTotal*100)/100;
