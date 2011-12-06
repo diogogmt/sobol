@@ -172,7 +172,10 @@ vows.describe('Customer').addBatch({
     },
     'with 1 job containing 1 estimate': {
       topic: function () {
+        // console.log("\n\n\nwith 1 job containing 1 estimate\n\n");
         var c = new Customer();
+        // console.log("c status: " + c.Status);
+        // console.log("c totalJobs: " + c.totalJobs());
         var j = new Job();
         j.Id = 420;
         j.addEstimate(new Estimate());

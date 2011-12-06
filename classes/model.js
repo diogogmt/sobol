@@ -105,15 +105,21 @@ Customer.prototype = {
         jobs = this.Jobs,
         jobsLength = this.totalJobs()
     ;
-    // console.log("deleteJob");
-    // console.log("jboId: " + jobId);
+    // console.log("\n\ndeleteJob");
+    // console.log("jobId: " + jobId);
+    // console.log("jobsLength: " + jobsLength);
+    // console.log("this.Jobs.length: " + this.Jobs.length);
     for (i = 0; i < jobsLength; i++) {
       // console.log("i: " + i);
       // console.log("jobs[" + i + "].Id: " + jobs[i].Id);
       if (jobs[i].Id == jobId) {
         // console.log("jobs[" + i + "].Id: " + jobs[i].Id + " == " + jobId);
         // console.log("jobsLength: " + jobsLength);
-        jobs = jobs.splice(i, 1);
+        // console.log("jobs[i].getNumOfEstimates(): " + jobs[i].getNumOfEstimates());
+        if (jobs[i].getNumOfEstimates() === 0) {
+          // console.log("splicing job");
+          jobs = jobs.splice(i, 1);
+        }
         // console.log("this.totalJobs(): " + this.totalJobs());
         break;
       }
@@ -259,8 +265,8 @@ Job.prototype = {
         }
         return isSet;
     },
-    getNumOfEstimates: function() {
-        return this.estimateSet.length;
+    getNumOfEstimates: function() {  
+        return this.EstimateSet ? this.EstimateSet.length : 0;
     }
 }
 
