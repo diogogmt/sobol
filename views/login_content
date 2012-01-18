@@ -1,0 +1,27 @@
+#login
+  h1#title
+    a(href='') Slate Admin
+  #login-body.clearfix
+    form#login_form(action='/auth', name='login', method='post')
+      .content_front
+        .pad
+          .field
+            label Username:
+            div
+              span.input
+                input#login_email.text(name='email', type='text', value='admin')
+          .field
+            label Password:
+            div
+              span.input
+                input#login_password.text(name='password', type='password', value='password')
+                a#forgot_my_password(style='', href='javascript:;') Forgot password?
+          .checkbox
+            span.label  
+            div
+              input#remember.checkbox(name='remember', value='yes', type='checkbox')
+              label(style='display: inline;', for='remember') Remember me on this computer
+          .field
+            span.label  
+            div
+              button.btn(type='submit') Login

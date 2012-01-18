@@ -1,0 +1,13 @@
+!!!
+html
+  head
+    title Sobol
+    - if (title == 'Login')
+      link(rel='stylesheet', href='/css/login.css')
+      link(rel='stylesheet', href='/plugins/jquery.fancybox-1.3.4/fancybox/jquery.fancybox-1.3.4.css')
+    - if (title == 'Customer')
+      link(rel='stylesheet', href='/css/screen.css')
+      link(rel='stylesheet', href='/css/plugin.css')
+      link(rel='stylesheet', href='/plugins/jquery.fancybox-1.3.4/fancybox/jquery.fancybox-1.3.4.css')
+      
+  body!= body
