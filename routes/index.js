@@ -15,7 +15,14 @@ var UserSchema = new Schema({
 });
 
 UserSchema.statics.search = function search (opt, cb) {
+	console.log("user search");
+	console.log("opt: " + opt);
 	console.log(opt);
+	this.find({}, function (err, docs) {
+		console.log("docs:");
+		console.log(docs);
+	});
+
 	return this.findOne({
 		user: opt.username,
 		password: opt.password
@@ -41,6 +48,7 @@ exports.index = function(req, res) {
 };
 
 exports.login = function (req, res) {
+	console.log("login route");
 	res.render('login', 
 		{
 			title: 'Login'
@@ -48,9 +56,10 @@ exports.login = function (req, res) {
 }
 
 exports.auth = function (req, res) {
+	console.log("auth route");
 	User.search(
 		{
-			username: req.body.email,
+			username: req.body.username,
 			password: req.body.password
 		}, 
 		function (err, user) {
