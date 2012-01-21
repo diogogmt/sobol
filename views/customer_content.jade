@@ -1,0 +1,90 @@
+#content.xfluid
+  .portlet.x12
+    .portlet-header
+      h4 Tables
+    .portlet-content
+      br
+      a(name='plugin')
+      h2 Customer Management
+      a#addCustomer.btn(href='#newCustomer') Add Customer
+      div(style='display: none;')
+        #newCustomer(style='width: 800px; height: 300px; overflow: auto;')
+          form.form.label-inline(action='#', method='post')
+            table
+              tr
+                td
+                  .field
+                    label(for='lname') First name 
+                    input#fname.medium(name='lname', size='20', type='text', value='')
+                  .field
+                    label(for='lname') Last name 
+                    input#lname.medium(name='lname', size='20', type='text', value='')
+                  button#saveNewCust.btn Save
+                td
+                  .field
+                    label(for='lname') Email 
+                    input#email.medium(name='lname', value='', size='20', type='text')
+                  .field.phone_field
+                    label(for='telephone') Telephone
+                    input#telephone1.xsmall(value='', size='3', type='text')
+                    | -
+                    input#telephone2.xsmall(size='3', value='', type='text')
+                    | -
+                    input#telephone3.xsmall(size='4', value='', type='text')
+                    br
+                    br
+                    .field
+                      label(for='address1') Address 1 
+                      input#address1.large(value='', size='40', type='text')
+      br
+      br
+      input#showArchived(type='checkbox', name='showArchived')
+      | Show Archived
+      br
+      br
+      table#example.display(cellpadding='0', cellspacing='0', border='0', rel='datatable')
+        thead
+          tr
+            th Name
+            th Email
+            th Phone
+            th Jobs pending
+            th Status
+        tbody
+          tr.odd.gradeX.archivedCust
+            td.center
+              a(href='customer_details.php') Joe Doe
+            td joe@doe.com
+            td 416 647-938
+            td.center  4
+            td Archived
+          tr.even.gradeC
+            td.center
+              a(href='customer_details.php') Pedo DiLara
+            td pedo@dilara.com
+            td 416 647-938
+            td.center 1
+            td Active
+          tr.odd.gradeEdit.archivedCust
+            td.center
+              a(href='customer_details.php') Trident
+            td
+              | Internet
+              | Explorer 5.5
+            td 416 647-938
+            td.center 0
+            td Archived
+          tr.even.gradeA
+            td.center
+              a(href='customer_details.php') Salci Fu
+            td salci@fu.com
+            td 416 647-938
+            td.center 2
+            td Active
+          tr.odd.gradeA.archivedCust
+            td.center
+              a(href='customer_details.php') Marie Doe
+            td marie@doe.com
+            td 416 647-938
+            td.center 0
+            td Archived
