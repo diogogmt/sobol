@@ -13,6 +13,7 @@ var app = module.exports = express.createServer();
 app.configure(function(){
   app.set('views', __dirname + '/views');
   app.set('view engine', 'jade');
+<<<<<<< HEAD
   app.use(express.logger());
   app.use(express.bodyParser());
   app.use(express.cookieParser());
@@ -21,6 +22,12 @@ app.configure(function(){
   app.use(app.router);
   app.use(express.static(__dirname + '/public'));
 
+=======
+  app.use(express.bodyParser());
+  app.use(express.methodOverride());
+  app.use(app.router);
+  app.use(express.static(__dirname + '/public'));
+>>>>>>> 3ae5c984663a8435609f03b3b4d490fb9dd82a77
 });
 
 app.configure('development', function(){
@@ -35,9 +42,12 @@ app.configure('production', function(){
 
 app.get('/', routes.index);
 
+<<<<<<< HEAD
 app.get('/login', routes.login);
 
 app.post('/auth', routes.auth);
 
+=======
+>>>>>>> 3ae5c984663a8435609f03b3b4d490fb9dd82a77
 app.listen(3000);
 console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);

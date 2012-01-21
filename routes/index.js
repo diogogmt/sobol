@@ -2,6 +2,7 @@
  * GET home page.
  */
 
+<<<<<<< HEAD
 
 var 
   mongoose = require('mongoose'),
@@ -78,3 +79,8 @@ exports.auth = function (req, res) {
 	);
 	
 }
+=======
+exports.index = function(req, res){
+  res.render('index', { title: 'Express' })
+};
+>>>>>>> 3ae5c984663a8435609f03b3b4d490fb9dd82a77
