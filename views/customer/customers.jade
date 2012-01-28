@@ -1,0 +1,15 @@
+include ../includes/menu.jade
+include customers_content.jade
+include ../includes/footer.jade
+
+script(type="text/javascript")
+  $(document).ready(function() {
+    /*
+    *   Add new customer
+    */
+    $("#addCustomer").fancybox({
+      'titlePosition'   : 'inside',
+      'transitionIn'    : 'none',
+      'transitionOut'   : 'none'
+    });
+  });

@@ -20,6 +20,7 @@ app.configure(function(){
   app.use(express.methodOverride());
   app.use(app.router);
   app.use(express.static(__dirname + '/public'));
+  app.set('view options', { pretty: true });
 });
 
 app.configure('development', function(){
@@ -30,10 +31,16 @@ app.configure('production', function(){
   app.use(express.errorHandler()); 
 });
 
-// Routes
-app.get('/', routes.index);
-app.get('/login', routes.login);
-app.post('/auth', routes.auth);
+console.log("routes: " + routes);
+console.log("customer route: " + routes.customer);
+console.log("general route: " + routes.general);
 
-app.listen(3000);
+// Routes
+app.get('/', routes.general.index);
+app.get('/login', routes.general.login);
+app.post('/auth', routes.general.auth);
+app.get('/customers', routes.customer.all);
+app.get('/customers/add', routes.customer.add);
+
+app.listen(11342);
 console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
