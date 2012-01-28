@@ -1,6 +1,6 @@
-include menu.jade
-include customer_content.jade
-include footer.jade
+include ../includes/menu.jade
+include customers_content.jade
+include ../includes/footer.jade
 
 script(type="text/javascript")
   $(document).ready(function() {
@@ -11,10 +11,5 @@ script(type="text/javascript")
       'titlePosition'   : 'inside',
       'transitionIn'    : 'none',
       'transitionOut'   : 'none'
-    });
-    $("#customerTable").dataTable( {
-      "bProcessing": true,
-      "bDestroy": true,
-      "sAjaxSource": "/customer"
     });
   });
