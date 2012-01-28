@@ -20,6 +20,7 @@ app.configure(function(){
   app.use(express.methodOverride());
   app.use(app.router);
   app.use(express.static(__dirname + '/public'));
+  app.set('view options', {pretty: true});
 });
 
 app.configure('development', function(){
@@ -34,6 +35,7 @@ app.configure('production', function(){
 app.get('/', routes.index);
 app.get('/login', routes.login);
 app.post('/auth', routes.auth);
+app.get('/customer', routes.customer);
 
-app.listen(3000);
+app.listen(11342);
 console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);

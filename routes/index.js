@@ -26,16 +26,50 @@ UserSchema.statics.search = function search (opt, cb) {
 		user: opt.username,
 		password: opt.password
 		}, cb);
-};	
+};
+
+var CustomerSchema = new Schema({
+	id : Number,
+	firstName : String,
+	lastName : String,
+	email : String,
+	phone1 : String,
+	phone2 : String,
+	street1 : String,
+	street2 : String,
+	postal : String,
+	city : String,
+	province : String,
+	country : String,
+	registrationDate : Date,
+	status : String
+});
+
+CustomerSchema.statics.search = function search (opt, cb) {
+	console.log("customer search");
+	console.log("opt: " + opt);
+	this.find({}, function(err, docs) {
+		console.log("docs:");
+		console.log(docs);
+	});
+
+	return this.findOne({
+		id : opt.id
+		}, cb);
+};
+
+CustomerSchema.statics.findAll = function findAll(opt, cb) {
+	return this.find({}, cb);
+};
 
 mongoose.connect(
 	'localhost',
 	'sobol',
-	'29017'
+	'27017'
 );
 
 var User = mongoose.model('users', UserSchema);
-
+var Customer = mongoose.model('customer', CustomerSchema);
 
 exports.index = function(req, res) {
 	if (!req.session || !req.session.user) {
@@ -65,9 +99,9 @@ exports.auth = function (req, res) {
 			console.log("callback");
 			console.log(user);
 			if (user) {
-			console.log("auth");
-			req.session.user = user;
-			res.redirect('/');	
+				console.log("auth");
+				req.session.user = user;
+				res.redirect('/');
 			}
 			else {
 				console.log("NOT auth");
@@ -76,4 +110,35 @@ exports.auth = function (req, res) {
 		}
 	);
 	
+}
+
+exports.customer = function (req, res) {
+	console.log("customer route");
+	Customer.findAll({}, function (err, customers) {
+		console.log("customer callback");
+		if(customers){
+			console.log("success");
+			console.log(customers);
+
+			var dataSet = new Array();
+			for(i = 0; i < customers.length; i++){
+				dataSet.push([
+            customers[i].id,
+            customers[i].firstName + ' ' + customers[i].lastName,
+            customers[i].email,
+            customers[i].phone1,
+            0,
+            customers[i].status
+				]);
+			}
+
+      var aaData = {
+        "aaData" : dataSet
+      };
+
+      res.json(aaData);
+		}else{
+			console.log("Not success");
+		}
+	});
 }
