@@ -29,7 +29,7 @@ UserSchema.statics.search = function search (opt, cb) {
 mongoose.connect(
   'localhost',
   'sobol',
-  '29017'
+  '27017'
 );
 
 var User = mongoose.model('users', UserSchema);

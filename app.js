@@ -42,5 +42,5 @@ app.post('/auth', routes.general.auth);
 app.get('/customers', routes.customer.all);
 app.get('/customers/add', routes.customer.add);
 
-app.listen(3000);
+app.listen(11342);
 console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
