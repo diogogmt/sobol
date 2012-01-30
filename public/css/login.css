@@ -108,11 +108,11 @@ body { background: #263849; font: 12px/1.7em arial, sans-serif; }
 	margin: 0 0 15px 0;
 }
 
-#login-body .error 
+#login-body span.error 
 {
 	font: bold;
 	font-size: 12px;
-	font-color: red;
+	color: red;
     float: left;
     line-height: 15px;
    	margin: 0;

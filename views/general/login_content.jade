@@ -10,8 +10,8 @@
             div
               span.input
                 input#login_email.text(name='username', type='text', value='admin')
-          span.input
-          error #{usernameError}
+                span.input
+                span.error #{usernameError}
           .field
             label Password:
             div
@@ -19,7 +19,7 @@
                 input#login_password.text(name='password', type='password')
                 a#forgotPassword(style='', href='#retrievePassword') Forgot password?
                 span.input
-                error #{passwordError}
+                span.error #{passwordError}
           .checkbox
             span.label  
             div
@@ -29,8 +29,8 @@
             span.label  
             div
               button.btn(type='submit') Login
-          div.error
-          error #{loginError}
+          div
+          span.error #{loginError}
 
 
           div(style='display: none;')
@@ -46,5 +46,5 @@
                         input#email.medium(name='email', size='20', type='text', value='')
                         button#actionBtnLogin.btn Submit
 
-                        div.error
-                        error #{emailError}
+                        div
+                        label.error #{emailError}
