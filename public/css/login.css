@@ -107,3 +107,16 @@ body { background: #263849; font: 12px/1.7em arial, sans-serif; }
 	padding: 5px;
 	margin: 0 0 15px 0;
 }
+
+#login-body .error 
+{
+	font: bold;
+	font-size: 12px;
+	font-color: red;
+    float: left;
+    line-height: 15px;
+   	margin: 0;
+	text-align: left;
+	font-weight: bold; 
+	
+}

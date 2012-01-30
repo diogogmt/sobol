@@ -10,12 +10,16 @@
             div
               span.input
                 input#login_email.text(name='username', type='text', value='admin')
+          span.input
+          error #{usernameError}
           .field
             label Password:
             div
               span.input
                 input#login_password.text(name='password', type='password')
                 a#forgotPassword(style='', href='#retrievePassword') Forgot password?
+                span.input
+                error #{passwordError}
           .checkbox
             span.label  
             div
@@ -25,6 +29,10 @@
             span.label  
             div
               button.btn(type='submit') Login
+          div.error
+          error #{loginError}
+
+
           div(style='display: none;')
             #retrievePassword(style='width: 400px; height: 120px; overflow: auto;')
               form.form.label-inline(action='#', method='post')
@@ -37,3 +45,6 @@
                         label(for='email') Email 
                         input#email.medium(name='email', size='20', type='text', value='')
                         button#actionBtnLogin.btn Submit
+
+                        div.error
+                        error #{emailError}

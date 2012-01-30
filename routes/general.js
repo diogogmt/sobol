@@ -45,6 +45,15 @@ exports.index = function(req, res) {
 
 exports.auth = function (req, res) {
   console.log("auth route");
+  
+if(req.body.username == ""){
+req.flash('usernameError', 'You must enter a username');  
+}
+
+if(req.body.password == ""){
+req.flash('passwordError', 'You must enter a password');  
+}
+
   User.search(
     {
       username: req.body.username,
@@ -60,6 +69,11 @@ exports.auth = function (req, res) {
       }
       else {
         console.log("NOT auth");
+        
+        if(req.body.username != "" && req.body.password != ""){
+            req.flash('loginError', 'Unable to login, incorrect username or password');
+            }
+
         res.redirect('/login');
       }
     }
@@ -72,7 +86,12 @@ exports.login = function (req, res) {
   res.render('general/login', 
     {
       layout: "includes/layout",
-      title: 'Login'
+      title: 'Login',
+      usernameError: req.flash("usernameError"),
+      passwordError: req.flash("passwordError"),
+      loginError: req.flash("loginError"),
+      emailError: req.flash("emailError"),
+      user: new User()
     }
   );
 }
