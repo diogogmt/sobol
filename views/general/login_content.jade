@@ -9,12 +9,12 @@
             label Username:
             div
               span.input
-                input#login_email.text(name='username', type='text', value='admin')
+                input#login_email.text(name='user[email]', value=user.email || '')
           .field
             label Password:
             div
               span.input
-                input#login_password.text(name='password', type='password', value='password')
+                input#login_password.text(name='user[password]', value=user.password || '', type='password')
                 a#forgotPassword(style='', href='#retrievePassword') Forgot password?
           .checkbox
             span.label  
@@ -25,6 +25,11 @@
             span.label  
             div
               button.btn(type='submit') Login
+           // - if (flash)
+          //-   h2= flash.error
+          //- - else
+          //-   h2 NO ERROR
+          h2 #{info}
           div(style='display: none;')
             #retrievePassword(style='width: 400px; height: 120px; overflow: auto;')
               form.form.label-inline(action='#', method='post')
