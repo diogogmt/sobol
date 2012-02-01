@@ -126,11 +126,12 @@ app.post('/auth', routes.general.auth);
 
 // Customer
 app.get('/customers', loadUser, routes.customer.all);
+app.get('/customers/findAll', routes.customer.findAll);
 app.get('/customers/add', routes.customer.add);
 
 // User
-app.get('/user/create', loadUser, routes.user.create);
-app.post('/user/save', loadUser, routes.user.save);
+app.get('/user/create', routes.user.create);
+app.post('/user/save', routes.user.save);
 // Post Reset
 app.post('/user/forgot', routes.user.forgot);
 // Get Reset

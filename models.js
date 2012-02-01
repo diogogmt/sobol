@@ -1,5 +1,6 @@
 var crypto = require('crypto'),
     User,
+    Customer,
     LoginToken;
 
 
@@ -16,6 +17,7 @@ function defineModels(mongoose, fn) {
   }
 
   User = new Schema({
+    'username': String,
     'email': { type: String, validate: [validatePresenceOf, 'an email is required'], index: { unique: true } },
     'hashed_password': String,
     'salt': String
@@ -89,7 +91,33 @@ function defineModels(mongoose, fn) {
       return JSON.stringify({ email: this.email, token: this.token, series: this.series });
     });
 
+  /**
+    * Model: Customer
+    */
+  
+  Customer = new Schema({
+    id : Number,
+    firstName : String,
+    lastName : String,
+    email : String,
+    phone1 : String,
+    phone2 : String,
+    street1 : String,
+    street2 : String,
+    postal : String,
+    city : String,
+    province : String,
+    country : String,
+    registrationDate : Date,
+    status : String
+  });
+
+  Customer.statics.findAll = function findAll(opt, cb) {
+    return this.find({}, cb);
+  };
+
   mongoose.model('User', User);
+  mongoose.model('Customer', Customer);
   mongoose.model('LoginToken', LoginToken);
 
   fn();

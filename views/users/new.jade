@@ -1,7 +1,7 @@
 .page
   h2 Register
 
-  form.users(method='post', action='/users/save')
+  form.users(method='post', action='/user/save')
     !=partial('fields', { locals: { user: user } })
     div
       input(type='submit', value='Register')

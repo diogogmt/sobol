@@ -1,14 +1,14 @@
 var mongoose = require('mongoose')
   , models = require('./../models')
   , bcrypt = require('bcrypt')
-  , domain = 'http://localhost:3000/'
+  , domain = 'http://localhost:11342/'
   , email = require('./../email.js')
   , Schema = mongoose.Schema;
 
 
 models.defineModels(mongoose, function() {
   User = mongoose.model('User');
-  db = mongoose.connect('mongodb://localhost/sobol-development');
+  db = mongoose.connect('mongodb://localhost/sobol');
 });
 
 

@@ -7,7 +7,7 @@ var mongoose = require('mongoose')
 models.defineModels(mongoose, function() {
   User = mongoose.model('User');
   LoginToken = mongoose.model('LoginToken');
-  db = mongoose.connect('mongodb://localhost/sobol-development');
+  db = mongoose.connect('mongodb://localhost/sobol');
 })
 
 exports.index = function(req, res) {
@@ -20,7 +20,7 @@ exports.index = function(req, res) {
 };
 
 exports.auth = function (req, res) {
-  User.findOne({ email: req.body.user.email }, function(err, user) {
+  User.findOne({ username: req.body.user.username }, function(err, user) {
     if (user && user.authenticate(req.body.user.password)) {
       req.session.user_id = user.id;
 
