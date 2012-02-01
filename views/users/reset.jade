@@ -1,0 +1,14 @@
+.page
+  h2 Reset Password
+
+  form.users(method='post', action='/user/reset/#{id}')
+    div
+      label New Password:
+      input(name='password[value]', type='password')
+
+    div
+      label Repeat Password:
+      input(name='password[confirm]', type='password')
+    div
+      input(type='submit', value='Reset')
+

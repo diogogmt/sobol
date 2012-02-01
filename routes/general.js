@@ -1,38 +1,14 @@
-/*
- * GET home page.
- */
 
 var mongoose = require('mongoose')
-  , Schema = mongoose.Schema;
+  , models = require('./../models')
+  , Schema = mongoose.Schema
+  , email = require('./../email.js');
 
-var UserSchema = new Schema({
-  username : String,
-  password : String,
-  type : String
-});
-
-UserSchema.statics.search = function search (opt, cb) {
-  console.log("user search");
-  console.log("opt: " + opt);
-  console.log(opt);
-  this.find({}, function (err, docs) {
-    console.log("docs:");
-    console.log(docs);
-  });
-
-  return this.findOne({
-    user: opt.username,
-    password: opt.password
-    }, cb);
-};  
-
-mongoose.connect(
-  'localhost',
-  'sobol',
-  '27017'
-);
-
-var User = mongoose.model('users', UserSchema);
+models.defineModels(mongoose, function() {
+  User = mongoose.model('User');
+  LoginToken = mongoose.model('LoginToken');
+  db = mongoose.connect('mongodb://localhost/sobol-development');
+})
 
 exports.index = function(req, res) {
   if (!req.session || !req.session.user) {
@@ -44,45 +20,76 @@ exports.index = function(req, res) {
 };
 
 exports.auth = function (req, res) {
-  console.log("auth route");
-  User.search(
-    {
-      username: req.body.username,
-      password: req.body.password
-    }, 
-    function (err, user) {
-      console.log("callback");
-      console.log(user);
-      if (user) {
-      console.log("auth");
-      req.session.user = user;
-      res.redirect('/');  
+  User.findOne({ email: req.body.user.email }, function(err, user) {
+    if (user && user.authenticate(req.body.user.password)) {
+      req.session.user_id = user.id;
+
+      var options = {
+        message: {
+          sender: 'Sobol INC <sobolinc@gmail.com>',
+          to: '"Diogo Golovanevsky" <diogo.gmt@gmail.com> ',
+          subject: 'Message from Dandasoft',
+
+          body: 'Client message',
+          // debug: true,
+          
+        },
+        // Callback to be run after the sending is completed
+        callback: function(error, success){
+          if(error){
+              console.log('Error occured');
+              console.log(error.message);
+              return;
+          }
+          if(success){
+              console.log('Message sent successfully!');
+          }else{
+              console.log('Message failed, reschedule!');
+          }
+        }
       }
+
+      email.send(options);
+
+
+      // Remember me
+      if (req.body.remember_me) {
+        var loginToken = new LoginToken({ email: user.email });
+        loginToken.save(function() {
+          res.cookie('logintoken', loginToken.cookieValue, { expires: new Date(Date.now() + 2 * 604800000), path: '/' });
+          res.redirect('/customers');
+        });
+      } 
       else {
-        console.log("NOT auth");
-        res.redirect('/login');
+        res.redirect('/customers');
       }
+    } 
+    else {
+      req.flash('info', 'Incorrect credentials');
+      res.redirect('/login');
     }
-  );
+  }); 
 }
 
 
 exports.login = function (req, res) {
-  console.log("login route");
   res.render('general/login', 
     {
       layout: "includes/layout",
-      title: 'Login'
+      title: 'Login',
+      info: req.flash("info"),
+      user: new User()
     }
   );
 }
 
 
 exports.logout = function (req, res) {
-  console.log("login route");
-  res.render('customer/customers', 
-    {
-      title: 'Customers'
-    }
-  );
+  if (req.session) {
+    LoginToken.remove({ email: req.currentUser.email }, function() {});
+    res.clearCookie('logintoken');
+    req.session.destroy(function() {
+    });
+  }
+  res.redirect('/login');
 }

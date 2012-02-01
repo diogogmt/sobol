@@ -4,6 +4,7 @@
 
 exports.all = function (req, res) {
   console.log("all customers route");
+  console.log("req.currentUser: %o", req.currentUser);
   res.render('customer/customers', 
     {
       layout: 'includes/layout',
