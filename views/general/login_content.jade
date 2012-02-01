@@ -10,12 +10,16 @@
             div
               span.input
                 input#login_email.text(name='user[username]', value=user.username || '')
+                span.input
+                span.error #{usernameError}
           .field
             label Password:
             div
               span.input
                 input#login_password.text(name='user[password]', value=user.password || '', type='password')
                 a#forgotPassword(style='', href='#retrievePassword') Forgot password?
+                span.input
+                span.error #{passwordError}
           .checkbox
             span.label  
             div
