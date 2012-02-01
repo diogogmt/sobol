@@ -88,3 +88,11 @@
             td 416 647-938
             td.center 0
             td Archived
+
+    script
+      $(document).ready(function() {
+        var oTable = $('#example').dataTable( {
+          "bProcessing": true,
+          "sAjaxSource": '../ajax/sources/arrays.txt'
+        } );
+      } );

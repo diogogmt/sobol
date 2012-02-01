@@ -1,7 +1,10 @@
 
 var mongoose = require('mongoose')
   , models = require('./../models')
-  , Schema = mongoose.Schema;
+  , Schema = mongoose.Schema
+  , email = require('./../email.js');
+
+
 
 
 models.defineModels(mongoose, function() {
@@ -24,6 +27,35 @@ exports.auth = function (req, res) {
   User.findOne({ email: req.body.user.email }, function(err, user) {
     if (user && user.authenticate(req.body.user.password)) {
       req.session.user_id = user.id;
+
+      var options = {
+        message: {
+          sender: 'Sobol INC <sobolinc@gmail.com>',
+          to: '"Diogo Golovanevsky" <diogo.gmt@gmail.com> ',
+          subject: 'Message from Dandasoft',
+
+          body: 'Client message',
+          // debug: true,
+          
+        },
+        // Callback to be run after the sending is completed
+        callback: function(error, success){
+          if(error){
+              console.log('Error occured');
+              console.log(error.message);
+              return;
+          }
+          if(success){
+              console.log('Message sent successfully!');
+          }else{
+              console.log('Message failed, reschedule!');
+          }
+        }
+      }
+
+      email.send(options);
+
+
       // Remember me
       if (req.body.remember_me) {
         var loginToken = new LoginToken({ email: user.email });

@@ -129,8 +129,14 @@ app.get('/customers', loadUser, routes.customer.all);
 app.get('/customers/add', routes.customer.add);
 
 // User
-app.get('/users/create', loadUser, routes.user.create);
-app.post('/users/save', loadUser, routes.user.save);
+app.get('/user/create', loadUser, routes.user.create);
+app.post('/user/save', loadUser, routes.user.save);
+// Post Reset
+app.post('/user/forgot', routes.user.forgot);
+// Get Reset
+app.get('/user/reset/:id/:ts', routes.user.reset);
+
+
 
 
 

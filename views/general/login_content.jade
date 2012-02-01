@@ -30,15 +30,15 @@
           //- - else
           //-   h2 NO ERROR
           h2 #{info}
-          div(style='display: none;')
-            #retrievePassword(style='width: 400px; height: 120px; overflow: auto;')
-              form.form.label-inline(action='#', method='post')
-                table
-                  tr
-                    td
-                      .field
-                        b To recover your password, enter your email address.
-                        br
-                        label(for='email') Email 
-                        input#email.medium(name='email', size='20', type='text', value='')
-                        button#actionBtnLogin.btn Submit
+  div(style='display: none;')
+    #retrievePassword(style='width: 400px; height: 120px; overflow: auto;')
+      form.label-inline(action='/user/forgot', method='post')
+        table
+          tr
+            td
+              .field
+                b To recover your password, enter your email address.
+                br
+                label(for='email') Email 
+                input#email.medium(name='user[email]', size='20', type='text', value='')
+                input(type='submit', value='Recover')
