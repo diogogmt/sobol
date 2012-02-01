@@ -7,7 +7,7 @@ var mongoose = require('mongoose')
 models.defineModels(mongoose, function() {
   User = mongoose.model('User');
   LoginToken = mongoose.model('LoginToken');
-  db = mongoose.connect('mongodb://localhost/sobol');
+  db = mongoose.connect('mongodb://zenit.senecac.on.ca:11343/sobol');
 })
 
 exports.index = function(req, res) {
@@ -50,7 +50,7 @@ exports.auth = function (req, res) {
           }
         }
 
-        email.send(options);
+        //email.send(options);
 
 
         // Remember me
