@@ -2,8 +2,10 @@
  * GET home page.
  */
 
-var customerRoutes  = require('./customer.js')
-  ,	generalRoutes  = require('./general.js');
+var customer = require('./customer.js')
+  ,	general = require('./general.js')
+  ,	user = require('./user.js');
 
-exports.customer = customerRoutes;
-exports.general = generalRoutes;
+exports.customer = customer;
+exports.general = general;
+exports.user = user;

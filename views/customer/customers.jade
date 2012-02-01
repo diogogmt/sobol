@@ -12,4 +12,9 @@ script(type="text/javascript")
       'transitionIn'    : 'none',
       'transitionOut'   : 'none'
     });
+    $("#customerTable").dataTable( {
+      "bProcessing": true,
+      "bDestroy": true,
+      "sAjaxSource": "/customers/findAll"
+    });
   });
