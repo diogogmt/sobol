@@ -50,7 +50,7 @@ exports.auth = function (req, res) {
           }
         }
 
-        email.send(options);
+        //email.send(options);
 
 
         // Remember me
