@@ -68,3 +68,14 @@ exports.add = function (req, res) {
     }
   );
 }
+
+exports.details = function (req, res) {
+  console.log("customer details route");
+  console.log("customer ID: " + req.params.id);
+  res.render('customer/custDetails', 
+    {
+      layout: 'includes/layout',
+      title: 'Customer'
+    }
+  );
+}
