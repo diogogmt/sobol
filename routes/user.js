@@ -3,12 +3,12 @@ var mongoose = require('mongoose')
   , bcrypt = require('bcrypt')
   , domain = 'http://localhost:11342/'
   , email = require('./../email.js')
+  , config = require('./../config')
   , Schema = mongoose.Schema;
 
 
-models.defineModels(mongoose, function() {
+models.defineModels(function() {
   User = mongoose.model('User');
-  db = mongoose.connect('mongodb://96.126.106.151:27017/sobol');
 });
 
 
