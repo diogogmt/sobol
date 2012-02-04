@@ -8,7 +8,7 @@
       h2 Customer Management
       a#addCustomer.btn(href='#newCustomer') Add Customer
       div(style='display: none;')
-        #newCustomer(style='width: 800px; height: 300px; overflow: auto;')
+        #newCustomer(style='width: 800px; height: 400px; overflow: auto;')
           form.form.label-inline(action='#', method='post')
             table
               tr
@@ -16,26 +16,65 @@
                   .field
                     label(for='lname') First name 
                     input#fname.medium(name='lname', size='20', type='text', value='')
+                td
                   .field
                     label(for='lname') Last name 
                     input#lname.medium(name='lname', size='20', type='text', value='')
-                  button#saveNewCust.btn Save
+              tr
                 td
                   .field
-                    label(for='lname') Email 
-                    input#email.medium(name='lname', value='', size='20', type='text')
+                    label(for='address1') Address 1 
+                    input#address1.large(value='', size='40', type='text')
+                td
+                  .field
+                    label(for='address1') Address 2
+                    input#address2.large(value='', size='40', type='text')
+              tr
+                td
+                  .field
+                    label(for='country') Country
+                    input#country.small(value='', size='20', type='text')
+                td
+                  .field
+                    label(for='province') Province
+                    input#province.small(value='', size='20', type='text')
+              tr
+                td
+                  .field
+                    label(for='city') City
+                    input#city.small(value='', size='20', type='text')
+                td
+                  .field
+                    label(for='postal') Postal Code
+                    input#postal.small(value='', size='20', type='text')
+              tr
+                td
                   .field.phone_field
-                    label(for='telephone') Telephone
-                    input#telephone1.xsmall(value='', size='3', type='text')
+                    label(for='telephone1') Telephone 1
+                    input#telephone1a.xsmall(value='', size='3', type='text')
                     | -
-                    input#telephone2.xsmall(size='3', value='', type='text')
+                    input#telephone1b.xsmall(size='3', value='', type='text')
                     | -
-                    input#telephone3.xsmall(size='4', value='', type='text')
-                    br
-                    br
-                    .field
-                      label(for='address1') Address 1 
-                      input#address1.large(value='', size='40', type='text')
+                    input#telephone1c.xsmall(size='4', value='', type='text')
+                td
+                  .field.phone_field
+                    label(for='telephone2') Telephone 2
+                    input#telephone2a.xsmall(value='', size='3', type='text')
+                    | -
+                    input#telephone2b.xsmall(size='3', value='', type='text')
+                    | -
+                    input#telephone2c.xsmall(size='4', value='', type='text')
+              tr
+                td
+                  .field
+                    label(for='email') Email 
+                    input#email.medium(name='email', value='', size='20', type='text')
+                td
+                  
+              tr
+                td
+                  button#saveNewCust.btn Save
+                td
       br
       br
       input#showArchived(type='checkbox', name='showArchived')

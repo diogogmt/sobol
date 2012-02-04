@@ -112,10 +112,6 @@ function defineModels(mongoose, fn) {
     status : String
   });
 
-  Customer.statics.findAll = function findAll(opt, cb) {
-    return this.find({}, cb);
-  };
-
   mongoose.model('User', User);
   mongoose.model('Customer', Customer);
   mongoose.model('LoginToken', LoginToken);

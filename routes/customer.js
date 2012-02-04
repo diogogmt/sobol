@@ -20,14 +20,14 @@ var mongoose = require('mongoose')
 
 models.defineModels(mongoose, function(){
   Customer = mongoose.model('Customer');
-  db = mongoose.connect('mongodb://zenit.senecac.on.ca:11343/sobol');
+  db = mongoose.connect('mongodb://96.126.106.151:27017/sobol');
 });
 
 exports.findAll = function (req, res) {
   console.log("all customers route");
   console.log("req.currentUser: %o", req.currentUser);
 
-  Customer.findAll({}, function (err, customers) {
+  Customer.find({}, function (err, customers) {
     console.log("customer callback");
     if(customers){
       console.log("success");

@@ -7,7 +7,7 @@ var mongoose = require('mongoose')
 models.defineModels(mongoose, function() {
   User = mongoose.model('User');
   LoginToken = mongoose.model('LoginToken');
-  db = mongoose.connect('mongodb://zenit.senecac.on.ca:11343/sobol');
+  db = mongoose.connect('mongodb://96.126.106.151:27017/sobol');
 })
 
 exports.index = function(req, res) {
