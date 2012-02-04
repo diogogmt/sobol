@@ -1,10 +1,13 @@
-var crypto = require('crypto'),
-    User,
-    Customer,
-    LoginToken;
+var crypto = require('crypto')
+  , mongoose = require('mongoose')
+  , User
+  , Customer
+  , LoginToken
+  , config = require('./config')
+  db = mongoose.connect(config.mongo.connectionString);
 
 
-function defineModels(mongoose, fn) {
+function defineModels(callback) {
   var Schema = mongoose.Schema,
       ObjectId = Schema.ObjectId;
 
@@ -116,11 +119,11 @@ function defineModels(mongoose, fn) {
     return this.find({}, cb);
   };
 
-  mongoose.model('User', User);
-  mongoose.model('Customer', Customer);
-  mongoose.model('LoginToken', LoginToken);
+  db.model('User', User);
+  db.model('Customer', Customer);
+  db.model('LoginToken', LoginToken);
 
-  fn();
+  callback();
 }
 
 exports.defineModels = defineModels; 

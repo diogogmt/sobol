@@ -2,12 +2,12 @@
 var mongoose = require('mongoose')
   , models = require('./../models')
   , Schema = mongoose.Schema
-  , email = require('./../email.js');
+  , email = require('./../email.js')
+  , config = require('./../config');
 
-models.defineModels(mongoose, function() {
+models.defineModels(function() {
   User = mongoose.model('User');
   LoginToken = mongoose.model('LoginToken');
-  db = mongoose.connect('mongodb://96.126.106.151:27017/sobol');
 })
 
 exports.index = function(req, res) {

@@ -2,6 +2,8 @@
  * GET home page.
  */
 
+var config = require('./../config');
+
 exports.all = function (req, res) {
   console.log("all customers route");
   console.log("req.currentUser: %o", req.currentUser);
@@ -11,16 +13,15 @@ exports.all = function (req, res) {
       title: 'Customer'
     }
   );
-}
+};
 
 var mongoose = require('mongoose')
   , models = require('./../models')
   , domain = 'http://localhost:11342/'
   , Schema = mongoose.Schema;
 
-models.defineModels(mongoose, function(){
+models.defineModels(function(){
   Customer = mongoose.model('Customer');
-  db = mongoose.connect('mongodb://96.126.106.151:27017/sobol');
 });
 
 exports.findAll = function (req, res) {
@@ -50,7 +51,8 @@ exports.findAll = function (req, res) {
       };
 
       res.json(aaData);
-    }else{
+    }
+    else {
       console.log("Not success");
     }
   });

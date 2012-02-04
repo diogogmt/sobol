@@ -13,31 +13,14 @@ var express = require('express')
   , mongoose = require('mongoose')
   , connect = require('connect')
   , jade = require('jade')
+  , routes = require('./routes')
+  , config = require('./config')
   , models = require('./models');
 
 
 var app = module.exports = express.createServer();
 
 // Configuration
-
-app.configure('development', function() {
-  app.set('db-uri', 'mongodb://96.126.106.151:27017/sobol-development');
-  app.use(express.errorHandler({ dumpExceptions: true }));
-  app.set('view options', {
-    pretty: true
-  });
-});
-
-app.configure('test', function() {
-  app.set('db-uri', 'mongodb://96.126.106.151:27017/sobol-test');
-  app.set('view options', {
-    pretty: true
-  });  
-});
-
-app.configure('production', function() {
-  app.set('db-uri', 'mongodb://96.126.106.151:27017/sobol-production');
-});
 
 app.configure(function() {
   app.set('views', __dirname + '/views');
@@ -56,13 +39,16 @@ app.configure(function() {
     port: '25',
     from: 'nodepad@example.com'
   });
+  app.set('view options', {
+    pretty: true
+  });
+  app.use(express.errorHandler({ dumpExceptions: true }));
 });
 
 
-models.defineModels(mongoose, function() {
-  app.User = User = mongoose.model('User');
-  app.LoginToken = LoginToken = mongoose.model('LoginToken');
-  db = mongoose.connect(app.set('db-uri'));
+models.defineModels(function() {
+  app.User = User = db.model('User');
+  app.LoginToken = LoginToken = db.model('LoginToken');
 })
 
 function authenticateFromLoginToken(req, res, next) {
@@ -136,7 +122,6 @@ app.post('/user/save', routes.user.save);
 app.post('/user/forgot', routes.user.forgot);
 // Get Reset
 app.get('/user/reset/:id/:ts', routes.user.reset);
-
 
 
 
