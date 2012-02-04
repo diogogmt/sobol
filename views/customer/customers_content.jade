@@ -1,15 +1,13 @@
 #content.xfluid
   .portlet.x12
     .portlet-header
-      h4 Tables
+      h4 Customer Management
     .portlet-content
       br
-      a(name='plugin')
-      h2 Customer Management
       a#addCustomer.btn(href='#newCustomer') Add Customer
       div(style='display: none;')
         #newCustomer(style='width: 800px; height: 400px; overflow: auto;')
-          form.form.label-inline(action='#', method='post')
+          form.form.label-inline(action='/customers/add', method='post')
             table
               tr
                 td
