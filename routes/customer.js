@@ -20,7 +20,7 @@ var mongoose = require('mongoose')
 
 models.defineModels(mongoose, function(){
   Customer = mongoose.model('Customer');
-  db = mongoose.connect('mongodb://localhost/sobol');
+  db = mongoose.connect('mongodb://96.126.106.151:27017/sobol');
 });
 
 exports.findAll = function (req, res) {

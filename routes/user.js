@@ -8,7 +8,7 @@ var mongoose = require('mongoose')
 
 models.defineModels(mongoose, function() {
   User = mongoose.model('User');
-  db = mongoose.connect('mongodb://localhost/sobol');
+  db = mongoose.connect('mongodb://96.126.106.151:27017/sobol');
 });
 
 

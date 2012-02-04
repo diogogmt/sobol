@@ -21,7 +21,7 @@ var app = module.exports = express.createServer();
 // Configuration
 
 app.configure('development', function() {
-  app.set('db-uri', 'mongodb://localhost/sobol-development');
+  app.set('db-uri', 'mongodb://96.126.106.151:27017/sobol-development');
   app.use(express.errorHandler({ dumpExceptions: true }));
   app.set('view options', {
     pretty: true
@@ -29,14 +29,14 @@ app.configure('development', function() {
 });
 
 app.configure('test', function() {
-  app.set('db-uri', 'mongodb://localhost/sobol-test');
+  app.set('db-uri', 'mongodb://96.126.106.151:27017/sobol-test');
   app.set('view options', {
     pretty: true
   });  
 });
 
 app.configure('production', function() {
-  app.set('db-uri', 'mongodb://localhost/sobol-production');
+  app.set('db-uri', 'mongodb://96.126.106.151:27017/sobol-production');
 });
 
 app.configure(function() {
