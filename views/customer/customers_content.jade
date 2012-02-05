@@ -7,71 +7,75 @@
       a#addCustomer.btn(href='#newCustomer') Add Customer
       div(style='display: none;')
         #newCustomer(style='width: 800px; height: 400px; overflow: auto;')
-          form.form.label-inline(action='/customers/add', method='post')
+          h4 Add Customer
+          form.form.label-inline(id='addCustForm', action='/customer/add', method='post')
             table
               tr
                 td
                   .field
                     label(for='lname') First name 
-                    input#fname.medium(name='lname', size='20', type='text', value='')
+                    input#firstName.medium(name='cust[firstName]', size='20', type='text', value='')
                 td
                   .field
                     label(for='lname') Last name 
-                    input#lname.medium(name='lname', size='20', type='text', value='')
+                    input#lastName.medium(name='cust[lastName]', size='20', type='text', value='')
               tr
                 td
                   .field
                     label(for='address1') Address 1 
-                    input#address1.large(value='', size='40', type='text')
+                    input#address1.large(name='cust[address1]', value='', size='40', type='text')
                 td
                   .field
                     label(for='address1') Address 2
-                    input#address2.large(value='', size='40', type='text')
+                    input#address2.large(name='cust[address2]', value='', size='40', type='text')
               tr
                 td
                   .field
                     label(for='country') Country
-                    input#country.small(value='', size='20', type='text')
+                    input#country.small(name='cust[country]', value='', size='20', type='text')
                 td
                   .field
                     label(for='province') Province
-                    input#province.small(value='', size='20', type='text')
+                    input#province.small(name='cust[province]', value='', size='20', type='text')
               tr
                 td
                   .field
                     label(for='city') City
-                    input#city.small(value='', size='20', type='text')
+                    input#city.small(name='cust[city]', value='', size='20', type='text')
                 td
                   .field
                     label(for='postal') Postal Code
-                    input#postal.small(value='', size='20', type='text')
+                    input#postal.small(name='cust[postal]', value='', size='20', type='text')
               tr
                 td
                   .field.phone_field
-                    label(for='telephone1') Telephone 1
-                    input#telephone1a.xsmall(value='', size='3', type='text')
+                    label(for='tel1a') Telephone 1
+                    input#tel1a.xsmall(name='cust[tel1a]', value='', size='3', type='text')
                     | -
-                    input#telephone1b.xsmall(size='3', value='', type='text')
+                    input#tel1b.xsmall(name='cust[tel1b]', size='3', value='', type='text')
                     | -
-                    input#telephone1c.xsmall(size='4', value='', type='text')
+                    input#tel1c.xsmall(name='cust[tel1c]', size='4', value='', type='text')
                 td
                   .field.phone_field
-                    label(for='telephone2') Telephone 2
-                    input#telephone2a.xsmall(value='', size='3', type='text')
+                    label(for='tel2a') Telephone 2
+                    input#tel2a.xsmall(name='cust[tel2a]', value='', size='3', type='text')
                     | -
-                    input#telephone2b.xsmall(size='3', value='', type='text')
+                    input#tel2b.xsmall(name='cust[tel2b]', size='3', value='', type='text')
                     | -
-                    input#telephone2c.xsmall(size='4', value='', type='text')
+                    input#tel2c.xsmall(name='cust[tel2c]', size='4', value='', type='text')
               tr
                 td
                   .field
                     label(for='email') Email 
-                    input#email.medium(name='email', value='', size='20', type='text')
+                    input#email.medium(name='cust[email]', value='', size='20', type='text')
                 td
-                  
+                  .field
+                    input#phone1(name='cust[phone1]', value='', type='hidden')
+                    input#phone2(name='cust[phone2]', value='', type='hidden')
               tr
                 td
-                  button#saveNewCust.btn Save
+                  input#saveNewCust.btn(type='submit', value='Add')
+                  //button#saveNewCust.btn Add
                 td
       br
       br

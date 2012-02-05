@@ -112,8 +112,8 @@ app.post('/auth', routes.general.auth);
 
 // Customer
 app.get('/customers', loadUser, routes.customer.all);
-app.get('/customers/findAll', routes.customer.findAll);
-app.get('/customers/add', routes.customer.add);
+app.get('/customer/findAll', routes.customer.findAll);
+app.post('/customer/add', routes.customer.add);
 app.get('/customer/:id', routes.customer.details);
 
 // User
