@@ -1,0 +1,50 @@
+
+#login
+  h1#title
+    a(href='') Slate Admin
+  #login-body.clearfix
+    form#login_form(action='/auth', name='login', method='post')
+      .content_front
+        .pad
+          .field
+            label Username:
+            div
+              span.input
+                input#login_email.text(name='user[username]', value=user.username || '')
+                span.input
+                span.error #{usernameError}
+          .field
+            label Password:
+            div
+              span.input
+                input#login_password.text(name='user[password]', value=user.password || '', type='password')
+                a#forgotPassword(style='', href='#retrievePassword') Forgot password?
+                span.input
+                span.error #{passwordError}
+          .checkbox
+            span.label  
+            div
+              input#remember.checkbox(name='remember', value='yes', type='checkbox')
+              label(style='display: inline;', for='remember') Remember me on this computer
+          .field
+            span.label  
+            div
+              button.btn(type='submit') Login
+           // - if (flash)
+          //-   h2= flash.error
+          //- - else
+          //-   h2 NO ERROR
+          h2 #{info}
+  div(style='display: none;')
+    #retrievePassword(style='width: 400px; height: 120px; overflow: auto;')
+      form.label-inline(action='/user/forgot', method='post')
+        table
+          tr
+            td
+              .field
+                b To recover your password, enter your email address.
+                br
+                label(for='email') Email 
+                input#email.medium(name='user[email]', size='20', type='text', value='')
+                input(type='submit', value='Recover')
+
