@@ -24,10 +24,11 @@ exports.create = function(req, res) {
 
 exports.save = function(req, res) {
   console.log("create user");
+  console.log("user: %o\n", user);
   var user = new User(req.body.user);
-  console.log("user: %o", user);
+
   function userSaveFailed() {
-    console.log("creating NO");
+    console.log("\nFAIL!\n");
     req.flash('error', 'Account creation failed');
     res.render('users/new.jade', {
       locals: { 
@@ -36,28 +37,31 @@ exports.save = function(req, res) {
       }
     });
   }
+  User.count({}, function (err, count) {
+    console.log("Collection has " + count + " users");
+    user.id = count + 1;
+    user.save(function(err) {
+      if (err) {
+        console.log("\nerr: %o\n", err);
+        return userSaveFailed();
+      } 
+      console.log("\nSUCCESS\n");
+      req.flash('info', 'Your account has been created');
+      //emails.sendWelcome(user);
 
-  user.save(function(err) {
-    if (err) {
-      console.log("err: " + err);
-      return userSaveFailed();
-    } 
-    console.log("creating YES");
-    req.flash('info', 'Your account has been created');
-    //emails.sendWelcome(user);
+      switch (req.params.format) {
+        case 'json':
+          console.log("case json");
+          res.send(user.toObject());
+        break;
 
-    switch (req.params.format) {
-      case 'json':
-        console.log("case json");
-        res.send(user.toObject());
-      break;
-
-      default:
-        console.log("case default");
-        req.session.user_id = user.id;
-        res.redirect('/customers');
-    }
-  });
+        default:
+          console.log("case default");
+          req.session.user_id = user.id;
+          res.redirect('/customers');
+      }
+    });
+  })
 };
 
 exports.forgot = function (req, res) {

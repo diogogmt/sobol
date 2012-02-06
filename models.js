@@ -19,44 +19,62 @@ function defineModels(callback) {
     return value && value.length;
   }
 
-  User = new Schema({
-    'username': String,
-    'email': { type: String, validate: [validatePresenceOf, 'an email is required'], index: { unique: true } },
-    'hashed_password': String,
-    'salt': String
-  });
+  function validateEmail (value) {
+    //TODO
+    //add validation to email
+    return true;
+  }
 
-  User.virtual('id')
-    .get(function() {
-      return this._id.toHexString();
-    });
+  function validateUsername (value) {
+    //TODO
+    //add validation to email
+    return false;
+  }
+
+  function trim (value) {
+    //TODO
+    //add validation to email
+    return false;
+  }
+
+  // Add the validation bits when defining the schema
+  // TODO
+  // Add validation to username email
+  User = new Schema({
+    'id': Number,
+    'username': {
+      type: String,
+      validate: [validateUsername, 'username not valid'],
+      index: { unique: true }
+    },
+    'email': { 
+      type: String,
+      validate: [validateEmail, 'email not valid'],
+      index: { unique: true } 
+    },
+    'hashed_password': String
+  });
 
   User.virtual('password')
     .set(function(password) {
-      this._password = password;
-      this.salt = this.makeSalt();
+      // TODO
+      // validate password here
       this.hashed_password = this.encryptPassword(password);
-    })
-    .get(function() { return this._password; });
+    });
 
   User.method('authenticate', function(plainText) {
     return this.encryptPassword(plainText) === this.hashed_password;
   });
-  
-  User.method('makeSalt', function() {
-    return Math.round((new Date().valueOf() * Math.random())) + '';
-  });
+
 
   User.method('encryptPassword', function(password) {
-    return crypto.createHmac('sha1', this.salt).update(password).digest('hex');
+    return crypto.createHmac('sha1', config.salt).update(password).digest('hex');
   });
 
   User.pre('save', function(next) {
-    if (!validatePresenceOf(this.password)) {
-      next(new Error('Invalid password'));
-    } else {
-      next();
-    }
+    //TODO
+    //validate object before saving it
+    next();
   });
 
   /**

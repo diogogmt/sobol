@@ -2,7 +2,17 @@
   h2 Register
 
   form.users(method='post', action='/user/save')
-    !=partial('fields', { locals: { user: user } })
+    div
+      label Username:
+      input(name='user[username]')
+
+    div
+      label Email:
+      input(name='user[email]')
+
+    div
+      label Password:
+      input(name='user[password]', type='password')
     div
       input(type='submit', value='Register')
       span \ or 
