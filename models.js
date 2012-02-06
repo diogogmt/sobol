@@ -99,25 +99,28 @@ function defineModels(callback) {
     */
   
   Customer = new Schema({
-    id : Number,
-    firstName : String,
-    lastName : String,
-    email : String,
-    phone1 : String,
-    phone2 : String,
-    street1 : String,
-    street2 : String,
-    postal : String,
-    city : String,
-    province : String,
-    country : String,
-    registrationDate : Date,
-    status : String
+    'id' : Number,
+    'firstName' : String,
+    'lastName' : String,
+    'email' : String,
+    'phone1' : String,
+    'phone2' : String,
+    'address1' : String,
+    'address2' : String,
+    'postal' : String,
+    'city' : String,
+    'province' : String,
+    'country' : String,
+    'registrationDate' : Date,
+    'status' : String
   });
 
-  Customer.statics.findAll = function findAll(opt, cb) {
-    return this.find({}, cb);
-  };
+  Customer.virtual('tel1a');
+  Customer.virtual('tel1b');
+  Customer.virtual('tel1c');
+  Customer.virtual('tel2a');
+  Customer.virtual('tel2b');
+  Customer.virtual('tel2c');
 
   db.model('User', User);
   db.model('Customer', Customer);
