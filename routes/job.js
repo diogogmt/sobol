@@ -21,7 +21,7 @@ exports.add = function(req, res) {
   console.log("job: %o", job);
   function jobSaveFailed() {
     console.log("failed creating job");
-// need to confirm if we need to redirect to customers or job
+//need to confirm if we need to redirect to customers or job
   }
 
   job.save(function(err) {
@@ -30,31 +30,10 @@ exports.add = function(req, res) {
       return jobSaveFailed();
     } 
     console.log("creating job");
-  //  req.flash('info', 'Job has been added');
+    req.flash('info', 'Job has been added');
   });
 };
 
 exports.findAll = function (req, res) {
   console.log("all customers route");
 };
-
-
-
-
-/*
-exports.all = function (req, res) {
-  console.log("all jobs route");
-  return 1;
-};
-
-exports.add = function(req, res) {
-  console.log("add job route");
-  return 1;
-};
-
-exports.findAll = function (req, res) {
-  console.log("all customers route");
-  return 1;
-};
-
-*/
