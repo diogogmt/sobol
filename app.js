@@ -125,7 +125,7 @@ app.post('/user/forgot', routes.user.forgot);
 app.get('/user/reset/:id/:ts', routes.user.reset);
 
 // Job
-app.get('/jobs', loadUser, routes.job.all);
+app.get('/job', loadUser, routes.job.all);
 app.get('/job/findAll', routes.job.findAll);
 app.post('/job/add', routes.job.add);
 //app.get('/job/:id', routes.job.details);

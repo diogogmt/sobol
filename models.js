@@ -116,6 +116,12 @@ function defineModels(callback) {
     'status' : String
   });
 
+  Customer.virtual('tel1a');
+  Customer.virtual('tel1b');
+  Customer.virtual('tel1c');
+  Customer.virtual('tel2a');
+  Customer.virtual('tel2b');
+  Customer.virtual('tel2c');
 
  Job = new Schema({
     id : Number,
@@ -124,19 +130,13 @@ function defineModels(callback) {
     description : String,
     creationDate : String,
     status : String,
-    scheduleDates : String,
+    scheduleDates : String
   });
-
-  Customer.virtual('tel1a');
-  Customer.virtual('tel1b');
-  Customer.virtual('tel1c');
-  Customer.virtual('tel2a');
-  Customer.virtual('tel2b');
-  Customer.virtual('tel2c');
 
   db.model('User', User);
   db.model('Customer', Customer);
   db.model('LoginToken', LoginToken);
+  db.model('Job', Job);
 
   callback();
 }

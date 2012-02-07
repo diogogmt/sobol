@@ -11,11 +11,6 @@ models.defineModels(function() {
 exports.all = function (req, res) {
   console.log("all jobs route");
   console.log("req.currentUser: %o", req.currentUser);
-  res.render('customer/jobs',
-    {
-      layout: 'includes/layout',
-      title: 'Job'
-    });
 };
 
 
@@ -26,13 +21,7 @@ exports.add = function(req, res) {
   console.log("job: %o", job);
   function jobSaveFailed() {
     console.log("failed creating job");
-
 //need to confirm if we need to redirect to customers or job
-    res.render('job/jobs',
-    {
-      layout: 'includes/layout',
-      title: 'Job'
-    });
   }
 
   job.save(function(err) {
@@ -42,10 +31,8 @@ exports.add = function(req, res) {
     } 
     console.log("creating job");
     req.flash('info', 'Job has been added');
-    res.redirect('/jobs');
   });
 };
-
 
 exports.findAll = function (req, res) {
   console.log("all customers route");
