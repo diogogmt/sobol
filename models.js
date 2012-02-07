@@ -116,6 +116,7 @@ function defineModels(callback) {
     'status' : String
   });
 
+
  Job = new Schema({
     id : Number,
     customid : String,  //assuming that Archie is going to use a mix of char and numerics in his ID's
@@ -136,7 +137,6 @@ function defineModels(callback) {
   db.model('User', User);
   db.model('Customer', Customer);
   db.model('LoginToken', LoginToken);
-  db.model('Job', Job);
 
   callback();
 }
