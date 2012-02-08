@@ -118,7 +118,7 @@ app.get('/customer/:id', routes.customer.details);
 
 // User
 app.get('/user/create', routes.user.create);
-app.post('/user/save', routes.user.save);
+app.post('/user/save', routes.user.validateUser, routes.user.save);
 // Post Reset
 app.post('/user/forgot', routes.user.forgot);
 // Get Reset

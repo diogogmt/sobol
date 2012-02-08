@@ -4,7 +4,12 @@ var mongoose = require('mongoose')
   , domain = 'http://localhost:11342/'
   , email = require('./../email.js')
   , config = require('./../config')
+  , userValidator = require('./../validators.js').userValidator
+  , check = require('validator').check
+  , sanitize = require('validator').sanitize
   , Schema = mongoose.Schema;
+
+
 
 
 models.defineModels(function() {
@@ -24,39 +29,41 @@ exports.create = function(req, res) {
 
 exports.save = function(req, res) {
   console.log("create user");
-  console.log("user: %o\n", user);
+  
   var user = new User(req.body.user);
+  //console.log("user: \n", user);
 
   function userSaveFailed() {
-    console.log("\nFAIL!\n");
-    req.flash('error', 'Account creation failed');
-    res.render('users/new.jade', {
-      locals: { 
-        layout: false,
-        user: user 
-      }
-    });
+    // console.log("\nFAIL!\n");
+    // req.flash('error', 'Account creation failed');
+    // res.render('users/new.jade', {
+    //   locals: { 
+    //     layout: false,
+    //     user: user 
+    //   }
+    // });
+    res.redirect('/user/create');
   }
   User.count({}, function (err, count) {
-    console.log("Collection has " + count + " users");
+    // console.log("Collection has " + count + " users");
     user.id = count + 1;
     user.save(function(err) {
       if (err) {
-        console.log("\nerr: %o\n", err);
+        // console.log("\nerr: \n", err);
         return userSaveFailed();
       } 
-      console.log("\nSUCCESS\n");
+      // console.log("\nSUCCESS\n");
       req.flash('info', 'Your account has been created');
       //emails.sendWelcome(user);
 
       switch (req.params.format) {
         case 'json':
-          console.log("case json");
+          // console.log("case json");
           res.send(user.toObject());
         break;
 
         default:
-          console.log("case default");
+          // console.log("case default");
           req.session.user_id = user.id;
           res.redirect('/customers');
       }
@@ -67,7 +74,7 @@ exports.save = function(req, res) {
 exports.forgot = function (req, res) {
   console.log("forgot");
   User.findOne({ email: req.body.user.email }, function(err, user) {
-    console.log("user: %o", user);
+    console.log("user: ", user);
     if (user) {
       console.log('user: %o' + user);
       var bcrypt = require('bcrypt')  
@@ -126,4 +133,16 @@ exports.reset = function (req, res) {
       }
     });
   }
+}
+
+
+exports.validateUser = function (req, res, next) {
+  console.log("validateUser ROUTE");
+  var errors = userValidator(req.body.user, function (err) {
+    if (err.length) {
+      next(new Error("Validate user error"));
+    }
+    next();  
+  });
+  
 }
