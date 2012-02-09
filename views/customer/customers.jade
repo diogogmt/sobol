@@ -7,19 +7,19 @@ script(type="text/javascript")
     /*
     *   Add new customer
     */
-    $("#addCustomer").fancybox({
+    $("#addJob").fancybox({
       'titlePosition'   : 'inside',
       'transitionIn'    : 'none',
       'transitionOut'   : 'none'
     });
-    $("#customerTable").dataTable( {
+    $("#jobTable").dataTable( {
       "bProcessing": true,
       "bDestroy": true,
-      "sAjaxSource": "/customer/findAll"
+      "sAjaxSource": "/job/findAll"
     });
-    $('#addCustForm').submit(function() {
+
+    $('#addJobForm').submit(function() {
       alert('Submit initiated');
-      $('#phone1').val($('#tel1a').val() + '-' + $('#tel1b').val() + '-' + $('#tel1c').val());
-      $('#phone2').val($('#tel2a').val() + '-' + $('#tel2b').val() + '-' + $('#tel2c').val());
     });
+
   });

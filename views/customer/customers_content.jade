@@ -4,7 +4,7 @@
       h4 Customer Management
     .portlet-content
       br
-      a#addCustomer.btn(href='#newCustomer') Add Customer
+      a#addJob.btn(href='#newJob') Add Job
       div(style='display: none;')
         #newCustomer(style='width: 800px; height: 400px; overflow: auto;')
           h4 Add Customer
@@ -83,12 +83,33 @@
       | Show Archived
       br
       br
-      table#customerTable.display(cellpadding='0', cellspacing='0', border='0', rel='datatable')
+      div(style='display: none;')
+        #newJob(style='width: 800px; height: 400px; overflow: auto;')
+          h4 Add Job
+          form.form.label-inline(id='addJobForm', action='/job/add', method='post')
+            table
+              tr
+                td
+                  .field
+                    label(for='customid') customid 
+                    input#customid.medium(name='job[customid]', size='20', type='text', value='')
+                td
+                  .field
+                    label(for='name') Job Name 
+                    input#customid.medium(name='job[name]', size='20', type='text', value='')                    
+              tr
+                td
+                  .field
+                    label(for='description') Job Description
+                    input#customid.medium(name='job[description]', size='20', type='text', value='')
+                td
+                  input#saveNewJob.btn(type='submit', value='Add')
+                  //button#saveNewCust.btn Add
+                td
+      table#jobTable.display(cellpadding='0', cellspacing='0', border='0', rel='datatable')
         thead
           tr
-            th Name
-            th Email
-            th Phone
-            th Pending Jobs
-            th Status
+            th ID
+            th Job Name
+            th Description
         tbody
