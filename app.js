@@ -42,8 +42,10 @@ app.configure(function() {
   app.set('view options', {
     pretty: true
   });
-  app.use(express.errorHandler({ dumpExceptions: true }));
+  app.use(express.errorHandler({ showStack: true, dumpExceptions: true }));
 });
+
+console.log("app: ", app);
 
 
 models.defineModels(function() {
@@ -99,6 +101,10 @@ function loadUser(req, res, next) {
   }
 }
 
+app.error(function(err, req, res, next){
+  console.log("APP ERROR");
+  next(err);
+});
 
 // Routes
 
@@ -117,13 +123,25 @@ app.get('/customers/add', routes.customer.add);
 app.get('/customer/:id', routes.customer.details);
 
 // User
-app.get('/user/create', routes.user.create);
-app.post('/user/save', routes.user.validateUser, routes.user.save);
+app.get('/user/new', routes.user.newUser);
+app.post('/user/create', routes.user.validateUser, routes.user.create);
 // Post Reset
 app.post('/user/forgot', routes.user.forgot);
 // Get Reset
 app.get('/user/reset/:id/:ts', routes.user.reset);
 
+
+function mErr (req, res, next) {
+  console.log("mErr");
+  console.log("next: ", next);
+  next(new Error('mERR'));
+}
+// Example error pages
+app.get('/err', mErr, function(req, res, next){
+  console.log("err route");
+  console.log("next: ", next);
+  next(new Error('keyboard cat!')); // trigger an error
+});
 
 
 
