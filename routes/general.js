@@ -7,7 +7,6 @@ var mongoose = require('mongoose')
 
 models.defineModels(function() {
   User = mongoose.model('User');
-  LoginToken = mongoose.model('LoginToken');
 })
 
 exports.index = function(req, res) {

@@ -45,41 +45,11 @@ app.configure(function() {
   app.use(express.errorHandler({ showStack: true, dumpExceptions: true }));
 });
 
-console.log("app: ", app);
-
 
 models.defineModels(function() {
   app.User = User = db.model('User');
-  app.LoginToken = LoginToken = db.model('LoginToken');
 })
 
-function authenticateFromLoginToken(req, res, next) {
-  var cookie = JSON.parse(req.cookies.logintoken);
-
-  LoginToken.findOne({ email: cookie.email,
-                       series: cookie.series,
-                       token: cookie.token }, (function(err, token) {
-    if (!token) {
-      res.redirect('/sessions/new');
-      return;
-    }
-
-    User.findOne({ email: token.email }, function(err, user) {
-      if (user) {
-        req.session.user_id = user.id;
-        req.currentUser = user;
-
-        token.token = token.randomToken();
-        token.save(function() {
-          res.cookie('logintoken', token.cookieValue, { expires: new Date(Date.now() + 2 * 604800000), path: '/' });
-          next();
-        });
-      } else {
-        res.redirect('/sessions/new');
-      }
-    });
-  }));
-}
 
 function loadUser(req, res, next) {
   if (req.session.user_id) {
@@ -93,18 +63,10 @@ function loadUser(req, res, next) {
       }
     });
   } 
-  else if (req.cookies.logintoken) {
-    authenticateFromLoginToken(req, res, next);
-  } 
   else {
     res.redirect('/login');
   }
 }
-
-app.error(function(err, req, res, next){
-  console.log("APP ERROR");
-  next(err);
-});
 
 // Routes
 
@@ -123,25 +85,12 @@ app.get('/customers/add', routes.customer.add);
 app.get('/customer/:id', routes.customer.details);
 
 // User
-app.get('/user/new', routes.user.newUser);
-app.post('/user/create', routes.user.validateUser, routes.user.create);
+app.get('/user/create', routes.user.create);
+app.post('/user/create', routes.user.validateUser, routes.user.save);
 // Post Reset
 app.post('/user/forgot', routes.user.forgot);
 // Get Reset
 app.get('/user/reset/:id/:ts', routes.user.reset);
-
-
-function mErr (req, res, next) {
-  console.log("mErr");
-  console.log("next: ", next);
-  next(new Error('mERR'));
-}
-// Example error pages
-app.get('/err', mErr, function(req, res, next){
-  console.log("err route");
-  console.log("next: ", next);
-  next(new Error('keyboard cat!')); // trigger an error
-});
 
 
 

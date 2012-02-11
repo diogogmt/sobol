@@ -15,27 +15,6 @@ function defineModels(callback) {
   /**
     * Model: User
     */
-  function validatePresenceOf(value) {
-    return value && value.length;
-  }
-
-  function validateEmail (value) {
-    //TODO
-    //add validation to email
-    return true;
-  }
-
-  function validateUsername (value) {
-    //TODO
-    //add validation to email
-    return false;
-  }
-
-  function trim (value) {
-    //TODO
-    //add validation to email
-    return false;
-  }
 
   // Add the validation bits when defining the schema
   // TODO
@@ -44,12 +23,10 @@ function defineModels(callback) {
     'id': Number,
     'username': {
       type: String,
-      validate: [validateUsername, 'username not valid'],
       index: { unique: true }
     },
     'email': { 
       type: String,
-      validate: [validateEmail, 'email not valid'],
       index: { unique: true } 
     },
     'hashed_password': String
@@ -77,40 +54,7 @@ function defineModels(callback) {
     next();
   });
 
-  /**
-    * Model: LoginToken
-    *
-    * Used for session persistence.
-    */
-  LoginToken = new Schema({
-    email: { type: String, index: true },
-    series: { type: String, index: true },
-    token: { type: String, index: true }
-  });
 
-  LoginToken.method('randomToken', function() {
-    return Math.round((new Date().valueOf() * Math.random())) + '';
-  });
-
-  LoginToken.pre('save', function(next) {
-    // Automatically create the tokens
-    this.token = this.randomToken();
-
-    if (this.isNew)
-      this.series = this.randomToken();
-
-    next();
-  });
-
-  LoginToken.virtual('id')
-    .get(function() {
-      return this._id.toHexString();
-    });
-
-  LoginToken.virtual('cookieValue')
-    .get(function() {
-      return JSON.stringify({ email: this.email, token: this.token, series: this.series });
-    });
 
   /**
     * Model: Customer
@@ -139,7 +83,6 @@ function defineModels(callback) {
 
   db.model('User', User);
   db.model('Customer', Customer);
-  db.model('LoginToken', LoginToken);
 
   callback();
 }

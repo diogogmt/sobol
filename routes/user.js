@@ -5,8 +5,6 @@ var mongoose = require('mongoose')
   , email = require('./../email.js')
   , config = require('./../config')
   , userValidator = require('./../validators.js').userValidator
-  , check = require('validator').check
-  , sanitize = require('validator').sanitize
   , Schema = mongoose.Schema;
 
 
@@ -18,57 +16,51 @@ models.defineModels(function() {
 
 
 // Users
-exports.newUser = function(req, res) {
-  res.render('users/new', {
+exports.create = function(req, res) {
+  console.log("getCreate");
+  res.render('users/create', {
     locals: { 
-      layout: false,
-      user: new User() 
+      layout: "includes/layout",
+      title: "Login",
+      user: new User(),
+      err: false 
     }
   });
 };
 
-exports.create = function(req, res, next) {
-  console.log("create user");
-  console.log("next: ", next);
-  // var user = new User(req.body.user);
-  // //console.log("user: \n", user);
+exports.save = function(req, res, next) {
+  console.log("save user");
+  // console.log("next: ", next);
+  var user = new User(req.body.user);
+  //console.log("user: \n", user);
 
-  // function userSaveFailed() {
-  //   // console.log("\nFAIL!\n");
-  //   // req.flash('error', 'Account creation failed');
-  //   // res.render('users/new.jade', {
-  //   //   locals: { 
-  //   //     layout: false,
-  //   //     user: user 
-  //   //   }
-  //   // });
-  //   res.redirect('/user/create');
-  // }
-  // User.count({}, function (err, count) {
-  //   console.log("Collection has " + count + " users");
-  //   user.id = count + 1;
-  //   user.save(function(err) {
-  //     if (err) {
-  //       console.log("\nerr: \n", err);
-  //       return userSaveFailed();
-  //     } 
-  //     console.log("\nSUCCESS\n");
-  //     req.flash('info', 'Your account has been created');
-  //     //emails.sendWelcome(user);
+  function userSaveFailed() {
+    console.log("\nFAIL!\n");
+    // req.flash('error', 'Account creation failed');
+    // res.render('users/new.jade', {
+    //   locals: { 
+    //     layout: false,
+    //     user: user 
+    //   }
+    // });
+    res.redirect('/user/create');
+  }
+  User.count({}, function (err, count) {
+    console.log("Collection has " + count + " users");
+    user.id = count + 1;
+    user.save(function(err) {
+      if (err) {
+        console.log("\nerr: \n", err);
+        return userSaveFailed();
+      } 
+      console.log("\nSUCCESS\n");
+      req.flash('info', 'Your account has been created');
+      //emails.sendWelcome(user);
 
-  //     switch (req.params.format) {
-  //       case 'json':
-  //         // console.log("case json");
-  //         res.send(user.toObject());
-  //       break;
-
-  //       default:
-  //         // console.log("case default");
-  //         req.session.user_id = user.id;
-  //         res.redirect('/customers');
-  //     }
-  //   });
-  // })
+      req.session.user_id = user.id;
+      res.redirect('/customers');
+    });
+  })
 };
 
 exports.forgot = function (req, res) {
@@ -139,21 +131,22 @@ exports.reset = function (req, res) {
 exports.validateUser = function (req, res, next) {
   console.log("validateUser ROUTE");
   var errors = userValidator(req.body.user, function (err) {
-    console.log('err: ', err);
-    console.log("err.length: ", Object.keys(err).length);
+    // console.log('err: ', err);
+    // console.log("err.length: ", Object.keys(err).length);
     if (Object.keys(err).length) {
-      res.render('users/new', {
+      console.log("HAS ERRORS rendering create again");
+      res.render('users/create', {
         locals: { 
-          layout: false,
-          user: new User(),
+          layout: "includes/layout",
+          title: "Login",
+          user: req.body.user,
           err: err 
         }
       });
       return false;
       // next(new Error("Validate user error"));
     }
-    console.log("next: ", next);
-    // next();  
+    next();  
   });
   
 }

@@ -1,14 +1,16 @@
 .page
   h2 Register
-
+  h3 has erros?
+  - if (err)
+    h3 YES
   form.users(method='post', action='/user/create')
     div
       label Username:
-      input(name='user[username]')
+      input(name='user[username]', value=user.username || '')
 
     div
       label Email:
-      input(name='user[email]')
+      input(name='user[email]', value=user.email || '')
 
     div
       label Password:
