@@ -37,7 +37,7 @@ exports.add = function(req, res) {
 console.log("today is " + today);
 
   var job = new Job(req.body.job);
-  job.status = 0;
+  job.status = "Active";
   job.creationDate = today;
   job.customerID = 1; //the current customer id
 
@@ -103,6 +103,7 @@ exports.findAll = function (req, res) {
       console.log("get all jobs Not success");
     }
   });
+
 
 
 

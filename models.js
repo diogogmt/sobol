@@ -129,7 +129,7 @@ function defineModels(callback) {
     name : String,
     description : String,
     creationDate : String,
-    status : Number,
+    status : String,
     scheduleDates : String,
     customerID: Number
   });
