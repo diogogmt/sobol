@@ -129,8 +129,9 @@ function defineModels(callback) {
     name : String,
     description : String,
     creationDate : String,
-    status : String,
-    scheduleDates : String
+    status : Number,
+    scheduleDates : String,
+    customerID: Number
   });
 
   db.model('User', User);
