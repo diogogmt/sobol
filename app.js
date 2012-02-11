@@ -80,9 +80,12 @@ app.post('/auth', routes.general.auth);
 
 // Customer
 app.get('/customers', loadUser, routes.customer.all);
-app.get('/customers/findAll', routes.customer.findAll);
-app.get('/customers/add', routes.customer.add);
-app.get('/customer/:id', routes.customer.details);
+app.post('/customer/add', loadUser, routes.customer.add);
+app.get('/customer/:id', loadUser, routes.customer.details);
+app.get('/datatable/customer/findAll', routes.customer.findAll);
+
+// Jobs
+//app.get('/datatable/customer/:id/jobs', routes.job.findByCustID);
 
 // User
 app.get('/user/create', routes.user.create);

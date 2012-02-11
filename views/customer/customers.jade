@@ -15,6 +15,18 @@ script(type="text/javascript")
     $("#customerTable").dataTable( {
       "bProcessing": true,
       "bDestroy": true,
-      "sAjaxSource": "http://localhost:11342/customers/findAll"
+
+      "sAjaxSource": "/datatable/customer/findAll"
+    });
+    $('#addCustForm').submit(function() {
+      alert('Submit initiated');
+      $('#phone1').val($('#tel1a').val() + '-' + $('#tel1b').val() + '-' + $('#tel1c').val());
+      $('#phone2').val($('#tel2a').val() + '-' + $('#tel2b').val() + '-' + $('#tel2c').val());
+    });
+    $("#customerTable tbody tr").live("click", function() {
+      var nTds = $('td', this);
+      var custID = $(nTds[0]).text();
+      console.log("Customer ID is --> " + custID);
+      window.location = "./customer/" + custID;
     });
   });
