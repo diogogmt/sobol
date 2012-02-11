@@ -22,4 +22,10 @@ script(type="text/javascript")
       $('#phone1').val($('#tel1a').val() + '-' + $('#tel1b').val() + '-' + $('#tel1c').val());
       $('#phone2').val($('#tel2a').val() + '-' + $('#tel2b').val() + '-' + $('#tel2c').val());
     });
+    $("#customerTable tbody tr").live("click", function() {
+      var nTds = $('td', this);
+      var custID = $(nTds[0]).text();
+      console.log("Customer ID is --> " + custID);
+      window.location = "./customer/" + custID;
+    });
   });
