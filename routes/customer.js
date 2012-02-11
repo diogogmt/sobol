@@ -84,7 +84,8 @@ exports.details = function (req, res) {
   res.render('customer/custDetails', 
     {
       layout: 'includes/layout',
-      title: 'Customer'
+      title: 'Customer',
+      custID: req.params.id
     }
   );
 };
