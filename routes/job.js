@@ -61,6 +61,11 @@ exports.findAll = function (req, res) {
         ]);
       }
 
+      var aaData = {
+        "aaData" : dataSet
+      };
+
+
       res.json(aaData);
     }
     else {
