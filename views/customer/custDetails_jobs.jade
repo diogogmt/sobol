@@ -1,4 +1,4 @@
-h2 #{custID}
+input#id.large(name='id', size='20', type='text', value='#{custID}')
 br
 a#addJob.btn(href='#newJob') Add Job      
 div(style='display: none;')
@@ -25,7 +25,7 @@ div(style='display: none;')
           td
             .field
               label(for='description') Customer ID
-              input#description.large(name='job[customerID]', size='20', type='text', value='#{custID}')        
+              input#customerID.large(name='job[customerID]', size='20', type='text', value='#{custID}')        
         tr
           td
               input#saveJob.btn(type='submit', value='Add')
@@ -55,7 +55,7 @@ script(type="text/javascript")
     $("#jobTable").dataTable( {
       "bProcessing": true,
       "bDestroy": true,
-      "sAjaxSource": "/datatable/job/findAll"
+      "sAjaxSource": "/datatable/job/getCustJobs"
     });
 
     $('#addJobForm').submit(function() {
