@@ -54,7 +54,7 @@ console.log("today is " + today);
       return jobSaveFailed();
     } 
     console.log("creating job");
-    res.redirect('/customers');
+    res.redirect('/customer/' + job.customerID);
 //    req.flash('info', 'Job has been added');
   });
 
