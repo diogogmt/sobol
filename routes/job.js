@@ -37,7 +37,7 @@ console.log("today is " + today);
   var job = new Job(req.body.job);
   job.status = "Active";
   job.creationDate = today;
-  
+  job.customerID = req.params.id;
   console.log("job: %o", job);
   function jobSaveFailed() {
     console.log("failed creating job");
@@ -101,8 +101,8 @@ exports.findAll = function (req, res) {
 
 exports.getCustJobs = function (req, res) {
 
-Job.find({customerID:req.params.custID}, function (err, jobs) {
-console.log("The current customer is " + req.params.custID);
+Job.find({customerID:req.params.id}, function (err, jobs) {
+console.log("The current customer is " + req.params.id);
 
     if(jobs){
       console.log("get all this customers jobs success");
