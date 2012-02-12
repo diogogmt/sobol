@@ -39,10 +39,7 @@ console.log("today is " + today);
   var job = new Job(req.body.job);
   job.status = "Active";
   job.creationDate = today;
-  job.customerID = 1; //the current customer id
-
- 
-
+  
   console.log("job: %o", job);
   function jobSaveFailed() {
     console.log("failed creating job");
@@ -68,8 +65,6 @@ console.log("today is " + today);
 
   
 };
-
-
 
 exports.findAll = function (req, res) {
   console.log("all customers route");
