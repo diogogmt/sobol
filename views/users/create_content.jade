@@ -1,0 +1,55 @@
+//- .page
+//-   h2 Register
+//-   h3 has erros?
+//-   - if (errors)
+//-     h3 YES
+//-   form.users(method='post', action='/user/create')
+//-     div
+//-       label Username:
+//-       input(name='user[username]', value=user.username || '')
+
+//-     div
+//-       label Email:
+//-       input(name='user[email]', value=user.email || '')
+
+//-     div
+//-       label Password:
+//-       input(name='user[password]', type='password')
+//-     div
+//-       input(type='submit', value='Register')
+//-       span \ or 
+//-         a(href='/sessions/new') Log In
+
+#login
+  h1#title
+    a(href='') Slate Admin
+  #login-body.clearfix
+    form#login_form(action='/user/create', method='post')
+      .content_front
+        .pad
+          .field
+            label Username:
+            div
+              span.input
+                input#login_email.text(name='user[username]', value=user.username || '')
+                span.input
+          .field
+            label Email:
+            div
+              span.input
+                input#login_email.text(name='user[email]', value=user.email || '')
+                span.input      
+          .field
+            label Password:
+            div
+              span.input
+                input#login_password.text(name='user[password]', type='password')
+                a#forgotPassword(style='', href='#retrievePassword') Forgot password?
+                span.input
+          .field
+            span.label  
+            h3 #{errors.username}
+            h3 #{errors.email}
+            h3 #{errors.password}
+            div
+              button.btn(type='submit') Login

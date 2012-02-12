@@ -15,6 +15,7 @@ script(type="text/javascript")
     $("#customerTable").dataTable( {
       "bProcessing": true,
       "bDestroy": true,
+
       "sAjaxSource": "/datatable/customer/findAll"
     });
     $('#addCustForm').submit(function() {
