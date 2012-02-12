@@ -75,8 +75,8 @@ app.get('/', routes.general.index);
 
 // Login
 app.get('/login', routes.general.login);
+app.post('/login', routes.general.auth);
 app.get('/logout', loadUser, routes.general.logout);
-app.post('/auth', routes.general.auth);
 
 // Customer
 app.get('/customers', loadUser, routes.customer.all);

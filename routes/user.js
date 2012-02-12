@@ -23,7 +23,7 @@ exports.create = function(req, res) {
       layout: "includes/layout",
       title: "Login",
       user: new User(),
-      err: false 
+      errors: false 
     }
   });
 };

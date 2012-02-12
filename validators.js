@@ -52,3 +52,30 @@ exports.userValidator = function (user, callback) {
       callback(errors);
     });
 }
+
+exports.loginValidator = function (user, callback) {
+  console.log("loginUser");
+
+  var errors = new Array();
+
+  // Username
+  try {
+    check(user.username, 'Please enter an username').notEmpty();
+    user.username = sanitize(user.username).trim();
+  } 
+  catch (e) {
+      console.log(e.message); //Please enter a valid integer
+      errors['username'] = e.message;
+  }
+
+  // Password
+  try {
+    check(user.password, 'Please enter a password password').notEmpty();
+  } 
+  catch (e) {
+      console.log(e.message); //Please enter a valid integer
+      errors['password'] = e.message
+  }
+
+  callback(errors);
+}
