@@ -1,27 +1,5 @@
 include ../includes/menu.jade
-include ../includes/footer.jade
 
-script(type="text/javascript")
-  $(document).ready(function() {
-    /*
-    *   Add new job
-    */
-    $("#addJob").fancybox({
-      'titlePosition'   : 'inside',
-      'transitionIn'    : 'none',
-      'transitionOut'   : 'none'
-    });
-    $("#jobTable").dataTable( {
-      "bProcessing": true,
-      "bDestroy": true,
-      "sAjaxSource": "/datatable/job/findAll"
-    });
-
-        $('#addJobForm').submit(function() {
-      alert('Submit initiated');
-    });
-  });
-  
 h2 #{custID}
       br
       a#addJob.btn(href='#newJob') Add Job      
@@ -62,4 +40,25 @@ h2 #{custID}
             th Status
         tbody
 
+include ../includes/footer.jade
 
+script(type="text/javascript")
+  $(document).ready(function() {
+    /*
+    *   Add new job
+    */
+    $("#addJob").fancybox({
+      'titlePosition'   : 'inside',
+      'transitionIn'    : 'none',
+      'transitionOut'   : 'none'
+    });
+    $("#jobTable").dataTable( {
+      "bProcessing": true,
+      "bDestroy": true,
+      "sAjaxSource": "/datatable/job/findAll"
+    });
+
+        $('#addJobForm').submit(function() {
+      alert('Submit initiated');
+    });
+  });
