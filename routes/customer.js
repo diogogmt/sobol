@@ -81,11 +81,21 @@ exports.add = function (req, res) {
 exports.details = function (req, res) {
   console.log("customer details route");
   console.log("customer ID: " + req.params.id);
-  res.render('customer/custDetails', 
-    {
-      layout: 'includes/layout',
-      title: 'Customer',
-      custID: req.params.id
+
+  Customer.find({id:req.params.id}, function (err, customer) {
+    if(!customer){
+      console.log("get specific customer not successful");
+    }else{
+      res.render('customer/custDetails', 
+        {
+          layout: 'includes/layout',
+          title: 'Customer',
+          custID: req.params.id,
+          customer: customer
+        }
+      );
     }
-  );
+  });
+
+  
 };
