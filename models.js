@@ -102,7 +102,6 @@ function defineModels(callback) {
 
   db.model('User', User);
   db.model('Customer', Customer);
-  db.model('LoginToken', LoginToken);
   db.model('Job', Job);
 
   callback();

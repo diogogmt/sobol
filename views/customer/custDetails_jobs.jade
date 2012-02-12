@@ -1,8 +1,11 @@
-      h2 #{custID}
-      a#addJob.btn(href='#newJob') Add Job
+include jobs.jade
+h2 #{custID}
+      br
+      a#addJob.btn(href='#newJob') Add Job      
       div(style='display: none;')
         #newJob(style='width: 800px; height: 400px; overflow: auto;')
-          form.form.label-inline(action='#/job/add', method='post')
+          h4 Add Customer
+          form.form.label-inline(id='addJobForm', action='/job/add', method='post')
             table
               tr
                 td
@@ -29,11 +32,11 @@
         thead
           tr
             th ID
+            th Custom ID
             th Job Name
             th Job Description
             th Created On
             th Status
         tbody
-
 
 
