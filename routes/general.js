@@ -11,12 +11,7 @@ models.defineModels(function() {
 })
 
 exports.index = function(req, res) {
-  if (!req.session || !req.session.user) {
-    res.redirect('/login');
-  }
-  else {
-    res.redirect('/customers');
-  }
+  res.redirect('/customers');
 };
 
 exports.auth = function (req, res) {

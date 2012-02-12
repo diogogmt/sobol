@@ -72,7 +72,7 @@ function loadUser(req, res, next) {
 // Routes
 
 // Index
-app.get('/', routes.general.index);
+app.get('/', loadUser, routes.general.index);
 
 // Login
 app.get('/login', routes.general.login);
