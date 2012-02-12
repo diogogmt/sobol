@@ -12,20 +12,20 @@ var mongoose = require('mongoose')
 
 models.defineModels(function() {
   User = mongoose.model('User');
+  console.log("user model defined");
 });
 
 
 // Users
 exports.create = function(req, res) {
   console.log("getCreate");
-  res.render('users/create', {
-    locals: { 
+  res.render('users/create',
+    { 
       layout: "includes/layout",
-      title: "Login",
       user: new User(),
       errors: false 
     }
-  });
+  );
 };
 
 exports.save = function(req, res, next) {
@@ -135,14 +135,14 @@ exports.validateUser = function (req, res, next) {
     // console.log("err.length: ", Object.keys(err).length);
     if (Object.keys(err).length) {
       console.log("HAS ERRORS rendering create again");
-      res.render('users/create', {
-        locals: { 
+      res.render('users/create',
+        { 
           layout: "includes/layout",
           title: "Login",
           user: req.body.user,
-          err: err 
+          errors: err 
         }
-      });
+      );
       return false;
       // next(new Error("Validate user error"));
     }

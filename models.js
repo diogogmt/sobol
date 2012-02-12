@@ -40,10 +40,10 @@ function defineModels(callback) {
     });
 
   User.method('authenticate', function(plainText) {
-    // console.log("user authenticate");
-    // console.log("password: ", plainText);
-    // console.log("hashed_password: ", this.hashed_password);
-    // console.log("encryptPassword: ", this.encryptPassword(plainText));
+    console.log("user authenticate");
+    console.log("password: ", plainText);
+    console.log("hashed_password: ", this.hashed_password);
+    console.log("encryptPassword: ", this.encryptPassword(plainText));
     return this.encryptPassword(plainText) === this.hashed_password;
   });
 

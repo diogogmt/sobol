@@ -52,8 +52,9 @@ models.defineModels(function() {
 
 
 function loadUser(req, res, next) {
+  console.log("loaduser");
   if (req.session.user_id) {
-    User.findById(req.session.user_id, function(err, user) {
+    User.findOne({id: req.session.user_id}, function(err, user) {
       if (user) {
         req.currentUser = user;
         next();

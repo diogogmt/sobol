@@ -23,22 +23,26 @@ exports.auth = function (req, res) {
   console.log("auth route");
 
   loginValidator(req.body.user, function (errors) {
+    console.log("loginValidator");
     if (!Object.keys(errors).length) {
-      User.findOne({ username: req.body.user.username }, 
-          function(err, user) {
-          if (user && user.authenticate(req.body.user.password)) {
-            req.session.user_id = user.id;
-          } 
-          else {
-            res.render('general/login', 
-              {
-                layout: "includes/layout",
-                title: 'Login',
-                errors: {credentials: "Wrong credentials"},
-                user: req.body.user
-              }
-            );
-          }
+      console.log("no errors");
+      User.findOne({ username: req.body.user.username }, function(err, user) {
+        console.log("user: ", user);
+        console.log("err: ", err);
+        if (user && user.authenticate(req.body.user.password)) {
+          req.session.user_id = user.id;
+          res.redirect("/customers");
+        } 
+        else {
+          res.render('general/login', 
+            {
+              layout: "includes/layout",
+              title: 'Login',
+              errors: {credentials: "Wrong credentials"},
+              user: req.body.user
+            }
+          );
+        }
       }); 
     }
     else {
@@ -71,8 +75,6 @@ exports.login = function (req, res) {
 
 exports.logout = function (req, res) {
   if (req.session) {
-    LoginToken.remove({ email: req.currentUser.email }, function() {});
-    res.clearCookie('logintoken');
     req.session.destroy(function() {
     });
   }
