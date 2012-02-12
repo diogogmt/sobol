@@ -3,6 +3,7 @@ var crypto = require('crypto')
   , User
   , Customer
   , LoginToken
+  , Job
   , config = require('./config')
   db = mongoose.connect(config.mongo.connectionString);
 
@@ -88,8 +89,20 @@ function defineModels(callback) {
   Customer.virtual('tel2b');
   Customer.virtual('tel2c');
 
+ Job = new Schema({
+    id : Number,
+    customid : String,  //assuming that Archie is going to use a mix of char and numerics in his ID's
+    name : String,
+    description : String,
+    creationDate : String,
+    status : String,
+    scheduleDates : String,
+    customerID: Number
+  });
+
   db.model('User', User);
   db.model('Customer', Customer);
+  db.model('Job', Job);
 
   callback();
 }
