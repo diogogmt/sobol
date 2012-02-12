@@ -25,7 +25,6 @@ script(type="text/javascript")
     $("#customerTable tbody tr").live("click", function() {
       var nTds = $('td', this);
       var custID = $(nTds[0]).text();
-      console.log("Customer ID is --> " + custID);
       window.location = "./customer/" + custID;
     });
   });

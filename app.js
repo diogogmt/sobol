@@ -82,11 +82,9 @@ app.get('/logout', loadUser, routes.general.logout);
 // Customer
 app.get('/customers', loadUser, routes.customer.all);
 app.post('/customer/add', loadUser, routes.customer.add);
+app.post('/customer/edit', loadUser, routes.customer.edit);
 app.get('/customer/:id', loadUser, routes.customer.details);
 app.get('/datatable/customer/findAll', routes.customer.findAll);
-
-// Jobs
-//app.get('/datatable/customer/:id/jobs', routes.job.findByCustID);
 
 // User
 app.get('/user/create', routes.user.create);
@@ -101,6 +99,7 @@ app.get('/jobs', loadUser, routes.job.all);
 app.get('/datatable/job/findAll', routes.job.findAll);
 app.post('/job/add', routes.job.add);
 //app.get('/job/:id', routes.job.details);
+//app.get('/datatable/customer/:id/jobs', routes.job.findByCustID);
 
 if (!module.parent) {
   app.listen(11342);

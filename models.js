@@ -78,8 +78,8 @@ function defineModels(callback) {
     'city' : String,
     'province' : String,
     'country' : String,
-    'registrationDate' : Date,
-    'status' : String
+    'registrationDate' : { type: Date, default: Date.now },
+    'status' : { type: String, default: "Active" }
   });
 
   Customer.virtual('tel1a');
