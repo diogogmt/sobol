@@ -42,46 +42,19 @@ app.configure(function() {
   app.set('view options', {
     pretty: true
   });
-  app.use(express.errorHandler({ dumpExceptions: true }));
+  app.use(express.errorHandler({ showStack: true, dumpExceptions: true }));
 });
 
 
 models.defineModels(function() {
   app.User = User = db.model('User');
-  app.LoginToken = LoginToken = db.model('LoginToken');
 })
 
-function authenticateFromLoginToken(req, res, next) {
-  var cookie = JSON.parse(req.cookies.logintoken);
-
-  LoginToken.findOne({ email: cookie.email,
-                       series: cookie.series,
-                       token: cookie.token }, (function(err, token) {
-    if (!token) {
-      res.redirect('/sessions/new');
-      return;
-    }
-
-    User.findOne({ email: token.email }, function(err, user) {
-      if (user) {
-        req.session.user_id = user.id;
-        req.currentUser = user;
-
-        token.token = token.randomToken();
-        token.save(function() {
-          res.cookie('logintoken', token.cookieValue, { expires: new Date(Date.now() + 2 * 604800000), path: '/' });
-          next();
-        });
-      } else {
-        res.redirect('/sessions/new');
-      }
-    });
-  }));
-}
 
 function loadUser(req, res, next) {
+  console.log("loaduser");
   if (req.session.user_id) {
-    User.findById(req.session.user_id, function(err, user) {
+    User.findOne({id: req.session.user_id}, function(err, user) {
       if (user) {
         req.currentUser = user;
         next();
@@ -91,14 +64,10 @@ function loadUser(req, res, next) {
       }
     });
   } 
-  else if (req.cookies.logintoken) {
-    authenticateFromLoginToken(req, res, next);
-  } 
   else {
     res.redirect('/login');
   }
 }
-
 
 // Routes
 
@@ -107,8 +76,8 @@ app.get('/', routes.general.index);
 
 // Login
 app.get('/login', routes.general.login);
+app.post('/login', routes.general.auth);
 app.get('/logout', loadUser, routes.general.logout);
-app.post('/auth', routes.general.auth);
 
 // Customer
 app.get('/customers', loadUser, routes.customer.all);
@@ -121,7 +90,7 @@ app.get('/datatable/customer/findAll', routes.customer.findAll);
 
 // User
 app.get('/user/create', routes.user.create);
-app.post('/user/save', routes.user.save);
+app.post('/user/create', routes.user.validateUser, routes.user.save);
 // Post Reset
 app.post('/user/forgot', routes.user.forgot);
 // Get Reset
@@ -132,7 +101,6 @@ app.get('/jobs', loadUser, routes.job.all);
 app.get('/job/findAll', routes.job.findAll);
 app.post('/job/add', routes.job.add);
 //app.get('/job/:id', routes.job.details);
-
 
 if (!module.parent) {
   app.listen(11342);

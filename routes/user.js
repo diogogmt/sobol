@@ -4,66 +4,69 @@ var mongoose = require('mongoose')
   , domain = 'http://localhost:11342/'
   , email = require('./../email.js')
   , config = require('./../config')
+  , userValidator = require('./../validators.js').userValidator
   , Schema = mongoose.Schema;
+
+
 
 
 models.defineModels(function() {
   User = mongoose.model('User');
+  console.log("user model defined");
 });
 
 
 // Users
 exports.create = function(req, res) {
-  res.render('users/new', {
-    locals: { 
-      layout: false,
-      user: new User() 
+  console.log("getCreate");
+  res.render('users/create',
+    { 
+      layout: "includes/layout",
+      user: new User(),
+      errors: false 
     }
-  });
+  );
 };
 
-exports.save = function(req, res) {
-  console.log("create user");
+exports.save = function(req, res, next) {
+  console.log("save user");
+  // console.log("next: ", next);
   var user = new User(req.body.user);
-  console.log("user: %o", user);
+  //console.log("user: \n", user);
+
   function userSaveFailed() {
-    console.log("creating NO");
-    req.flash('error', 'Account creation failed');
-    res.render('users/new.jade', {
-      locals: { 
-        layout: false,
-        user: user 
-      }
-    });
+    console.log("\nFAIL!\n");
+    // req.flash('error', 'Account creation failed');
+    // res.render('users/new.jade', {
+    //   locals: { 
+    //     layout: false,
+    //     user: user 
+    //   }
+    // });
+    res.redirect('/user/create');
   }
+  User.count({}, function (err, count) {
+    console.log("Collection has " + count + " users");
+    user.id = count + 1;
+    user.save(function(err) {
+      if (err) {
+        console.log("\nerr: \n", err);
+        return userSaveFailed();
+      } 
+      console.log("\nSUCCESS\n");
+      req.flash('info', 'Your account has been created');
+      //emails.sendWelcome(user);
 
-  user.save(function(err) {
-    if (err) {
-      console.log("err: " + err);
-      return userSaveFailed();
-    } 
-    console.log("creating YES");
-    req.flash('info', 'Your account has been created');
-    //emails.sendWelcome(user);
-
-    switch (req.params.format) {
-      case 'json':
-        console.log("case json");
-        res.send(user.toObject());
-      break;
-
-      default:
-        console.log("case default");
-        req.session.user_id = user.id;
-        res.redirect('/customers');
-    }
-  });
+      req.session.user_id = user.id;
+      res.redirect('/customers');
+    });
+  })
 };
 
 exports.forgot = function (req, res) {
   console.log("forgot");
   User.findOne({ email: req.body.user.email }, function(err, user) {
-    console.log("user: %o", user);
+    console.log("user: ", user);
     if (user) {
       console.log('user: %o' + user);
       var bcrypt = require('bcrypt')  
@@ -122,4 +125,28 @@ exports.reset = function (req, res) {
       }
     });
   }
+}
+
+
+exports.validateUser = function (req, res, next) {
+  console.log("validateUser ROUTE");
+  var errors = userValidator(req.body.user, function (err) {
+    // console.log('err: ', err);
+    // console.log("err.length: ", Object.keys(err).length);
+    if (Object.keys(err).length) {
+      console.log("HAS ERRORS rendering create again");
+      res.render('users/create',
+        { 
+          layout: "includes/layout",
+          title: "Login",
+          user: req.body.user,
+          errors: err 
+        }
+      );
+      return false;
+      // next(new Error("Validate user error"));
+    }
+    next();  
+  });
+  
 }

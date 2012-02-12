@@ -11,3 +11,5 @@ exports.mongo = {
 	},
 	connectionString: 'mongodb://' + ip + ':' + port + '/' + db,
 };
+
+exports.salt = 'sobolinc2012';
