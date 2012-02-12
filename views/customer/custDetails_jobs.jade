@@ -1,31 +1,29 @@
-h2 #{custID}
 br
 a#addJob.btn(href='#newJob') Add Job      
 div(style='display: none;')
   #newJob(style='width: 800px; height: 400px; overflow: auto;')
-    h4 Add Customer
-    form.form.label-inline(id='addJobForm', action='/job/add', method='post')
+    h4 Add Job
+    form.form.label-inline(id='addJobForm', action='/job/add/#{custID}', method='post')
       table
         tr
           td
             .field
-              label(for='customid') customid 
-              input#customid.medium(name='customid', size='20', type='text', value='')
+              label(for='customid') customid
+              input#customid.medium(name='job[customid]', size='20', type='text', value='')
         tr
           td
             .field
-              label(for='name') Job Name 
-              input#name.medium(name='name', size='20', type='text', value='')
+              label(for='name') Job Name
+              input#name.medium(name='job[name]', size='20', type='text', value='')
         tr
           td
             .field
               label(for='description') Job Description
-              input#description.large(name='description', size='20', type='text', value='')
+              input#description.large(name='job[description]', size='20', type='text', value='')
         tr
           td
-            .field
-              label(for='creationDate') Created On
-              input#creationDate.large(name='creationDate', size='20', type='text', value='')
+              input#saveJob.btn(type='submit', value='Add')
+        
 
 table#jobTable.display(cellpadding='0', cellspacing='0', border='0', rel='datatable')
   thead
@@ -51,8 +49,9 @@ script(type="text/javascript")
     $("#jobTable").dataTable( {
       "bProcessing": true,
       "bDestroy": true,
-      "sAjaxSource": "/datatable/job/findAll"
+      "sAjaxSource": "/datatable/job/getCustJobs/" + '#{customer[0].id}'
     });
+
     $('#addJobForm').submit(function() {
       alert('Submit initiated');
     });

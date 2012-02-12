@@ -23,8 +23,6 @@ exports.all = function (req, res) {
 exports.add = function(req, res) {
   console.log("add job route");
 
-
-
   var now = new Date();
   var day = now.getUTCDate();
   console.log("day is " + day);
@@ -39,10 +37,7 @@ console.log("today is " + today);
   var job = new Job(req.body.job);
   job.status = "Active";
   job.creationDate = today;
-  job.customerID = 1; //the current customer id
-
- 
-
+  job.customerID = req.params.id;
   console.log("job: %o", job);
   function jobSaveFailed() {
     console.log("failed creating job");
@@ -68,8 +63,6 @@ console.log("today is " + today);
 
   
 };
-
-
 
 exports.findAll = function (req, res) {
   console.log("all customers route");
@@ -104,7 +97,38 @@ exports.findAll = function (req, res) {
     }
   });
 
+};
 
+exports.getCustJobs = function (req, res) {
 
+Job.find({customerID:req.params.id}, function (err, jobs) {
+console.log("The current customer is " + req.params.id);
+
+    if(jobs){
+      console.log("get all this customers jobs success");
+
+      var dataSet = new Array();
+      for(i = 0; i < jobs.length; i++){
+        dataSet.push([
+            jobs[i].id,
+            jobs[i].customid,
+            jobs[i].name,
+            jobs[i].description,
+            jobs[i].creationDate,
+            jobs[i].status
+      
+        ]);
+      }
+
+      var aaData = {
+        "aaData" : dataSet
+      };
+
+      res.json(aaData);
+    }
+    else {
+      console.log("get all this customers jobs Not success");
+    }
+  });
 
 };

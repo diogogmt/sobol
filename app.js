@@ -96,8 +96,9 @@ app.get('/user/reset/:id/:ts', routes.user.reset);
 
 // Job
 app.get('/jobs', loadUser, routes.job.all);
+app.get('/datatable/job/getCustJobs/:id', routes.job.getCustJobs);
 app.get('/datatable/job/findAll', routes.job.findAll);
-app.post('/job/add', routes.job.add);
+app.post('/job/add/:id', routes.job.add);
 //app.get('/job/:id', routes.job.details);
 //app.get('/datatable/customer/:id/jobs', routes.job.findByCustID);
 
