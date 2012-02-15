@@ -92,7 +92,6 @@ script(type="text/javascript")
     $('#tel2c').val(phoneArray[2]);
     // On edit form submit
     $('#editCustForm').submit(function() {
-      alert('Submit initiated');
       $('#phone1').val($('#tel1a').val() + '-' + $('#tel1b').val() + '-' + $('#tel1c').val());
       $('#phone2').val($('#tel2a').val() + '-' + $('#tel2b').val() + '-' + $('#tel2c').val());
     });

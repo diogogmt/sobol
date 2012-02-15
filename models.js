@@ -89,8 +89,6 @@ function defineModels(callback) {
   Customer.virtual('tel2b');
   Customer.virtual('tel2c');
 
-<<<<<<< HEAD
-
   /**
     * Model: Tag
     */
