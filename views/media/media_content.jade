@@ -1,0 +1,54 @@
+#content.xfluid
+  a(name='line')
+  #gallery_wrapper.portlet.x8
+    .portlet-header
+      h4 Image Gallery
+    //
+       .portlet-header 
+    .portlet-content
+      .field
+        label(for='file_name') Search images 
+        br
+        input#file_name(name='file_name', size='30', type='text', value='')
+      button.btn Search
+      ul.gallery
+        li
+          b Image Name
+          br
+          img(alt='', src='https://zenit.senecac.on.ca/~bts530_113a03/ui/images/rain_large.jpg', width='150', height='150')
+          .actions
+            a.btn.btn-orange.btn-small(rel='facebox', href='https://zenit.senecac.on.ca/~bts530_113a03/ui/images/rain_large.jpg') View
+            a.btn.btn-orange.btn-small.editImg(href='#editImage') Edit
+            a.btn.btn-grey.btn-small.delete.deleteImage(href='javascript:;') Delete
+     
+     .portlet.x4
+          .portlet-header
+            h4 Upload File
+          //
+             .portlet-header 
+          .portlet-content
+            form#add-user-form.form.label-top(action='', method='get')
+              .field
+                label(for='file_name') File Name 
+                input#file_name(name='file_name', size='30', type='text', value='')
+              .field
+                label(for='file_name') Description 
+                input#file_name(name='file_name', size='30', type='text', value='')
+              .field.clearfix
+                label(for='lname') File Upload 
+                input.file(style='opacity: 0;', size='35', type='file')
+              .field
+                label(for='tags') Tags 
+                | tag 1
+                a(href='#') X
+                br
+
+                select
+                  option(value='') Add Existing Tag
+                  option(value='Tag5') Tag 5
+                  
+                br
+                input#file_name(name='file_name', size='20', type='text', value='tag 7')
+                button.btn Add Tag
+              .buttonrow
+                button.btn Upload File 

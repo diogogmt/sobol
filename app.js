@@ -97,6 +97,22 @@ app.post('/user/forgot', routes.user.forgot);
 app.get('/user/reset/:id/:ts', routes.user.reset);
 
 
+// Media
+app.get('/media', routes.media.all);
+app.get('/media/:id', loadUser, routes.media.one);
+app.get('/media/search', loadUser, routes.media.search);
+
+app.post('/media/create', loadUser, routes.media.create);
+app.get('/media/update/:id', loadUser, routes.media.update);
+app.post('/media/update/:id', loadUser, routes.media.save);
+app.post('/media/delete/:id', loadUser, routes.media.delete);
+
+
+//Tags
+app.get('/tags', routes.tag.all);
+app.get('/media/:id/tag/create', routes.tag.create);
+app.post('/media/:id/tag/delete/:id', routes.tag.delete);
+
 
 
 if (!module.parent) {

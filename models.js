@@ -88,8 +88,34 @@ function defineModels(callback) {
   Customer.virtual('tel2b');
   Customer.virtual('tel2c');
 
+
+  /**
+    * Model: Tag
+    */
+  
+  Tag = new Schema({
+    'id' : Number,
+    'name' : String
+  });
+
+  /**
+    * Model: Media
+    */
+  
+  Media = new Schema({
+    'id' : Number,
+    'name' : String,
+    'desc' : String,
+    'src' : String,
+    'tags' : [Tag]
+  });
+
+
+
   db.model('User', User);
   db.model('Customer', Customer);
+  db.model('Tag', Tag);
+  db.model('Media', Media);
 
   callback();
 }

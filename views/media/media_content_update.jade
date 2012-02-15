@@ -1,0 +1,42 @@
+div(style='display: none;')
+  #editImage(style='width: 800px; height: 800px; overflow: auto; text-align: center;')
+    table
+      tr
+        td
+          input#fname.medium(name='lname', size='20', type='text', value='Image name')
+          br
+          img(alt='', src='https://zenit.senecac.on.ca/~bts530_113a03/ui/images/crayons_large.jpg')
+          br
+          button.btn Change Image
+        td
+          h3 Image tags:
+          .field(style='text-align: left;')
+            | tag 1
+            a(href='#') X
+            br
+            | tag 2
+            a(href='#') X
+            br
+            | tag 3
+            a(href='#') X
+            br
+            | tag 4
+            a(href='#') X
+            br
+            select
+              option(value='') Add Existing Tag
+              option(value='Tag5') Tag 5
+              option(value='Tag6') Tag 6
+            br
+            input#fname.medium(name='lname', size='15', type='text', value='tag 7')
+            button#actionBtn.btn Add Tag
+      tr
+        td
+          h3 Description:
+          input#fname.medium(name='lname', size='40', type='text', value='')
+      tr
+        td(colspan='2')
+          br
+          br
+          br
+          button#actionBtn.btn Save Changes

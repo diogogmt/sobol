@@ -1,0 +1,17 @@
+include ../includes/menu
+include media_content
+include media_content_update
+include ../includes/footer   
+    
+script(type="text/javascript")
+  $(document).ready(function() {
+    /*
+    *   Update media
+    */
+    $(".editImg").fancybox({
+      'titlePosition'   : 'inside',
+      'transitionIn'    : 'none',
+      'transitionOut'   : 'none'
+    });
+  });
+       
