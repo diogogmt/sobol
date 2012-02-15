@@ -22,6 +22,7 @@ exports.create = function(req, res) {
   res.render('users/create',
     { 
       layout: "includes/layout",
+      title: "Login",
       user: new User(),
       errors: false 
     }

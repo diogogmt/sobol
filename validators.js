@@ -70,7 +70,7 @@ exports.loginValidator = function (user, callback) {
 
   // Password
   try {
-    check(user.password, 'Please enter a password password').notEmpty();
+    check(user.password, 'Please enter a password').notEmpty();
   } 
   catch (e) {
       console.log(e.message); //Please enter a valid integer
