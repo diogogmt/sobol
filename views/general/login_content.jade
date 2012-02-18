@@ -10,24 +10,23 @@
             label Username:
             div
               span.input
-                input#login_email.text(name='user[username]', value=user.username || '')
-                span.input
+                input#login_email.text(name='user[username]', value=user.username || '', autofocus)
+                span #{errors.username}
           .field
             label Password:
             div
               span.input
                 input#login_password.text(name='user[password]', type='password')
                 a#forgotPassword(style='', href='#retrievePassword') Forgot password?
-                span.input
+                br
+                span #{errors.password}
           .checkbox
             span.label  
             div
               input#remember.checkbox(name='remember', value='yes', type='checkbox')
               label(style='display: inline;', for='remember') Remember me on this computer
           .field
-            h3 #{errors.credentials}
-            h3 #{errors.username}
-            h3 #{errors.password}
+            h4 #{errors.credentials}
             div
               button.btn(type='submit') Login
   div(style='display: none;')

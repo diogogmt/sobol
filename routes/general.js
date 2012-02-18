@@ -33,7 +33,7 @@ exports.auth = function (req, res) {
             {
               layout: "includes/layout",
               title: 'Login',
-              errors: {credentials: "Wrong credentials"},
+              errors: {credentials: "Incorrect username/password. Please try again."},
               user: req.body.user
             }
           );

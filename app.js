@@ -84,7 +84,7 @@ app.get('/customers', loadUser, routes.customer.all);
 app.post('/customer/add', loadUser, routes.customer.add);
 app.post('/customer/edit', loadUser, routes.customer.edit);
 app.get('/customer/:id', loadUser, routes.customer.details);
-app.get('/datatable/customer/findAll', routes.customer.findAll);
+app.get('/datatable/customer/findAll', loadUser, routes.customer.findAll);
 
 // User
 app.get('/user/create', routes.user.create);
@@ -99,7 +99,6 @@ app.get('/user/reset/:id/:ts', routes.user.reset);
 app.get('/media', routes.media.all);
 app.get('/media/:id', loadUser, routes.media.one);
 app.get('/media/search', loadUser, routes.media.search);
-
 app.post('/media/create', loadUser, routes.media.create);
 app.get('/media/update/:id', loadUser, routes.media.update);
 app.post('/media/update/:id', loadUser, routes.media.save);
@@ -107,18 +106,18 @@ app.post('/media/delete/:id', loadUser, routes.media.delete);
 
 
 //Tags
-app.get('/tags', routes.tag.all);
-app.get('/media/:id/tag/create', routes.tag.create);
-app.post('/media/:id/tag/delete/:id', routes.tag.delete);
+app.get('/tags', loadUser, routes.tag.all);
+app.get('/media/:id/tag/create', loadUser, routes.tag.create);
+app.post('/media/:id/tag/delete/:id', loadUser, routes.tag.delete);
 
 
 // Job
 app.get('/jobs', loadUser, routes.job.all);
-app.get('/datatable/job/getCustJobs/:id', routes.job.getCustJobs);
-app.get('/datatable/job/findAll', routes.job.findAll);
-app.post('/job/add/:id', routes.job.add);
-//app.get('/job/:id', routes.job.details);
-//app.get('/datatable/customer/:id/jobs', routes.job.findByCustID);
+app.get('/datatable/job/getCustJobs/:id', loadUser, routes.job.getCustJobs);
+app.get('/datatable/job/findAll', loadUser, routes.job.findAll);
+app.post('/job/add/:id', loadUser, routes.job.add);
+app.post('/job/edit', loadUser, routes.job.edit);
+app.get('/job/:id', loadUser, routes.job.details);
 
 if (!module.parent) {
   app.listen(11342);

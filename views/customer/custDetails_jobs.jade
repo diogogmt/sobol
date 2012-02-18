@@ -3,12 +3,12 @@ a#addJob.btn(href='#newJob') Add Job
 div(style='display: none;')
   #newJob(style='width: 800px; height: 400px; overflow: auto;')
     h4 Add Job
-    form.form.label-inline(id='addJobForm', action='/job/add/#{custID}', method='post')
+    form.form.label-inline(id='addJobForm', action='/job/add/#{customer.id', method='post')
       table
         tr
           td
             .field
-              label(for='customid') customid
+              label(for='customid') Custom ID
               input#customid.medium(name='job[customid]', size='20', type='text', value='')
         tr
           td
@@ -30,8 +30,8 @@ table#jobTable.display(cellpadding='0', cellspacing='0', border='0', rel='datata
     tr
       th ID
       th Custom ID
-      th Job Name
-      th Job Description
+      th Name
+      th Description
       th Created On
       th Status
   tbody
@@ -49,9 +49,13 @@ script(type="text/javascript")
     $("#jobTable").dataTable( {
       "bProcessing": true,
       "bDestroy": true,
-      "sAjaxSource": "/datatable/job/getCustJobs/" + '#{customer[0].id}'
+      "sAjaxSource": "/datatable/job/getCustJobs/" + '#{customer.id}'
     });
-
     $('#addJobForm').submit(function() {
+    });
+    $("#jobTable tbody tr").live("click", function() {
+      var nTds = $('td', this);
+      var jobID = $(nTds[0]).text();
+      window.location = "/job/" + jobID;
     });
   });

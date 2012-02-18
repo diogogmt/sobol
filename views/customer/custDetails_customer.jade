@@ -4,74 +4,74 @@ form.form.label-inline(id='editCustForm', action='/customer/edit', method='post'
       td
         .field
           label(for='lname') First name
-          input#firstName.medium(name='cust[firstName]', size='20', type='text', value='#{customer[0].firstName}')
+          input#firstName.medium(name='cust[firstName]', size='20', type='text', value='#{customer.firstName}')
       td
         .field
           label(for='lname') Last name
-          input#lastName.medium(name='cust[lastName]', size='20', type='text', value='#{customer[0].lastName}')
+          input#lastName.medium(name='cust[lastName]', size='20', type='text', value='#{customer.lastName}')
     tr
       td
         .field
           label(for='address1') Address 1
-          input#address1.large(name='cust[address1]', value='#{customer[0].address1}', size='40', type='text')
+          input#address1.large(name='cust[address1]', value='#{customer.address1}', type='text')
       td
         .field
           label(for='address1') Address 2
-          input#address2.large(name='cust[address2]', value='#{customer[0].address2}', size='40', type='text')
+          input#address2.large(name='cust[address2]', value='#{customer.address2}', type='text')
     tr
       td
         .field
           label(for='country') Country
-          input#country.small(name='cust[country]', value='#{customer[0].country}', size='20', type='text')
+          input#country.small(name='cust[country]', value='#{customer.country}', size='20', type='text')
       td
         .field
           label(for='province') Province
-          input#province.small(name='cust[province]', value='#{customer[0].province}', size='20', type='text')
+          input#province.small(name='cust[province]', value='#{customer.province}', size='20', type='text')
     tr
       td
         .field
           label(for='city') City
-          input#city.small(name='cust[city]', value='#{customer[0].city}', size='20', type='text')
+          input#city.small(name='cust[city]', value='#{customer.city}', size='20', type='text')
       td
         .field
           label(for='postal') Postal Code
-          input#postal.small(name='cust[postal]', value='#{customer[0].postal}', size='20', type='text')
+          input#postal.small(name='cust[postal]', value='#{customer.postal}', size='20', type='text')
     tr
       td
         .field.phone_field
           label(for='tel1a') Telephone 1
-          input#tel1a.xsmall(name='cust[tel1a]', value='', size='3', type='text')
+          input#tel1a.xsmall(name='cust[tel1a]', value='', size='3', maxlength='3', type='text')
           | -
-          input#tel1b.xsmall(name='cust[tel1b]', size='3', value='', type='text')
+          input#tel1b.xsmall(name='cust[tel1b]', size='3', value='', maxlength='4', type='text')
           | -
-          input#tel1c.xsmall(name='cust[tel1c]', size='4', value='', type='text')
+          input#tel1c.xsmall(name='cust[tel1c]', size='4', value='', maxlength='4', type='text')
       td
         .field.phone_field
           label(for='tel2a') Telephone 2
-          input#tel2a.xsmall(name='cust[tel2a]', value='', size='3', type='text')
+          input#tel2a.xsmall(name='cust[tel2a]', value='', size='3', maxlength='3', type='text')
           | -
-          input#tel2b.xsmall(name='cust[tel2b]', size='3', value='', type='text')
+          input#tel2b.xsmall(name='cust[tel2b]', size='3', value='', maxlength='4', type='text')
           | -
-          input#tel2c.xsmall(name='cust[tel2c]', size='4', value='', type='text')
+          input#tel2c.xsmall(name='cust[tel2c]', size='4', value='', maxlength='4', type='text')
     tr
       td
         .field
           label(for='email') Email
-          input#email.medium(name='cust[email]', value='#{customer[0].email}', size='20', type='text')
+          input#email.medium(name='cust[email]', value='#{customer.email}', size='20', type='text')
       td
         .field
           input#phone1(name='cust[phone1]', value='', type='hidden')
           input#phone2(name='cust[phone2]', value='', type='hidden')
-          input#id(name='cust[id]', value='#{customer[0].id}', type='hidden')
+          input#id(name='cust[id]', value='#{customer.id}', type='hidden')
     tr
       td
         .field
           label Registration Date
-          #{customer[0].registrationDate}
+          #{customer.registrationDate}
       td
         .field
           label Status
-          #{customer[0].status}
+          #{customer.status}
     tr
       td
         input#editCust.btn(type='submit', value='Update')
@@ -80,12 +80,12 @@ form.form.label-inline(id='editCustForm', action='/customer/edit', method='post'
 script(type="text/javascript")
   $(document).ready(function() {
     // Parse the phone number back to split fields
-    var phoneString = '#{customer[0].phone1}';
+    var phoneString = '#{customer.phone1}';
     var phoneArray = phoneString.split("-");
     $('#tel1a').val(phoneArray[0]);
     $('#tel1b').val(phoneArray[1]);
     $('#tel1c').val(phoneArray[2]);
-    phoneString = '#{customer[0].phone2}';
+    phoneString = '#{customer.phone2}';
     phoneArray = phoneString.split("-");
     $('#tel2a').val(phoneArray[0]);
     $('#tel2b').val(phoneArray[1]);
