@@ -67,7 +67,7 @@ exports.edit = function (req, res) {
     if(job){
       job.customid = formJob.customid;
       job.name = formJob.name;
-      job.description = formJob.desc;
+      job.description = formJob.description;
 
       job.save(function(err) {
         if (err){
@@ -138,7 +138,7 @@ exports.getCustJobs = function (req, res) {
             jobs[i].customid,
             jobs[i].name,
             jobs[i].description,
-            jobs[i].creationDate,
+            new Date(jobs[i].creationDate).toDateString(),
             jobs[i].status
         ]);
       }
