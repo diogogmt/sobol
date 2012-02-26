@@ -1,14 +1,11 @@
 
 var mongoose = require('mongoose')
-  , models = require('./../models')
+  , User = require('./../models').User
   , Schema = mongoose.Schema
   , email = require('./../email.js')
   , config = require('./../config')
   , loginValidator = require('./../validators').loginValidator;
 
-models.defineModels(function() {
-  User = mongoose.model('User');
-})
 
 exports.index = function(req, res) {
   res.redirect('/customers');

@@ -1,19 +1,11 @@
 var mongoose = require('mongoose')
-  , models = require('./../models')
+  , User = require('./../models').User
   , bcrypt = require('bcrypt')
   , domain = 'http://localhost:11342/'
   , email = require('./../email.js')
   , config = require('./../config')
   , userValidator = require('./../validators.js').userValidator
   , Schema = mongoose.Schema;
-
-
-
-
-models.defineModels(function() {
-  User = mongoose.model('User');
-  console.log("user model defined");
-});
 
 
 // Users

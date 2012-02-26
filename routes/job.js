@@ -1,13 +1,10 @@
 var mongoose = require('mongoose')
-  , models = require('./../models')
+  , Job = require('./../models').Job
   , config = require('./../config')
   , domain = 'http://localhost:11342/'
   , Schema = mongoose.Schema;
 
 
-models.defineModels(function() {
-  Job = mongoose.model('Job');
-});
 
 exports.all = function (req, res) {
   console.log("all jobs route");

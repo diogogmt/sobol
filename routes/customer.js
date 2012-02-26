@@ -1,12 +1,13 @@
 var mongoose = require('mongoose')
   , models = require('./../models')
+  , Customer = require('./../models').Customer
   , config = require('./../config')
   , domain = 'http://localhost:11342/'
   , Schema = mongoose.Schema;
 
-models.defineModels(function(){
-  Customer = mongoose.model('Customer');
-});
+// models.defineModels(function(){
+//   Customer = mongoose.model('Customer');
+// });
 
 exports.all = function (req, res) {
   console.log("all customers route");
