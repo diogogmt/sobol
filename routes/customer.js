@@ -36,7 +36,6 @@ exports.findAll = function (req, res) {
             customers[i].firstName + ' ' + customers[i].lastName,
             customers[i].email,
             customers[i].phone1,
-            0,
             customers[i].status
         ]);
       }
