@@ -20,45 +20,72 @@ exports.all = function (req, res) {
 exports.add = function(req, res) {
   console.log("add job route");
 
-  var now = new Date();
-  var day = now.getUTCDate();
-  console.log("day is " + day);
-  var month = now.getUTCMonth();
-  console.log("month is " + month);
-  var year = now.getUTCFullYear();
-  console.log("year is " + year);
-  var today = '' + month + '/' + day + '/' + year;
-
-console.log("today is " + today);
-
   var job = new Job(req.body.job);
-  job.status = "Active";
-  job.creationDate = today;
   job.customerID = req.params.id;
   console.log("job: %o", job);
   function jobSaveFailed() {
     console.log("failed creating job");
-//need to confirm if we need to redirect to customers or job
+    //need to confirm if we need to redirect to customers or job
   }
 
   Job.count({}, function (err, count) {
-  console.log("Collection has " + count + " jobs");
-  job.id = count + 1;  
-  
-  job.save(function(err) {
-    if (err) {
-      console.log("err: " + err);
-      return jobSaveFailed();
-    } 
-    console.log("creating job");
-    res.redirect('/customer/' + job.customerID);
-//    req.flash('info', 'Job has been added');
+    console.log("Collection has " + count + " jobs");
+    job.id = count + 1;
+    job.save(function(err) {
+      if (err) {
+        console.log("err: " + err);
+        return jobSaveFailed();
+      } 
+      console.log("creating job");
+      res.redirect('/customer/' + job.customerID);
+      // req.flash('info', 'Job has been added');
+    });
+  });  
+};
+
+exports.edit = function (req, res) {
+  console.log("edit job route");
+  var formJob = new Job(req.body.formJob);
+  //console.log("customer: %o", req.body.cust);
+  function jobEditFailed() {
+    console.log("edit job FAIL");
+    //req.flash('addError', 'Customer Add failed');
+    res.render('job/jobDetails/', 
+    {
+      layout: 'includes/layout',
+      title: 'Job',
+      job: formJob
+    });
+  };
+
+  console.log("The form job ID is: ", formJob.id);
+
+  Job.findOne({id:formJob.id}, function(err, job) {
+    if(job){
+      job.customid = formJob.customid;
+      job.name = formJob.name;
+      job.description = formJob.description;
+
+      job.save(function(err) {
+        if (err){
+          console.log("err: " + err);
+          return jobEditFailed();
+        }
+        console.log("Editing SUCCEED");
+        //req.flash('info', 'The customer has been added');
+        res.redirect('/job/' + job.id);
+      });
+    }else{
+      console.log("Job not found. This shouldn't happen");
+      console.log("Edit job: ", formJob);
+      res.render('job/jobDetails', 
+      {
+        layout: 'includes/layout',
+        title: 'Job',
+        job: formJob
+      });
+    }
   });
-
-});
-
-
-  
 };
 
 exports.findAll = function (req, res) {
@@ -97,13 +124,10 @@ exports.findAll = function (req, res) {
 };
 
 exports.getCustJobs = function (req, res) {
-
-Job.find({customerID:req.params.id}, function (err, jobs) {
-console.log("The current customer is " + req.params.id);
-
+  Job.find({customerID:req.params.id}, function (err, jobs) {
+    console.log("The current customer is " + req.params.id);
     if(jobs){
       console.log("get all this customers jobs success");
-
       var dataSet = new Array();
       for(i = 0; i < jobs.length; i++){
         dataSet.push([
@@ -111,21 +135,39 @@ console.log("The current customer is " + req.params.id);
             jobs[i].customid,
             jobs[i].name,
             jobs[i].description,
-            jobs[i].creationDate,
+            new Date(jobs[i].creationDate).toDateString(),
             jobs[i].status
-      
         ]);
       }
-
       var aaData = {
         "aaData" : dataSet
       };
-
       res.json(aaData);
     }
-    else {
+    else 
+    {
       console.log("get all this customers jobs Not success");
     }
   });
+};
 
+
+exports.details = function (req, res) {
+  console.log("job details route");
+  console.log("job ID: " + req.params.id);
+
+  Job.findOne({id:req.params.id}, function (err, job) {
+    if(!job){
+      console.log("get specific job not successful");
+    }else{
+      console.log("Details job: ", job);
+      res.render('job/jobDetails', 
+        {
+          layout: 'includes/layout',
+          title: 'Job',
+          job: job
+        }
+      );
+    }
+  });  
 };

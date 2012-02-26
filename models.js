@@ -114,21 +114,25 @@ exports.Media = (function () {
 })();
 
 
-
-
+/**
+* Model: Job
+*/
 exports.Job = (function () {
   console.log("Job model");
-  Job = new Schema({
-    id : Number,
-    customid : String,  //assuming that Archie is going to use a mix of char and numerics in his ID's
-    name : String,
-    description : String,
-    creationDate : String,
-    status : String,
-    scheduleDates : String,
-    customerID: Number
+
+ Job = new Schema({
+    'id' : Number,
+    'customid' : String,  //assuming that Archie is going to use a mix of char and numerics in his ID's
+    'name' : String,
+    'description' : String,
+    'creationDate' : { type: Date, default: Date.now },
+    'status' : { type: String, default: "Active" },
+    'scheduleDates' : String,
+    'customerID' : Number
   });
-});
+
+  return db.model('Job', Media);
+})();
 
 
 /**

@@ -137,7 +137,7 @@ exports.details = function (req, res) {
   console.log("customer details route");
   console.log("customer ID: " + req.params.id);
 
-  Customer.find({id:req.params.id}, function (err, customer) {
+  Customer.findOne({id:req.params.id}, function (err, customer) {
     if(!customer){
       console.log("get specific customer not successful");
     }else{
@@ -145,7 +145,6 @@ exports.details = function (req, res) {
         {
           layout: 'includes/layout',
           title: 'Customer',
-          custID: req.params.id,
           customer: customer
         }
       );
