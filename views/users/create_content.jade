@@ -32,23 +32,20 @@
             div
               span.input
                 input#login_email.text(name='user[username]', value=user.username || '')
-                span.input
+                span #{errors.username}
           .field
             label Email:
             div
               span.input
                 input#login_email.text(name='user[email]', value=user.email || '')
-                span.input      
+                span #{errors.email}
           .field
             label Password:
             div
               span.input
-                input#login_password.text(name='user[password]', type='password')
-                a#forgotPassword(style='', href='#retrievePassword') Forgot password?
-                span.input
+                input#login_email.text(name='user[password]', type='password')
+                br
+                span #{errors.password}
           .field
-            h3 #{errors.username}
-            h3 #{errors.email}
-            h3 #{errors.password}
             div
               button.btn(type='submit') Create and Login
