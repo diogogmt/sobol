@@ -119,6 +119,10 @@ app.post('/job/add/:id', loadUser, routes.job.add);
 app.post('/job/edit', loadUser, routes.job.edit);
 app.get('/job/:id', loadUser, routes.job.details);
 
+// Job
+app.get('/test', routes.test.generate);
+
+
 if (!module.parent) {
   app.listen(11342);
   console.log('Express server listening on port %d, environment: %s', app.address().port, app.settings.env)
