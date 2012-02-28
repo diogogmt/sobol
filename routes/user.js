@@ -1,19 +1,12 @@
 var mongoose = require('mongoose')
-  , models = require('./../models')
+  , User = require('./../models').User
   , bcrypt = require('bcrypt')
   , domain = 'http://localhost:11342/'
   , email = require('./../email.js')
   , config = require('./../config')
   , userValidator = require('./../validators.js').userValidator
-  , Schema = mongoose.Schema;
-
-
-
-
-models.defineModels(function() {
-  User = mongoose.model('User');
-  console.log("user model defined");
-});
+  , Schema = mongoose.Schema
+  , ObjectId = mongoose.Types.ObjectId;
 
 
 // Users
@@ -46,22 +39,20 @@ exports.save = function(req, res, next) {
     // });
     res.redirect('/user/create');
   }
-  User.count({}, function (err, count) {
-    console.log("Collection has " + count + " users");
-    user.id = count + 1;
-    user.save(function(err) {
-      if (err) {
-        console.log("\nerr: \n", err);
-        return userSaveFailed();
-      } 
-      console.log("\nSUCCESS\n");
-      req.flash('info', 'Your account has been created');
-      //emails.sendWelcome(user);
+  
+  //console.log("Collection has " + count + " users");
+  user.save(function(err) {
+    if (err) {
+      console.log("\nerr: \n", err);
+      return userSaveFailed();
+    } 
+    console.log("\nSUCCESS\n");
+    req.flash('info', 'Your account has been created');
+    //emails.sendWelcome(user);
 
-      req.session.user_id = user.id;
-      res.redirect('/customers');
-    });
-  })
+    req.session.user_id = user._id;
+    res.redirect('/customers');
+  });
 };
 
 exports.forgot = function (req, res) {

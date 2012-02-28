@@ -4,9 +4,7 @@
  */
 
 var express = require('express')
-  , routes = require('./routes')
   , MongoStore = require('connect-mongo')
-  , mongo = require('mongoose')
   , connectTimeout = require('connect-timeout')
   , mongoStore = require('connect-mongodb')
   , stylus = require('stylus')
@@ -15,22 +13,23 @@ var express = require('express')
   , jade = require('jade')
   , routes = require('./routes')
   , config = require('./config')
-  , models = require('./models');
+  , gridfs = require("./gridfs")
+  , User = require('./models').User;
 
 
 var app = module.exports = express.createServer();
 
-// Configuration
 
+// Configuration
 app.configure(function() {
   app.set('views', __dirname + '/views');
   app.set('view engine', 'jade');
   app.use(express.favicon());
-  app.use(express.bodyParser());
+  app.use(connect.bodyParser({uploadDir:'./uploads'}));
   app.use(express.cookieParser());
   app.use(connectTimeout({ time: 10000 }));
   app.use(express.session({ store: mongoStore(app.set('db-uri')), secret: 'topsecret' }));
-  app.use(express.logger({ format: '\x1b[1m:method\x1b[0m \x1b[33m:url\x1b[0m :response-time ms' }))
+  app.use(express.logger({ format: '\x1b[1m:method\x1b[0m \x1b[33m:url\x1b[0m :response-time ms' }));
   app.use(express.methodOverride());
   app.use(stylus.middleware({ src: __dirname + '/public' }));
   app.use(express.static(__dirname + '/public'));
@@ -46,24 +45,20 @@ app.configure(function() {
 });
 
 
-models.defineModels(function() {
-  app.User = User = db.model('User');
-})
-
 
 function loadUser(req, res, next) {
   console.log("loaduser");
   if (req.session.user_id) {
-    User.findOne({id: req.session.user_id}, function(err, user) {
+    User.findOne({_id: req.session.user_id}, function(err, user) {
       if (user) {
         req.currentUser = user;
         next();
-      } 
+      }
       else {
         res.redirect('/login');
       }
     });
-  } 
+  }
   else {
     res.redirect('/login');
   }
@@ -72,7 +67,7 @@ function loadUser(req, res, next) {
 // Routes
 
 // Index
-app.get('/', loadUser, routes.general.index);
+// app.get('/', loadUser, routes.general.index);
 
 // Login
 app.get('/login', routes.general.login);
@@ -119,13 +114,73 @@ app.post('/job/add/:id', loadUser, routes.job.add);
 app.post('/job/edit', loadUser, routes.job.edit);
 app.get('/job/:id', loadUser, routes.job.details);
 
+<<<<<<< HEAD
 // Job
 app.get('/test', routes.test.generate);
+=======
+
+
+
+var GridFS, GridFSSchema;
+
+GridFSSchema = new mongoose.Schema({
+  name: String,
+  files: [mongoose.Schema.Mixed]
+});
+
+GridFSSchema.methods.addFile = function(file, options, fn) {
+  var that = this;
+  return gridfs.putFile(file.path, file.filename, options, function(err, result) {
+    that.files.push(result);
+    return application.save(fn);
+  });
+};
+
+GridFS = mongoose.model("application", GridFSSchema);
+
+app.get("/", function(req, res) {
+  console.log("root");
+  return GridFS.find({}, function(err, files) {
+    // console.log("files: ", files)
+    return res.render("gridIndex", {
+      layout: false,
+      title: "GridFS Example",
+      files: files
+    });
+  });
+});
+
+app.post("/new", function(req, res) {
+  console.log("new");
+  // console.log("req.body: ", req.body);
+  // console.log("req.body.name: ", req.body.name);
+  // console.log("req.files: ", req.files);
+  var application, opts;
+  application = new File();
+  application.name = req.body.name;
+  opts = {
+    content_type: req.files.file.type
+  };
+  return application.addFile(req.files.file, opts, function(err, result) {
+    return res.redirect("/");
+  });
+});
+
+app.get("/file/:id", function(req, res) {
+  console.log("file/id");
+  return gridfs.get(req.params.id, function(err, file) {
+    res.header("Content-Type", file.type);
+    res.header("Content-Disposition", "attachment; filename=" + file.filename);
+    return file.stream(true).pipe(res);
+  });
+});
+
+>>>>>>> 09e5cf44472d097bfedc6d0ebd53f9f560491590
 
 
 if (!module.parent) {
   app.listen(11342);
-  console.log('Express server listening on port %d, environment: %s', app.address().port, app.settings.env)
+  console.log('Express server listening on port %d, environment: %s', app.address().port, app.settings.env);
   console.log('Using connect %s, Express %s, Jade %s', connect.version, express.version, jade.version);
 }
 

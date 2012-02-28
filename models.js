@@ -5,23 +5,43 @@ var crypto = require('crypto')
   , LoginToken
   , Job
   , config = require('./config')
-  db = mongoose.connect(config.mongo.connectionString);
+  , gridfs = require("./gridfs")
+  , db = mongoose.connect(config.mongo.connectionString)
+  , Schema = mongoose.Schema
+  , ObjectId = Schema.ObjectId;
+
+console.log("model.js");
 
 
-function defineModels(callback) {
-  var Schema = mongoose.Schema,
-      ObjectId = Schema.ObjectId;
 
 
-  /**
-    * Model: User
-    */
+exports.File = (function () {
+  console.log("File model");
+  // GridFSSchema = new mongoose.Schema({
+  //   name: String,
+  //   files: [mongoose.Schema.Mixed]
+  // });
 
-  // Add the validation bits when defining the schema
-  // TODO
-  // Add validation to username email
+  // GridFSSchema.methods.addFile = function(file, options, fn) {
+  //   var that = this;
+  //   return gridfs.putFile(file.path, file.filename, options, function(err, result) {
+  //     that.files.push(result);
+  //     return application.save(fn);
+  //   });
+  // };
+
+  // GridFS = mongoose.model("application", GridFSSchema);
+
+
+  // db.model('File', File);
+})();
+
+/**
+* Model: User
+*/
+exports.User = (function () {
+  console.log("User model");
   User = new Schema({
-    'id': Number,
     'username': {
       type: String,
       index: { unique: true }
@@ -59,14 +79,63 @@ function defineModels(callback) {
     next();
   });
 
+  return db.model('User', User);
+})();
 
 
-  /**
-    * Model: Customer
-    */
-  
-  Customer = new Schema({
-    'id' : Number,
+/**
+* Model: Tag
+*/
+exports.Tag = (function () {
+  console.log("Tag model");
+  Tag = new Schema({
+    'name' : String
+  });
+
+  return db.model('Tag', Tag);
+})();
+
+/**
+* Model: Media
+*/
+exports.Media = (function () {
+  console.log("Media model");
+  Media = new Schema({
+    'name' : String,
+    'desc' : String,
+    'src' : String,
+    'tags' : [exports.Tag]
+  });
+
+  return db.model('Media', Media);
+})();
+
+
+/**
+* Model: Job
+*/
+exports.Job = (function () {
+  console.log("Job model");
+
+ Job = new Schema({
+    'name' : String,
+    'description' : String,
+    'creationDate' : { type: Date, default: Date.now },
+    'status' : { type: String, default: "Active" },
+    'scheduleDates' : String,
+    'customerID' : ObjectId
+  });
+
+  return db.model('Job', Job);
+})();
+
+
+/**
+* Model: Customer
+*/
+exports.Customer = (function () {
+  console.log("Customer model");
+  Customer = new mongoose.Schema({
     'firstName' : String,
     'lastName' : String,
     'email' : String,
@@ -89,51 +158,7 @@ function defineModels(callback) {
   Customer.virtual('tel2b');
   Customer.virtual('tel2c');
 
-  /**
-    * Model: Tag
-    */
-  
-  Tag = new Schema({
-    'id' : Number,
-    'name' : String
-  });
+  return db.model('Customer', Customer);
+})();
 
-  /**
-    * Model: Media
-    */
-  
-  Media = new Schema({
-    'id' : Number,
-    'name' : String,
-    'desc' : String,
-    'src' : String,
-    'tags' : [Tag]
-  });
-
-/**
-  * Model: Job
-  */
-
- Job = new Schema({
-    'id' : Number,
-    'customid' : String,  //assuming that Archie is going to use a mix of char and numerics in his ID's
-    'name' : String,
-    'description' : String,
-    'creationDate' : { type: Date, default: Date.now },
-    'status' : { type: String, default: "Active" },
-    'scheduleDates' : String,
-    'customerID' : Number
-  });
-
-  
-  db.model('User', User);
-  db.model('Customer', Customer);
-  db.model('Tag', Tag);
-  db.model('Media', Media);
-  db.model('Job', Job);
-
-  callback();
-}
-
-exports.defineModels = defineModels; 
-
+console.log("exports", exports);
