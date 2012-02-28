@@ -1,9 +1,11 @@
 var mongoose = require('mongoose')
   , models = require('./../models')
   , Customer = require('./../models').Customer
+  , Job = require('./../models').Job
   , config = require('./../config')
   , domain = 'http://localhost:11342/'
-  , Schema = mongoose.Schema;
+  , Schema = mongoose.Schema
+  , ObjectId = mongoose.Types.ObjectId;
 
 // models.defineModels(function(){
 //   Customer = mongoose.model('Customer');
@@ -30,21 +32,37 @@ exports.findAll = function (req, res) {
       //console.log(customers);
 
       var dataSet = new Array();
+      var innerCust = customers;
       for(i = 0; i < customers.length; i++){
-        dataSet.push([
-            customers[i].id,
-            customers[i].firstName + ' ' + customers[i].lastName,
-            customers[i].email,
-            customers[i].phone1,
-            customers[i].status
-        ]);
-      }
+        // console.log("This is CUSTOMERS: " + customers);
+        // console.log("This is INNER CUST: " + innerCust);
+        //console.log("count: " + i);
+        var countJob = function (i) {
+          Job.count({ customerID : customers[i]._id }, function (err, count) {
+            
+            //console.log("inside count: " + i);
+            dataSet.push([
+              innerCust[i]._id,
+              innerCust[i].lastName,
+              innerCust[i].firstName,
+              innerCust[i].email,
+              innerCust[i].phone1,
+              count,
+              new Date(innerCust[i].registrationDate).toDateString(),
+              innerCust[i].status
+            ]);
 
-      var aaData = {
-        "aaData" : dataSet
-      };
+            //console.log("INNER CUST LENGTH: " + innerCust.length);
+            if(i == innerCust.length - 1){
+              var aaData = {
+                "aaData" : dataSet
+              };
 
-      res.json(aaData);
+              res.json(aaData);
+            }
+          }); // END JOB COUNT
+        }(i); // END countJob
+      } // END for loop
     }
     else {
       console.log("get all customers Not success");
@@ -67,23 +85,20 @@ exports.add = function (req, res) {
     });
   };
 
-  Customer.count({}, function (err, count) {
-    customer.id = count + 1;
-    customer.save(function(err) {
-      if (err){
-        console.log("err: " + err);
-        return customerAddFailed();
-      }
-      console.log("Adding SUCCEED");
-      //req.flash('info', 'The customer has been added');
-      res.redirect('/customers');
-    });
+  customer.save(function(err) {
+    if (err){
+      console.log("err: " + err);
+      return customerAddFailed();
+    }
+    console.log("Adding SUCCEED");
+    //req.flash('info', 'The customer has been added');
+    res.redirect('/customers');
   });
 };
 
 exports.edit = function (req, res) {
   console.log("edit customer route");
-  var formCustomer = new Customer(req.body.cust);
+  var formCustomer = req.body.cust;
   //console.log("customer: %o", req.body.cust);
   function customerEditFailed() {
     console.log("edit customer FAIL");
@@ -96,7 +111,7 @@ exports.edit = function (req, res) {
     });
   };
 
-  Customer.findOne({id:formCustomer.id}, function(err, customer) {
+  Customer.findOne({ _id : new ObjectId(formCustomer.id) }, function (err, customer) {
     if(customer){
       customer.firstName = formCustomer.firstName;
       customer.lastName = formCustomer.lastName;
@@ -118,7 +133,7 @@ exports.edit = function (req, res) {
         }
         console.log("Editing SUCCEED");
         //req.flash('info', 'The customer has been added');
-        res.redirect('/customer/' + customer.id);
+        res.redirect('/customer/' + customer._id);
       });
     }else{
       console.log("Customer not found. This shouldn't happen");
@@ -133,10 +148,8 @@ exports.edit = function (req, res) {
 };
 
 exports.details = function (req, res) {
-  console.log("customer details route");
-  console.log("customer ID: " + req.params.id);
-
-  Customer.findOne({id:req.params.id}, function (err, customer) {
+  //console.log("customer details route");
+  Customer.findOne({ _id : new ObjectId(req.params.id) }, function (err, customer) {
     if(!customer){
       console.log("get specific customer not successful");
     }else{

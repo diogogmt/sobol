@@ -7,8 +7,8 @@ var crypto = require('crypto')
   , config = require('./config')
   , gridfs = require("./gridfs")
   , db = mongoose.connect(config.mongo.connectionString)
-  , Schema = mongoose.Schema,
-    ObjectId = Schema.ObjectId;
+  , Schema = mongoose.Schema
+  , ObjectId = Schema.ObjectId;
 
 console.log("model.js");
 
@@ -42,7 +42,6 @@ exports.File = (function () {
 exports.User = (function () {
   console.log("User model");
   User = new Schema({
-    'id': Number,
     'username': {
       type: String,
       index: { unique: true }
@@ -90,7 +89,6 @@ exports.User = (function () {
 exports.Tag = (function () {
   console.log("Tag model");
   Tag = new Schema({
-    'id' : Number,
     'name' : String
   });
 
@@ -103,7 +101,6 @@ exports.Tag = (function () {
 exports.Media = (function () {
   console.log("Media model");
   Media = new Schema({
-    'id' : Number,
     'name' : String,
     'desc' : String,
     'src' : String,
@@ -121,17 +118,15 @@ exports.Job = (function () {
   console.log("Job model");
 
  Job = new Schema({
-    'id' : Number,
-    'customid' : String,  //assuming that Archie is going to use a mix of char and numerics in his ID's
     'name' : String,
     'description' : String,
     'creationDate' : { type: Date, default: Date.now },
     'status' : { type: String, default: "Active" },
     'scheduleDates' : String,
-    'customerID' : Number
+    'customerID' : ObjectId
   });
 
-  return db.model('Job', Media);
+  return db.model('Job', Job);
 })();
 
 
@@ -141,7 +136,6 @@ exports.Job = (function () {
 exports.Customer = (function () {
   console.log("Customer model");
   Customer = new mongoose.Schema({
-    'id' : Number,
     'firstName' : String,
     'lastName' : String,
     'email' : String,
