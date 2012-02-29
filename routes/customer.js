@@ -101,7 +101,7 @@ exports.add = function (req, res) {
                 {
                   layout: 'includes/layout',
                   title: 'Customer'
-//                  errors: error,
+                  errors: errors,
                 });
           };
         }
