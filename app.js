@@ -114,10 +114,9 @@ app.post('/job/add/:id', loadUser, routes.job.add);
 app.post('/job/edit', loadUser, routes.job.edit);
 app.get('/job/:id', loadUser, routes.job.details);
 
-<<<<<<< HEAD
-// Job
+// test data generation
 app.get('/test', routes.test.generate);
-=======
+
 
 
 
@@ -174,8 +173,6 @@ app.get("/file/:id", function(req, res) {
     return file.stream(true).pipe(res);
   });
 });
-
->>>>>>> 09e5cf44472d097bfedc6d0ebd53f9f560491590
 
 
 if (!module.parent) {

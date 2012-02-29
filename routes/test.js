@@ -4,10 +4,12 @@ var mongoose = require('mongoose')
   , domain = 'http://localhost:11342/'
   , Schema = mongoose.Schema;
 
+/*
 models.defineModels(function(){
   Customer = mongoose.model('Customer');
   Jobs = mongoose.model('Job');
 });
+*/
 
 exports.generate = function (req, res) {
   console.log("creating test data");
@@ -44,9 +46,6 @@ exports.generate = function (req, res) {
   var job106_3 = new Job();
   var job106_4 = new Job();
 
-
-
-    customer1.id = 101;
     customer1.firstName = "Barbara";
     customer1.lastName = "Meyer";
     customer1.email = "Barbarra@email.ca";
@@ -57,7 +56,6 @@ exports.generate = function (req, res) {
     customer1.province = "Ontario";
     customer1.country = "Canada";
 
-    customer2.id = 102;
     customer2.firstName = "Anthony";
     customer2.lastName = "Wu";
     customer2.email = "AnthonyWu@email.ca";
@@ -68,7 +66,6 @@ exports.generate = function (req, res) {
     customer2.province = "Ontario";
     customer2.country = "Canada";
 
-    customer3.id = 103;
     customer3.firstName = "Johnen";
     customer3.lastName = "Vasquez";
     customer3.email = "JVasquez@email.ca";
@@ -81,7 +78,6 @@ exports.generate = function (req, res) {
     customer3.province = "Ontario";
     customer3.country = "Canada";
 
-    customer4.id = 104;
     customer4.firstName = "Bryan";
     customer4.lastName = "Ramirez";
     customer4.email = "Bram@email.ca";
@@ -92,7 +88,6 @@ exports.generate = function (req, res) {
     customer4.province = "Ontario";
     customer4.country = "Canada";
 
-    customer5.id = 105;
     customer5.firstName = "Gerald";
     customer5.lastName = "Fitzpatrick";
     customer5.email = "Fritz@email.ca";
@@ -103,7 +98,6 @@ exports.generate = function (req, res) {
     customer5.province = "Ontario";
     customer5.country = "Canada";
 
-    customer6.id = 106;
     customer6.firstName = "Samantha";
     customer6.lastName = "Mathews";
     customer6.email = "Sammy123@email.ca";
@@ -117,106 +111,89 @@ exports.generate = function (req, res) {
     customer6.country = "Canada";
 
 
-    job101_1.id = 1
     job101_1.customid = "Meyer1"
     job101_1.name = "Front Door"
     job101_1.description = "Full replacement of broken front door"
     job101_1.status = "Closed"
     job101_1.customerID = 101
 
-    job101_2.id = 2
     job101_2.customid = "Meyer2"
     job101_2.name = "Bedroom"
     job101_2.description = "installation of new bedroom door"
     job101_2.status = "Closed"
     job101_2.customerID = 101
 
-    job101_3.id = 3
     job101_3.customid = "Meyer3"
     job101_3.name = "Kitchen"
     job101_3.description = "replacement of kitchen window"
     job101_3.customerID = 101
 
-    job101_4.id = 4
     job101_4.customid = "Meyer4"
     job101_4.name = "Back Door"
     job101_4.description = "replacement of broken back door"
     job101_4.customerID = 101
 
-    job102_1.id = 1
     job102_1.customid = "Wu1"
     job102_1.name = "Attic"
     job102_1.description = "replacement of old attic window"
     job102_1.status = "Closed"
     job102_1.customerID = 102
 
-    job102_2.id = 2
     job102_2.customid = "Wu2"
     job102_2.name = "Basement Bedroom"
     job102_2.description = "installation of new basement bedroom window"
     job102_2.customerID = 102
 
-
-    job103_1.id = 1
     job103_1.customid = "Vasquez1"
     job103_1.name = "Bathroom"
     job103_1.description = "replacement of bathroom window"
     job103_1.status = "Closed"
     job103_1.customerID = 103
 
-    job103_2.id = 2
     job103_2.customid = "Vasquez2"
     job103_2.name = "Kitchen"
     job103_2.description = "new installation of kitchen window"
     job103_2.status = "Closed"
     job103_2.customerID = 103
 
-    job103_3.id = 3
     job103_3.customid = "Vasquez3"
     job103_3.name = "childrens room"
     job103_3.description = "replacement of children's bedroom door"
     job103_3.status = "Closed"
     job103_3.customerID = 103
 
-    job103_4.id = 4
     job103_4.customid = "Vasquez4"
     job103_4.name = "Basement Bathroom"
     job103_4.description = "replacement of broken basement bathroom window"
     job103_4.customerID = 103
 
-    job104_1.id = 1
     job104_1.customid = "Ramirez1"
     job104_1.name = "Kitchen"
     job104_1.description = "replacement of broken kitchen window"
     job104_1.customerID = 104
 
-    job105_1.id = 1
     job105_1.customid = "Ramirez2"
     job105_1.name = "Patio"
     job105_1.description = "installation of new patio door"
     job105_1.customerID = 105
 
-    job106_1.id = 1
     job106_1.customid = "Mathews1"
     job106_1.name = "Bedroom1"
     job106_1.description = "installation of new bedroom window"
     job106_1.status = "Closed"
     job106_1.customerID = 106
 
-    job106_2.id = 2
     job106_2.customid = "Mathews2"
     job106_2.name = "guest bedroom"
     job106_2.description = "replacement of old door in guest bedroom"
     job106_2.status = "Closed"
     job106_2.customerID = 106
 
-    job106_3.id = 3
     job106_3.customid = "Mathews3"
     job106_3.name = "Bathroom"
     job106_3.description = "installation of new bathroom door"
     job106_3.customerID = 106
 
-    job106_4.id = 4
     job106_4.customid = "Mathews4"
     job106_4.name = "Dining Room"
     job106_4.description = "replacement of broken dining room window"

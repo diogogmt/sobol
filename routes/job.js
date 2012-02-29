@@ -10,10 +10,10 @@ var mongoose = require('mongoose')
 exports.all = function (req, res) {
   console.log("all jobs route");
   console.log("req.currentUser: %o", req.currentUser);
-  res.render('customer/customers',
+  res.render('job/jobs', 
     {
       layout: 'includes/layout',
-      title: 'Jobs'
+      title: 'Job'
     });
 };
 
@@ -85,10 +85,10 @@ exports.edit = function (req, res) {
 };
 
 exports.findAll = function (req, res) {
-  console.log("all jobs route");
+  console.log("find all jobs route");
 
  Job.find({}, function (err, jobs) {
-    console.log("Find Job ");
+    console.log("getting all the jobs ");
     if(jobs){
       console.log("get all jobs success");
       var dataSet = new Array();
@@ -98,9 +98,11 @@ exports.findAll = function (req, res) {
             jobs[i].name,
             jobs[i].description,
             jobs[i].creationDate,
-            jobs[i].status
+            jobs[i].status,
+            jobs[i].customerID
         ]);
-      }
+        console.log("getting job");
+        }
 
       var aaData = {
         "aaData" : dataSet
