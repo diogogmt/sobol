@@ -10,11 +10,13 @@ div(style='display: none;')
             .field
               label(for='name') Job Name
               input#name.medium(name='job[name]', size='20', type='text', value='')
+              //span #{errors.name}
         tr
           td
             .field
               label(for='description') Job Description
               input#description.large(name='job[description]', size='20', type='text', value='')
+              //span #{errors.description}
         tr
           td
               input#saveJob.btn(type='submit', value='Add')

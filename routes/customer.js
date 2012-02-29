@@ -5,6 +5,7 @@ var mongoose = require('mongoose')
   , config = require('./../config')
   , domain = 'http://localhost:11342/'
   , Schema = mongoose.Schema
+  , customerValidator = require('./../validators.js').customerValidator
   , ObjectId = mongoose.Types.ObjectId;
 
 // models.defineModels(function(){
@@ -75,25 +76,39 @@ exports.add = function (req, res) {
   console.log("add customer route");
   var customer = new Customer(req.body.cust);
   //console.log("customer: %o", req.body.cust);
-  function customerAddFailed() {
-    console.log("add customer FAIL");
-    //req.flash('addError', 'Customer Add failed');
-    res.render('customer/customers', 
-    {
-      layout: 'includes/layout',
-      title: 'Customer'
-    });
-  };
 
-  customer.save(function(err) {
-    if (err){
-      console.log("err: " + err);
-      return customerAddFailed();
+
+
+  customerValidator(req.body.cust, function (errors) {
+    console.log("customerValidator");
+    if (!Object.keys(errors).length) {
+      console.log("no errors");
+      
+              customer.save(function(err) {
+                if (err){
+                    console.log("err: " + err);
+                    return customerAddFailed();
+                }
+              console.log("Adding SUCCEED");
+              res.redirect('/customers');
+              });
+
     }
-    console.log("Adding SUCCEED");
-    //req.flash('info', 'The customer has been added');
-    res.redirect('/customers');
+    else {
+          function customerAddFailed() {
+          console.log("add customer FAIL");
+          res.render('customer/customers', 
+                {
+                  layout: 'includes/layout',
+                  title: 'Customer'
+//                  errors: error,
+                });
+          };
+        }
   });
+
+
+
 };
 
 exports.edit = function (req, res) {
