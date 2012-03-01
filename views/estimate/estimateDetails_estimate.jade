@@ -1,0 +1,30 @@
+form.form.label-inline(id='editJobForm', action='/job/edit', method='post')
+  table
+    tr
+      td
+        .field
+          label(for='name') Name
+          input#name.medium(name='formJob[name]', size='20', type='text', value='#{job.name}')
+      td
+        .field
+          label(for='desc') Description
+          input#desc.medium(name='formJob[description]', size='45', type='text', value='#{job.description}')
+    tr
+      td
+        .field
+          label Creation Date
+          #{job.creationDate}
+      td
+        .field
+          label Status
+          #{job.status}
+    tr
+      td
+        input#editJob.btn(type='submit', value='Update')
+      td
+        input#id(name='formJob[id]', value='#{job._id}', type='hidden')
+
+script(type="text/javascript")
+  $(document).ready(function() {
+    
+  });

@@ -111,39 +111,28 @@ exports.edit = function (req, res) {
     });
   };
 
-  Customer.findOne({ _id : new ObjectId(formCustomer.id) }, function (err, customer) {
-    if(customer){
-      customer.firstName = formCustomer.firstName;
-      customer.lastName = formCustomer.lastName;
-      customer.email = formCustomer.email;
-      customer.phone1 = formCustomer.phone1;
-      customer.phone2 = formCustomer.phone2;
-      customer.address1 = formCustomer.address1;
-      customer.address2 = formCustomer.address2;
-      customer.postal = formCustomer.postal;
-      customer.city = formCustomer.city;
-      customer.province = formCustomer.province;
-      customer.country = formCustomer.country;
-      //customer.registrationDate = formCustomer.registrationDate;
-      //customer.status = formCustomer.status;
-      customer.save(function(err) {
-        if (err){
-          console.log("err: " + err);
-          return customerEditFailed();
-        }
-        console.log("Editing SUCCEED");
-        //req.flash('info', 'The customer has been added');
-        res.redirect('/customer/' + customer._id);
-      });
-    }else{
-      console.log("Customer not found. This shouldn't happen");
-      res.render('customer/custDetails/', 
-      {
-        layout: 'includes/layout',
-        title: 'Customer',
-        customer: formCustomer
-      });
+  var conditions  = { _id : new ObjectId(formCustomer.id) }
+    , update      = { firstName : formCustomer.firstName
+                    , lastName : formCustomer.lastName
+                    , email : formCustomer.email
+                    , phone1 : formCustomer.phone1
+                    , phone2 : formCustomer.phone2
+                    , address1 : formCustomer.address1
+                    , address2 : formCustomer.address2
+                    , postal : formCustomer.postal
+                    , city : formCustomer.city
+                    , province : formCustomer.province
+                    , country : formCustomer.country
+                    }
+  ;
+  Customer.update(conditions, update, function (err, numAffected) {
+    if (err || numAffected == 0){
+      console.log("err: " + err);
+      return customerEditFailed();
     }
+    console.log("Editing SUCCEED");
+    //req.flash('info', 'The customer has been added');
+    res.redirect('/customer/' + formCustomer.id);
   });
 };
 
