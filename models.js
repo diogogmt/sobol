@@ -4,11 +4,13 @@ var crypto = require('crypto')
   , Customer
   , LoginToken
   , Job
+  , EstimateLineItem
+  , Estimate
   , config = require('./config')
   , gridfs = require("./gridfs")
   , db = mongoose.connect(config.mongo.connectionString)
-  , Schema = mongoose.Schema,
-    ObjectId = Schema.ObjectId;
+  , Schema = mongoose.Schema
+  , ObjectId = Schema.ObjectId;
 
 console.log("model.js");
 
@@ -45,7 +47,6 @@ console.log("model.js");
 exports.User = (function () {
   console.log("User model");
   User = new Schema({
-    'id': Number,
     'username': {
       type: String,
       index: { unique: true }
@@ -93,7 +94,6 @@ exports.User = (function () {
 exports.Tag = (function () {
   console.log("Tag model");
   Tag = new Schema({
-    'id' : Number,
     'name' : String
   });
 
@@ -106,7 +106,6 @@ exports.Tag = (function () {
 exports.Media = (function () {
   console.log("Media model");
   Media = new Schema({
-    'id' : Number,
     'name' : String,
     'desc' : String,
     'src' : String,
@@ -118,33 +117,11 @@ exports.Media = (function () {
 
 
 /**
-* Model: Job
-*/
-exports.Job = (function () {
-  console.log("Job model");
-
- Job = new Schema({
-    'id' : Number,
-    'customid' : String,  //assuming that Archie is going to use a mix of char and numerics in his ID's
-    'name' : String,
-    'description' : String,
-    'creationDate' : { type: Date, default: Date.now },
-    'status' : { type: String, default: "Active" },
-    'scheduleDates' : String,
-    'customerID' : Number
-  });
-
-  return db.model('Job', Job);
-})();
-
-
-/**
 * Model: Customer
 */
 exports.Customer = (function () {
   console.log("Customer model");
   Customer = new mongoose.Schema({
-    'id' : Number,
     'firstName' : String,
     'lastName' : String,
     'email' : String,
@@ -169,4 +146,61 @@ exports.Customer = (function () {
 
   return db.model('Customer', Customer);
 })();
+
+
+/**
+* Model: Job
+*/
+exports.Job = (function () {
+  console.log("Job model");
+
+ Job = new Schema({
+    'name' : String,
+    'description' : String,
+    'creationDate' : { type: Date, default: Date.now },
+    'status' : { type: String, default: "Active" },
+    'scheduleDates' : String,
+    'customerID' : ObjectId,
+    'estimateSet' : [exports.Estimate]
+  });
+
+  return db.model('Job', Job);
+})();
+
+/**
+* Model: Estimate Line Item
+*/
+exports.EstimateLineItem = (function () {
+  console.log("Estimate Line Item model");
+
+ EstimateLineItem = new Schema({
+    'name' : String,
+    'description' : String,
+    'quantity' : Number,
+    'cost' : Number,
+    'media' : ObjectId
+  });
+
+  return db.model('EstimateLineItem', EstimateLineItem);
+})();
+
+/**
+* Model: Estimate
+*/
+exports.Estimate = (function () {
+  console.log("Estimate model");
+
+ Estimate = new Schema({
+    'name' : String,
+    'subTotal' : Number,
+    'finalTotal' : Number,
+    'creationDate' : { type: Date, default: Date.now },
+    'status' : { type: String, default: "Active" },
+    'lineItemSet' : [exports.EstimateLineItem]
+  });
+
+  return db.model('Estimate', Estimate);
+})();
+
+console.log("exports", exports);
 

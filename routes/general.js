@@ -21,8 +21,9 @@ exports.auth = function (req, res) {
       User.findOne({ username: req.body.user.username }, function(err, user) {
         console.log("user: ", user);
         console.log("err: ", err);
+        console.log("user id: " + user._id);
         if (user && user.authenticate(req.body.user.password)) {
-          req.session.user_id = user.id;
+          req.session.user_id = user._id;
           res.redirect("/customers");
         } 
         else {

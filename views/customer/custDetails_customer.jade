@@ -62,7 +62,7 @@ form.form.label-inline(id='editCustForm', action='/customer/edit', method='post'
         .field
           input#phone1(name='cust[phone1]', value='', type='hidden')
           input#phone2(name='cust[phone2]', value='', type='hidden')
-          input#id(name='cust[id]', value='#{customer.id}', type='hidden')
+          input#id(name='cust[id]', value='#{customer._id}', type='hidden')
     tr
       td
         .field
