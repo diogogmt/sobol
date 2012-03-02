@@ -75,11 +75,13 @@ app.post('/login', routes.general.auth);
 app.get('/logout', loadUser, routes.general.logout);
 
 // Customer
+
 app.get('/customers', loadUser, routes.customer.all);
-app.post('/customer/add', loadUser, routes.customer.add);
-app.post('/customer/edit', loadUser, routes.customer.edit);
+app.post('/customer/add', loadUser, routes.customer.validateCustomer, routes.customer.add);
+app.post('/customer/edit', loadUser, routes.customer.validateEditCustomer, routes.customer.edit);
 app.get('/customer/:id', loadUser, routes.customer.details);
 app.get('/datatable/customer/findAll', loadUser, routes.customer.findAll);
+app.get('/datatable/customer/findActive', loadUser, routes.customer.findActive);
 
 // User
 app.get('/user/create', routes.user.create);
@@ -110,8 +112,12 @@ app.post('/media/:id/tag/delete/:id', loadUser, routes.tag.delete);
 app.get('/jobs', loadUser, routes.job.all);
 app.get('/datatable/job/getCustJobs/:id', loadUser, routes.job.getCustJobs);
 app.get('/datatable/job/findAll', loadUser, routes.job.findAll);
-app.post('/job/add/:id', loadUser, routes.job.add);
-app.post('/job/edit', loadUser, routes.job.edit);
+
+app.post('/job/add/:id', loadUser, routes.job.validateJob, routes.job.add);
+app.post('/job/edit', loadUser, routes.job.validateEditJob, routes.job.edit);
+//app.post('/job/edit', loadUser, routes.job.edit);
+
+
 app.get('/job/:id', loadUser, routes.job.details);
 
 // test data generation

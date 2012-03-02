@@ -5,12 +5,12 @@ form.form.label-inline(id='editCustForm', action='/customer/edit', method='post'
         .field
           label(for='lname') First name
           input#firstName.medium(name='cust[firstName]', size='20', type='text', value='#{customer.firstName}')
-          //span #{errors.firstName}
+          span #{errors.firstName}
       td
         .field
           label(for='lname') Last name
           input#lastName.medium(name='cust[lastName]', size='20', type='text', value='#{customer.lastName}')
-          //span #{errors.lastName}
+          span #{errors.lastName}
     tr
       td
         .field
@@ -20,7 +20,7 @@ form.form.label-inline(id='editCustForm', action='/customer/edit', method='post'
         .field
           label(for='address1') Address 2
           input#address2.large(name='cust[address2]', value='#{customer.address2}', type='text')
-          //span #{errors.address1}
+          span #{errors.address1}
     tr
       td
         .field
@@ -48,7 +48,7 @@ form.form.label-inline(id='editCustForm', action='/customer/edit', method='post'
           input#tel1b.xsmall(name='cust[tel1b]', size='3', value='', maxlength='3', type='text')
           | -
           input#tel1c.xsmall(name='cust[tel1c]', size='4', value='', maxlength='4', type='text')
-          //span #{errors.phone}
+          span #{errors.phone}
       td
         .field.phone_field
           label(for='tel2a') Telephone 2
@@ -62,7 +62,7 @@ form.form.label-inline(id='editCustForm', action='/customer/edit', method='post'
         .field
           label(for='email') Email
           input#email.medium(name='cust[email]', value='#{customer.email}', size='20', type='text')
-          //span #{errors.email}
+          span #{errors.email}
       td
         .field
           input#phone1(name='cust[phone1]', value='', type='hidden')

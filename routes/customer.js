@@ -18,7 +18,8 @@ exports.all = function (req, res) {
   res.render('customer/customers', 
     {
       layout: 'includes/layout',
-      title: 'Customer'
+      title: 'Customer',
+      errors: false
     });
 };
 
@@ -72,44 +73,55 @@ exports.findAll = function (req, res) {
 };
 
 
-exports.add = function (req, res) {
-  console.log("add customer route");
-  var customer = new Customer(req.body.cust);
-  //console.log("customer: %o", req.body.cust);
+exports.findActive = function (req, res) {
+  console.log("all customers route");
+  //console.log("req.currentUser: %o", req.currentUser);
 
+  Customer.find({ status : "Active"}, function (err, customers) {
+    console.log("customer callback");
+    if(customers){
+      console.log("get all customers success");
+      //console.log(customers);
 
+      var dataSet = new Array();
+      var innerCust = customers;
+      for(i = 0; i < customers.length; i++){
+        // console.log("This is CUSTOMERS: " + customers);
+        // console.log("This is INNER CUST: " + innerCust);
+        //console.log("count: " + i);
+        var countJob = function (i) {
+          Job.count({ customerID : customers[i]._id }, function (err, count) {
+            
+            //console.log("inside count: " + i);
+            dataSet.push([
+              innerCust[i]._id,
+              innerCust[i].lastName,
+              innerCust[i].firstName,
+              innerCust[i].email,
+              innerCust[i].phone1,
+              count,
+              new Date(innerCust[i].registrationDate).toDateString(),
+              innerCust[i].status
+            ]);
 
-  customerValidator(req.body.cust, function (errors) {
-    console.log("customerValidator");
-    if (!Object.keys(errors).length) {
-      console.log("no errors");
-      
-              customer.save(function(err) {
-                if (err){
-                    console.log("err: " + err);
-                    return customerAddFailed();
-                }
-              console.log("Adding SUCCEED");
-              res.redirect('/customers');
-              });
+            //console.log("INNER CUST LENGTH: " + innerCust.length);
+            if(i == innerCust.length - 1){
+              var aaData = {
+                "aaData" : dataSet
+              };
 
+              res.json(aaData);
+            }
+          }); // END JOB COUNT
+        }(i); // END countJob
+      } // END for loop
     }
     else {
-          function customerAddFailed() {
-          console.log("add customer FAIL");
-          res.render('customer/customers', 
-                {
-                  layout: 'includes/layout',
-                  title: 'Customer'
-                  errors: errors,
-                });
-          };
-        }
+      console.log("get all customers Not success");
+    }
   });
-
-
-
 };
+
 
 exports.edit = function (req, res) {
   console.log("edit customer route");
@@ -122,7 +134,8 @@ exports.edit = function (req, res) {
     {
       layout: 'includes/layout',
       title: 'Customer',
-      customer: formCustomer
+      customer: formCustomer,
+      errors: false
     });
   };
 
@@ -156,7 +169,8 @@ exports.edit = function (req, res) {
       {
         layout: 'includes/layout',
         title: 'Customer',
-        customer: formCustomer
+        customer: formCustomer,
+        errors: err
       });
     }
   });
@@ -172,9 +186,85 @@ exports.details = function (req, res) {
         {
           layout: 'includes/layout',
           title: 'Customer',
-          customer: customer
+          customer: customer,
+          errors: false
         }
       );
     }
   });  
 };
+
+exports.add = function (req, res) {
+  console.log("add customer route");
+  var customer = new Customer(req.body.cust);
+  //console.log("customer: %o", req.body.cust);
+  function customerAddFailed() {
+    console.log("add customer FAIL");
+    //req.flash('addError', 'Customer Add failed');
+    res.render('customer/customers',
+    {
+      layout: 'includes/layout',
+      title: 'Customer'
+    });
+  };
+
+  customer.save(function(err) {
+    if (err){
+      console.log("err: " + err);
+      return customerAddFailed();
+    }
+    console.log("Adding SUCCEED");
+    //req.flash('info', 'The customer has been added');
+    res.redirect('/customers');
+  });
+};
+
+
+
+exports.validateCustomer = function (req, res, next) {
+  console.log("validating the customer");
+  var errors = customerValidator(req.body.cust, function (err) {
+    // console.log('err: ', err);
+    // console.log("err.length: ", Object.keys(err).length);
+    if (Object.keys(err).length) {
+      console.log("HAS ERRORS rendering create again");
+      res.render('customer/customers',
+        { 
+          layout: "includes/layout",
+          title: "Customer",
+          customer: req.body.cust,
+          errors: err 
+        }
+      );
+      return false;
+      // next(new Error("Validate user error"));
+    }
+    next();  
+  });
+  
+};
+
+
+exports.validateEditCustomer = function (req, res, next) {
+  console.log("validating the customer");
+  var errors = customerValidator(req.body.cust, function (err) {
+    // console.log('err: ', err);
+    // console.log("err.length: ", Object.keys(err).length);
+    if (Object.keys(err).length) {
+      console.log("HAS ERRORS rendering create again");
+      res.render('customer/custDetails',
+        { 
+          layout: "includes/layout",
+          title: "Customer",
+          customer: req.body.cust,
+          errors: err 
+        }
+      );
+      return false;
+      // next(new Error("Validate user error"));
+    }
+    next();  
+  });
+  
+};
+

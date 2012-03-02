@@ -12,19 +12,23 @@ script(type="text/javascript")
       'transitionIn'    : 'none',
       'transitionOut'   : 'none'
     });
-    var dTable = $("#customerTable").dataTable( {
+
+      var dTable = $("#customerTable").dataTable( {
       "bProcessing": true,
       "bDestroy": true,
-      "sAjaxSource": "/datatable/customer/findAll",
+      //"sAjaxSource": "/datatable/customer/findAll",
+      "sAjaxSource": "/datatable/customer/findActive",
       "aoColumnDefs": [
         { "bVisible" : false, "aTargets" : [0] }
       ],
       "aaSorting": [[6, "desc"], [1, "asc"]]
     });
+
     $('#addCustForm').submit(function() {
       $('#phone1').val($('#tel1a').val() + '-' + $('#tel1b').val() + '-' + $('#tel1c').val());
       $('#phone2').val($('#tel2a').val() + '-' + $('#tel2b').val() + '-' + $('#tel2c').val());
     });
+
     $("#customerTable tbody tr").live("click", function() {
       var data = dTable.fnGetData(this);
       var custID = data[0];

@@ -1,8 +1,10 @@
 var mongoose = require('mongoose')
   , Job = require('./../models').Job
+  , Customer = require('./../models').Customer
   , config = require('./../config')
   , domain = 'http://localhost:11342/'
   , Schema = mongoose.Schema
+  , jobValidator = require('./../validators.js').jobValidator
   , ObjectId = mongoose.Types.ObjectId;
 
 
@@ -13,7 +15,8 @@ exports.all = function (req, res) {
   res.render('job/jobs', 
     {
       layout: 'includes/layout',
-      title: 'Job'
+      title: 'Job',
+      errors: false
     });
 };
 
@@ -24,6 +27,8 @@ exports.add = function(req, res) {
   var job = new Job(req.body.job);
   job.customerID = new ObjectId(req.params.id);
   console.log("job: %o", job);
+  
+
   function jobSaveFailed() {
     console.log("failed creating job");
     //need to confirm if we need to redirect to customers or job
@@ -36,8 +41,8 @@ exports.add = function(req, res) {
     } 
     console.log("creating job");
     res.redirect('/customer/' + job.customerID);
-    // req.flash('info', 'Job has been added');
   });  
+
 };
 
 exports.edit = function (req, res) {
@@ -51,13 +56,16 @@ exports.edit = function (req, res) {
     {
       layout: 'includes/layout',
       title: 'Job',
-      job: formJob
+      job: formJob,
+      errors: false
     });
   };
 
   //console.log("The form job ID is: ", formJob.id);
 
   Job.findOne({ _id : new ObjectId(formJob.id) }, function(err, job) {
+    console.log("this is the formjob name: ", formJob.name);
+
     if(job){
       job.name = formJob.name;
       job.description = formJob.description;
@@ -78,7 +86,8 @@ exports.edit = function (req, res) {
       {
         layout: 'includes/layout',
         title: 'Job',
-        job: formJob
+        job: formJob,
+        errors: err
       });
     }
   });
@@ -158,9 +167,59 @@ exports.details = function (req, res) {
         {
           layout: 'includes/layout',
           title: 'Job',
-          job: job
+          job: job,
+          errors: false
         }
       );
     }
   });  
 };
+
+exports.validateJob = function (req, res, next) {
+  console.log("validating the job");
+  
+  var customer = new Customer(req.body.cust);
+//  console.log("This is the customer firstname", customer._id);
+//  customer.id = req.params.id;
+
+  var errors = jobValidator(req.body.formJob, function (err) {
+    if (Object.keys(err).length) {
+      console.log("HAS ERRORS rendering create again");
+
+      res.render('customer/custDetails',
+        { 
+          layout: "includes/layout",
+          title: "Job",
+          job: req.body.formJob,
+          customer: customer,
+          errors: err 
+        }
+      );
+      return false;
+    }
+    next();  
+  });
+  
+}
+
+
+exports.validateEditJob = function (req, res, next) {
+  console.log("validating the job");
+
+  var errors = jobValidator(req.body.formJob, function (err) {
+    if (Object.keys(err).length) {
+      console.log("HAS ERRORS rendering create again");
+      res.render('job/jobDetails',
+        { 
+          layout: "includes/layout",
+          title: "Job",
+          job: req.body.formJob,
+          errors: err 
+        }
+      );
+      return false;
+    }
+    next();  
+  });
+  
+}
