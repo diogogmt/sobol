@@ -1,6 +1,7 @@
 var check = require('validator').check
-  , sanitize = require('validator').sanitize;
-  
+  , sanitize = require('validator').sanitize
+  , User = require('./models').User;
+
 exports.userValidator = function (user, callback) {
   console.log("validateUser");
 
@@ -20,7 +21,7 @@ exports.userValidator = function (user, callback) {
     check(user.email, 'Email empty').notEmpty();
     user.email = sanitize(user.email).trim();
     check(user.email, 'Email not valid').isEmail();
-    
+
   } catch (e) {
       console.log(e.message); //Please enter a valid integer
       errors['email'] = e.message;
@@ -62,7 +63,7 @@ exports.loginValidator = function (user, callback) {
   try {
     check(user.username, 'Please enter an username').notEmpty();
     user.username = sanitize(user.username).trim();
-  } 
+  }
   catch (e) {
       console.log(e.message); //Please enter a valid integer
       errors['username'] = e.message;
@@ -71,7 +72,7 @@ exports.loginValidator = function (user, callback) {
   // Password
   try {
     check(user.password, 'Please enter a password').notEmpty();
-  } 
+  }
   catch (e) {
       console.log(e.message); //Please enter a valid integer
       errors['password'] = e.message

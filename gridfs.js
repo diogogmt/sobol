@@ -45,12 +45,14 @@ exports.put = function() {
 };
 
 exports.putFile = function(path, name, options, fn) {
-  console.log("putFile");
+  console.log("putFile**********************");
+  console.log("path: ", path);
+  console.log("name: ", name);
+  console.log("options: ", options);
   var db;
   db = mongoose.connection.db;
-  // console.log("db: ", db);
-  options = parse(options);
-  options.metadata.filename = name;
+
+  console.log("");
   return new GridStore(db, name, "w", options).open(function(err, file) {
     if (err) {
       return fn(err);
