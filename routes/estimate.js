@@ -11,6 +11,7 @@ var mongoose = require('mongoose')
 exports.add = function (req, res) {
   console.log("add estimate route");
   var estimate = new Estimate(req.body.estimate);
+  var jobID = new ObjectId(req.params.id);
   function estimateAddFailed() {
     console.log("add estimate FAIL");
     //req.flash('addError', 'Estimate Add failed');
@@ -21,14 +22,23 @@ exports.add = function (req, res) {
     });
   };
 
-  estimate.save(function(err) {
-    if (err){
-      console.log("err: " + err);
-      return estimateAddFailed();
+  Job.findOne({ _id : new ObjectId(req.params.id) }, function (err, job) {
+    if(job){
+      var estimateSet = job.estimateSet;
+      console.log("Pushing Estimate into Job EstimateSet: ", estimate);
+      estimateSet.push(estimate);
+      job.save(function(err) {
+        if(err){
+          console.log("Error saving job after adding estimate");
+          return estimateAddFailed();
+        }
+        console.log("Adding Estimate SUCCESS");
+        //req.flash('info', 'The estimate has been added');
+        res.redirect('/job/' + jobID);
+      });
+    }else{
+      console.log("finding job for add estimate - Not success");
     }
-    console.log("Adding SUCCEED");
-    //req.flash('info', 'The estimate has been added');
-    res.redirect('/job/' + job._id);
   });
 };
 
@@ -99,8 +109,9 @@ exports.getJobEstimates = function (req, res) {
         dataSet.push([
             estimates[i]._id,
             estimates[i].name,
-            new Date(jobs[i].creationDate).toDateString(),
-            jobs[i].status
+            estimates[i].finalTotal,
+            new Date(estimates[i].creationDate).toDateString(),
+            estimates[i].status
         ]);
       }
       var aaData = {

@@ -114,6 +114,7 @@ exports.getCustJobs = function (req, res) {
             jobs[i]._id,
             jobs[i].name,
             jobs[i].description,
+            jobs[i].estimateSet.length,
             new Date(jobs[i].creationDate).toDateString(),
             jobs[i].status
         ]);

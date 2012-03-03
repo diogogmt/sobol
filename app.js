@@ -114,7 +114,9 @@ app.post('/job/add/:id', loadUser, routes.job.add);
 app.post('/job/edit', loadUser, routes.job.edit);
 app.get('/job/:id', loadUser, routes.job.details);
 
-
+// Estimate
+app.get('/datatable/estimate/getJobEstimates/:id', loadUser, routes.estimate.getJobEstimates);
+app.post('/estimate/add/:id', loadUser, routes.estimate.add);
 
 
 var GridFS, GridFSSchema;

@@ -64,7 +64,8 @@ exports.findAll = function (req, res) {
         }(i); // END countJob
       } // END for loop
     }
-    else {
+    else 
+    {
       console.log("get all customers Not success");
     }
   });
