@@ -100,7 +100,6 @@ exports.findAll = function (req, res) {
       console.log("get all jobs Not success");
     }
   });
-
 };
 
 exports.getCustJobs = function (req, res) {
@@ -140,12 +139,18 @@ exports.details = function (req, res) {
     if(!job){
       console.log("get specific job not successful");
     }else{
-      console.log("Details job: ", job);
+      //console.log("Details job: ", job);
+      var breadcrumb = req.session.breadcrumb;
+      breadcrumb.job = {
+        id : job._id,
+        name : job.name
+      }
       res.render('job/jobDetails', 
         {
           layout: 'includes/layout',
           title: 'Job',
-          job: job
+          job: job,
+          breadcrumb: breadcrumb
         }
       );
     }

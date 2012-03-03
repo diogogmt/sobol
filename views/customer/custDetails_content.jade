@@ -3,6 +3,19 @@
     .portlet-header
       h4 Customer Management
     .portlet-content
+      div#breadCrumb.breadCrumb.module
+        ul
+          li
+            a(href="#")
+              |Home
+          li
+            |#{breadcrumb.cust.name}
+      br
       br
       include custDetails_customer.jade
       include custDetails_jobs.jade
+
+script(type="text/javascript")
+  $(document).ready(function() {
+    $('#breadCrumb').jBreadCrumb();
+  });

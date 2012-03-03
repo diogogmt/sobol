@@ -83,17 +83,36 @@ exports.edit = function (req, res) {
 };
 
 exports.details = function (req, res) {
-  Estimate.findOne({ _id : new ObjectId(req.params.id) }, function (err, estimate) {
-    if(!estimate){
-      console.log("get specific estimate not successful");
+  Job.findOne({ _id : new ObjectId(req.params.jobId) }, function (err, job) {
+    if(!job){
+      console.log("get specific job for estimate not successful");
     }else{
-      res.render('job/jobDetails', 
+      var estimate;
+      var estimates = job.estimateSet;
+      if(estimates.length > 0){
+        for(var i = 0; i < estimates.length; i++){
+          console.log("Found estimate: ", estimates[i]);
+          console.log("Comparing against ID: " + req.params.estimateId);
+          if(estimates[i]._id == req.params.estimateId){
+            estimate = estimates[i];
+          }
+        }
+        //console.log("This is the passed Estimate: ", estimate);
+        var breadcrumb = req.session.breadcrumb;
+        breadcrumb.estimate = {
+          id : estimate._id,
+          name : estimate.name
+        }
+        res.render('estimate/estimateDetails', 
         {
           layout: 'includes/layout',
-          title: 'Job',
-          job: job
-        }
-      );
+          title: 'Estimate',
+          estimate: estimate,
+          breadcrumb: breadcrumb
+        });
+      }else{
+        console.log("No estimates found for this job. This shouldn't be possible");
+      }
     }
   });  
 };

@@ -39,4 +39,10 @@ script(type="text/javascript")
       ],
       "aaSorting": [[3, "desc"]]
     });
+    $("#estimateTable tbody tr").live("click", function() {
+      var data = dTable.fnGetData(this);
+      var estimateID = data[0];
+      var jobID = "#{job.id}";
+      window.location = "/job/" + jobID + "/estimate/" + estimateID;
+    });
   });

@@ -143,11 +143,19 @@ exports.details = function (req, res) {
     if(!customer){
       console.log("get specific customer not successful");
     }else{
+      var breadcrumb = {
+        cust : {
+          id : customer._id,
+          name : customer.firstName + " " + customer.lastName
+        }
+      }
+      req.session.breadcrumb = breadcrumb;
       res.render('customer/custDetails', 
         {
           layout: 'includes/layout',
           title: 'Customer',
-          customer: customer
+          customer: customer,
+          breadcrumb: breadcrumb
         }
       );
     }
