@@ -155,7 +155,7 @@ exports.details = function (req, res) {
           title: 'Job',
           job: job,
           breadcrumb: breadcrumb,
-          errors: err
+          errors: false
         }
       );
     }
