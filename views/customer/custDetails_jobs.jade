@@ -28,6 +28,7 @@ table#jobTable.display(cellpadding='0', cellspacing='0', border='0', rel='datata
       th ID
       th Name
       th Description
+      th Estimates
       th Created On
       th Status
   tbody
@@ -49,9 +50,7 @@ script(type="text/javascript")
       "aoColumnDefs": [
         { "bVisible" : false, "aTargets" : [0] }
       ],
-      "aaSorting": [[3, "desc"]]
-    });
-    $('#addJobForm').submit(function() {
+      "aaSorting": [[4, "desc"]]
     });
     $("#jobTable tbody tr").live("click", function() {
       var data = dTable.fnGetData(this);

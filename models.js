@@ -4,6 +4,8 @@ var crypto = require('crypto')
   , Customer
   , LoginToken
   , Job
+  , EstimateLineItem
+  , Estimate
   , config = require('./config')
   , gridfs = require("./gridfs")
   , db = mongoose.connect(config.mongo.connectionString)
@@ -110,26 +112,6 @@ exports.Media = (function () {
   return db.model('Media', Media);
 })();
 
-
-/**
-* Model: Job
-*/
-exports.Job = (function () {
-  console.log("Job model");
-
- Job = new Schema({
-    'name' : String,
-    'description' : String,
-    'creationDate' : { type: Date, default: Date.now },
-    'status' : { type: String, default: "Active" },
-    'scheduleDates' : String,
-    'customerID' : ObjectId
-  });
-
-  return db.model('Job', Job);
-})();
-
-
 /**
 * Model: Customer
 */
@@ -159,6 +141,60 @@ exports.Customer = (function () {
   Customer.virtual('tel2c');
 
   return db.model('Customer', Customer);
+})();
+
+/**
+* Model: Job
+*/
+exports.Job = (function () {
+  console.log("Job model");
+
+ Job = new Schema({
+    'name' : String,
+    'description' : String,
+    'creationDate' : { type: Date, default: Date.now },
+    'status' : { type: String, default: "Active" },
+    'scheduleDates' : String,
+    'customerID' : ObjectId,
+    'estimateSet' : [exports.Estimate]
+  });
+
+  return db.model('Job', Job);
+})();
+
+/**
+* Model: Estimate Line Item
+*/
+exports.EstimateLineItem = (function () {
+  console.log("Estimate Line Item model");
+
+ EstimateLineItem = new Schema({
+    'name' : String,
+    'description' : String,
+    'quantity' : Number,
+    'cost' : Number,
+    'media' : ObjectId
+  });
+
+  return db.model('EstimateLineItem', EstimateLineItem);
+})();
+
+/**
+* Model: Estimate
+*/
+exports.Estimate = (function () {
+  console.log("Estimate model");
+
+ Estimate = new Schema({
+    'name' : String,
+    'subTotal' : Number,
+    'finalTotal' : Number,
+    'creationDate' : { type: Date, default: Date.now },
+    'status' : { type: String, default: "Active" },
+    'lineItemSet' : [exports.EstimateLineItem]
+  });
+
+  return db.model('Estimate', Estimate);
 })();
 
 console.log("exports", exports);

@@ -8,14 +8,11 @@ var mongoose = require('mongoose')
   , customerValidator = require('./../validators.js').customerValidator
   , ObjectId = mongoose.Types.ObjectId;
 
-// models.defineModels(function(){
-//   Customer = mongoose.model('Customer');
-// });
 
 exports.all = function (req, res) {
   console.log("all customers route");
   console.log("req.currentUser: %o", req.currentUser);
-  res.render('customer/customers', 
+  res.render('customer/customers',
     {
       layout: 'includes/layout',
       title: 'Customer',
@@ -66,11 +63,107 @@ exports.findAll = function (req, res) {
         }(i); // END countJob
       } // END for loop
     }
-    else {
+    else
+    {
       console.log("get all customers Not success");
     }
   });
 };
+
+
+exports.add = function (req, res) {
+  console.log("add customer route");
+  var customer = new Customer(req.body.cust);
+  //console.log("customer: %o", req.body.cust);
+  function customerAddFailed() {
+    console.log("add customer FAIL");
+    //req.flash('addError', 'Customer Add failed');
+    res.render('customer/customers',
+    {
+      layout: 'includes/layout',
+      title: 'Customer',
+      errors: false
+    });
+  };
+
+  customer.save(function(err) {
+    if (err){
+      console.log("err: " + err);
+      return customerAddFailed();
+    }
+    console.log("Adding SUCCEED");
+    //req.flash('info', 'The customer has been added');
+    res.redirect('/customers');
+  });
+};
+
+exports.edit = function (req, res) {
+  console.log("edit customer route");
+  var formCustomer = req.body.cust;
+  //console.log("customer: %o", req.body.cust);
+  function customerEditFailed() {
+    console.log("edit customer FAIL");
+    //req.flash('addError', 'Customer Add failed');
+    res.render('customer/custDetails/',
+    {
+      layout: 'includes/layout',
+      title: 'Customer',
+      customer: formCustomer,
+      errors: false
+    });
+  };
+
+  var conditions = { _id : new ObjectId(formCustomer.id) }
+    , update = { firstName : formCustomer.firstName
+                    , lastName : formCustomer.lastName
+                    , email : formCustomer.email
+                    , phone1 : formCustomer.phone1
+                    , phone2 : formCustomer.phone2
+                    , address1 : formCustomer.address1
+                    , address2 : formCustomer.address2
+                    , postal : formCustomer.postal
+                    , city : formCustomer.city
+                    , province : formCustomer.province
+                    , country : formCustomer.country
+                    }
+  ;
+  Customer.update(conditions, update, function (err, numAffected) {
+    if (err || numAffected == 0){
+      console.log("err: " + err);
+      return customerEditFailed();
+    }
+    console.log("Editing SUCCEED");
+    //req.flash('info', 'The customer has been added');
+    res.redirect('/customer/' + formCustomer.id);
+  });
+};
+
+exports.details = function (req, res) {
+  //console.log("customer details route");
+  Customer.findOne({ _id : new ObjectId(req.params.id) }, function (err, customer) {
+    if(!customer){
+      console.log("get specific customer not successful");
+    }else{
+      var breadcrumb = {
+        cust : {
+          id : customer._id,
+          name : customer.firstName + " " + customer.lastName
+        }
+      }
+      req.session.breadcrumb = breadcrumb;
+      res.render('customer/custDetails',
+        {
+          layout: 'includes/layout',
+          title: 'Customer',
+          customer: customer,
+          breadcrumb: breadcrumb,
+          errors: false
+        }
+      );
+    }
+  });
+};
+
 
 
 exports.findActive = function (req, res) {
@@ -121,105 +214,6 @@ exports.findActive = function (req, res) {
     }
   });
 };
-
-
-exports.edit = function (req, res) {
-  console.log("edit customer route");
-  var formCustomer = req.body.cust;
-  //console.log("customer: %o", req.body.cust);
-  function customerEditFailed() {
-    console.log("edit customer FAIL");
-    //req.flash('addError', 'Customer Add failed');
-    res.render('customer/custDetails/', 
-    {
-      layout: 'includes/layout',
-      title: 'Customer',
-      customer: formCustomer,
-      errors: false
-    });
-  };
-
-  Customer.findOne({ _id : new ObjectId(formCustomer.id) }, function (err, customer) {
-    if(customer){
-      customer.firstName = formCustomer.firstName;
-      customer.lastName = formCustomer.lastName;
-      customer.email = formCustomer.email;
-      customer.phone1 = formCustomer.phone1;
-      customer.phone2 = formCustomer.phone2;
-      customer.address1 = formCustomer.address1;
-      customer.address2 = formCustomer.address2;
-      customer.postal = formCustomer.postal;
-      customer.city = formCustomer.city;
-      customer.province = formCustomer.province;
-      customer.country = formCustomer.country;
-      //customer.registrationDate = formCustomer.registrationDate;
-      //customer.status = formCustomer.status;
-      customer.save(function(err) {
-        if (err){
-          console.log("err: " + err);
-          return customerEditFailed();
-        }
-        console.log("Editing SUCCEED");
-        //req.flash('info', 'The customer has been added');
-        res.redirect('/customer/' + customer._id);
-      });
-    }else{
-      console.log("Customer not found. This shouldn't happen");
-      res.render('customer/custDetails/', 
-      {
-        layout: 'includes/layout',
-        title: 'Customer',
-        customer: formCustomer,
-        errors: err
-      });
-    }
-  });
-};
-
-exports.details = function (req, res) {
-  //console.log("customer details route");
-  Customer.findOne({ _id : new ObjectId(req.params.id) }, function (err, customer) {
-    if(!customer){
-      console.log("get specific customer not successful");
-    }else{
-      res.render('customer/custDetails', 
-        {
-          layout: 'includes/layout',
-          title: 'Customer',
-          customer: customer,
-          errors: false
-        }
-      );
-    }
-  });  
-};
-
-exports.add = function (req, res) {
-  console.log("add customer route");
-  var customer = new Customer(req.body.cust);
-  //console.log("customer: %o", req.body.cust);
-  function customerAddFailed() {
-    console.log("add customer FAIL");
-    //req.flash('addError', 'Customer Add failed');
-    res.render('customer/customers',
-    {
-      layout: 'includes/layout',
-      title: 'Customer'
-    });
-  };
-
-  customer.save(function(err) {
-    if (err){
-      console.log("err: " + err);
-      return customerAddFailed();
-    }
-    console.log("Adding SUCCEED");
-    //req.flash('info', 'The customer has been added');
-    res.redirect('/customers');
-  });
-};
-
-
 
 exports.validateCustomer = function (req, res, next) {
   console.log("validating the customer");
