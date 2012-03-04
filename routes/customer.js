@@ -39,7 +39,6 @@ exports.findAll = function (req, res) {
         //console.log("count: " + i);
         var countJob = function (i) {
           Job.count({ customerID : customers[i]._id }, function (err, count) {
-            
             //console.log("inside count: " + i);
             dataSet.push([
               innerCust[i]._id,
@@ -78,7 +77,7 @@ exports.add = function (req, res) {
   function customerAddFailed() {
     console.log("add customer FAIL");
     //req.flash('addError', 'Customer Add failed');
-    res.render('customer/customers', 
+    res.render('customer/customers',
     {
       layout: 'includes/layout',
       title: 'Customer'
@@ -103,7 +102,7 @@ exports.edit = function (req, res) {
   function customerEditFailed() {
     console.log("edit customer FAIL");
     //req.flash('addError', 'Customer Add failed');
-    res.render('customer/custDetails/', 
+    res.render('customer/custDetails/',
     {
       layout: 'includes/layout',
       title: 'Customer',
@@ -142,7 +141,7 @@ exports.details = function (req, res) {
     if(!customer){
       console.log("get specific customer not successful");
     }else{
-      res.render('customer/custDetails', 
+      res.render('customer/custDetails',
         {
           layout: 'includes/layout',
           title: 'Customer',
@@ -150,5 +149,5 @@ exports.details = function (req, res) {
         }
       );
     }
-  });  
+  });
 };

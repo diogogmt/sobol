@@ -3,68 +3,147 @@
   #gallery_wrapper.portlet.x8
     .portlet-header
       h4 Image Gallery
-    //
-       .portlet-header 
+      //- p
+      //-   button(rel="#custom", type="button") custom
+      //- div#custom.apple_overlay
+      //-  | Hello There
+
     .portlet-content
-      .field
-        label(for='file_name') Search images 
-        br
-        input#file_name(name='file_name', size='30', type='text', value='')
-      button.btn Search
-      ul.gallery
-        li
-          b Image Name
-          br
-          img(alt='', src='https://zenit.senecac.on.ca/~bts530_113a03/ui/images/rain_large.jpg', width='150', height='150')
-          .actions
-            a.btn.btn-orange.btn-small(rel='facebox', href='https://zenit.senecac.on.ca/~bts530_113a03/ui/images/rain_large.jpg') View
-            a.btn.btn-orange.btn-small.editImg(href='#editImage') Edit
-            a.btn.btn-grey.btn-small.delete.deleteImage(href='javascript:;') Delete
+      div#tagscope
+        form#magicboxform(name="magicboxform", action="")
+            input#addtagType(name="tagtype", value="tag", type="hidden")
+            input#addFilter(name="addFilter", value="Add a Tag Filter",
+              type="text")
+            button#searchMediaBtn.btn 
+              |Search
+        div#searchTags.tagList
+          script(id="searchMediaTmpl", type="text/x-jQuery-tmpl")
+              div.tag(query="${query}", rem="True", wt="tag", a="goToTag")
+                div.removeFilter(query="${query}")
+                div.filter
+                  span.name
+                    |${query}
+
+        
+        
+      br
+      br
+      ul#mediaList.gallery
+        
      
-     .portlet.x4
-          .portlet-header
-            h4 Upload File
-          //
-             .portlet-header 
-          .portlet-content
-            form#add-user-form.form.label-top(action='', method='get')
-              .field
-                label(for='file_name') File Name 
-                input#file_name(name='file_name', size='30', type='text', value='')
-              .field
-                label(for='file_name') Description 
-                input#file_name(name='file_name', size='30', type='text', value='')
-              .field.clearfix
-                label(for='lname') File Upload 
-                input.file(style='opacity: 0;', size='35', type='file')
-              .field
-                label(for='tags') Tags 
-                | tag 1
-                a(href='#') X
-                br
+   .portlet.x4
+        .portlet-header
+          h4 Upload File
+        //
+           .portlet-header 
+        .portlet-content
+          form#add-user-form.form.label-top
+            .field
+              label(for='filename') File Name 
+              input#fileName(name='filename', size='30', type='text', value='')
+            .field
+              label(for='description') Description 
+              input#description(name='description', size='30', type='text', value='')
+            .field.clearfix
+              label(for='file') File Upload 
+              input#file.file(name="file", style='opacity: 0;', size='35', type='file')
+            .field
+              label(for='tags') Tags 
+              | tag 1
+              a(href='#') X
+              br
 
-                select#tags
-                  option(value='') Add Existing Tag
-                  option(value='Tag5') Tag 5
-                  
-                  
-                  
-                br
-                input#file_name(name='file_name', size='20', type='text', value='tag 7')
-                button.btn Add Tag
-              .buttonrow
-                button.btn Upload File 
+              select#tags
+                option(value='') Add Existing Tag
+                option(value='Tag5') Tag 5
+                
+                
+                
+              br
+              input#file_name(name='tagName', size='20', type='text', value='tag 7')
+              button.btn Add Tag
+            .buttonrow
+              button#createMedia.btn Upload File
+              a#test(href="#") Bind Listeners
 
-      
+
+script(id="mediaGalleryTmpl", type="text/x-jQuery-tmpl")
+  li(id="${_id}")
+    b ${name}
+    br
+    img(alt='', src='/media/${thumbnail}', width='150', height='150')
+    .actions
+      button.btn.btn-orange.btn-small.various(rel='#${src}') View
+      button.btn.btn-orange.btn-small.editImg(href='#editImage') Edit
+      button.btn.btn-grey.btn-small.delete.deleteImage(media="${_id}") Delete
+  div.apple_overlay(id="${src}")
+    img(alt='', src='/media/${src}')
+
 script
+  function bindImageListeners() {
+    $("button[rel]").overlay({mask: '#000', effect: 'apple'});
+    /*
+    *   Update media
+    */
+    $(".editImg").fancybox({
+      'titlePosition'   : 'inside',
+      'transitionIn'    : 'none',
+      'transitionOut'   : 'none'
+    });
+    $(".deleteImage").click(function () {
+      var mediaID = $(this).attr("media")
+        , that = this;
+      $.post("/media/delete", { "mediaID": mediaID }, function (data) {
+        $("#"+mediaID).remove();
+      })
+    });
+  }
+ 
+ 
+ 
+  function searchMedia () {
+    console.log("search media");
+    $.post("/media/search", function(data) {
+      $("#mediaGalleryTmpl").tmpl(data).appendTo("#mediaList");
+      bindImageListeners();
+    });
+  }
+ 
+ 
+ 
   $(document).ready(function () {
-    $.get("/tags", function(data) {
-      for (i = 0; i < data.length; i++) {
-        $("#tags").append(new Option(data[i], data[i]));
-      }
+    $("#test").click(function (e) {
+      bindImageListeners();
     });
-
-    $.get("/media", function(data) {
-      console.log("data: " + data);
+    // bind form using 'ajaxForm' 
+    $('#add-user-form').ajaxForm({
+      url:       "media/create",
+      type:      "POST",
+      dataType:  "json",
+      clearForm: true,
+      beforeSubmit: function (formData, jqForm, options) {
+        // formData is an array of objects containing the values of the form
+        // jqForm is the html form element
+        // options are the object initialized with ajaxForm
+        // maybe validate the for before submiting
+        // if form is not valid return false
+        return true;
+      },
+      success: function (data) {
+        $("#mediaGalleryTmpl").tmpl(data).prependTo("#mediaList");
+        bindImageListeners();
+      },
     });
-  });
+ 
+    searchMedia();
+      $("button").click(function (e) {
+    });
+ 
+    $("#searchMediaBtn").click(function (e) {
+      var data = {
+        "query": $("#addFilter").val()
+      };
+      $("#searchMediaTmpl").tmpl(data).appendTo("#searchTags");
+      e.preventDefault();
+    }); // CLOSE searchMediaBtn.click
+  }); // CLOSE document.ready

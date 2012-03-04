@@ -108,7 +108,8 @@ exports.Media = (function () {
   Media = new Schema({
     'name' : String,
     'desc' : String,
-    'src' : String,
+    'src' : ObjectId,
+    'thumbnail' : ObjectId,
     'tags' : [exports.Tag]
   });
 
@@ -202,5 +203,4 @@ exports.Estimate = (function () {
   return db.model('Estimate', Estimate);
 })();
 
-console.log("exports", exports);
 

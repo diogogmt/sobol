@@ -29,7 +29,7 @@ app.configure(function() {
   app.use(express.favicon());
   app.use(connect.bodyParser({uploadDir:'./uploads'}));
   app.use(express.cookieParser());
-  app.use(connectTimeout({ time: 10000 }));
+  app.use(connectTimeout({ time: 100000 }));
   app.use(express.session({ store: mongoStore(app.set('db-uri')),
     secret: 'topsecret' }));
   app.use(express.logger({ format:
@@ -46,6 +46,8 @@ app.configure(function() {
     pretty: true
   });
   app.use(express.errorHandler({ showStack: true, dumpExceptions: true }));
+  // Serve static files
+  app.use("/public", express.static("./public"));
 });
 
 
@@ -94,20 +96,22 @@ app.post('/user/forgot', routes.user.forgot);
 app.get('/user/reset/:id/:ts', routes.user.reset);
 
 
+app.get('/media/get', routes.media.get);
+
 // Media
 app.get('/media', routes.media.all);
-app.get('/media/:id', loadUser, routes.media.one);
-app.get('/media/search', loadUser, routes.media.search);
-app.post('/media/create', loadUser, routes.media.create);
+app.get('/media/:id', routes.media.one);
+app.post('/media/search', routes.media.search);
+app.post('/media/create', routes.media.create);
 app.get('/media/update/:id', loadUser, routes.media.update);
 app.post('/media/update/:id', loadUser, routes.media.save);
-app.post('/media/delete/:id', loadUser, routes.media.delete);
+app.post('/media/delete', routes.media.delete);
 
-app.get('/media/get', routes.media.get);
+
 
 
 //Tags
-app.get('/tags', routes.tag.all);
+app.get('/tags/get', routes.tag.get);
 app.get('/media/:id/tag/create', loadUser, routes.tag.create);
 app.post('/media/:id/tag/delete/:id', loadUser, routes.tag.delete);
 
@@ -126,78 +130,78 @@ app.get('/job/:id', loadUser, routes.job.details);
 
 app.get("/", function(req, res) {
   console.log("root");
-  var media = new Media();
-  media.id = 99;
-  media.name = "firstName";
-  media.src = "media src";
-  media.tags = null;
-  media.save(function (err) {
-    return Media.find({}, function(err, files) {
-      console.log("files: ", files)
-      console.log("err: ", err)
-      return res.render("gridIndex", {
-        layout: false,
-        title: "GridFS Example",
-        files: files
-      });
+  return Media.find({}, function(err, files) {
+    console.log("files: ", files)
+    console.log("err: ", err)
+    return res.render("gridIndex", {
+      layout: false,
+      title: "GridFS Example",
+      files: files
     });
   });
 
 });
 
 app.post("/new", function(req, res) {
-  var media, opts;
-  var file = req.files.file;
-  var name = req.body.name;
-  media = new Media();
-  media.name = req.body.name;
-  opts = {
+  var media
+    , options
+    , thumbnail
+    , finish = 0
+    , file = req.files.file
+    , filename = req.body.name
+    , media = new Media();
+
+  // TODO
+  // Init on the media constructor
+  media.name = filename;
+  media.desc = "media description";
+
+  options = {
+    "content_type": file.type,
     metadata: {
-      name: name,
-      type: file.type,
+      "info": "something useful",
     },
   };
 
-
-  var thumbnail = {
-    path: "uploads/thumbnail_" + media.name,
-    filename: "thumbnail_" + media.name,
+  // TODO
+  // What if  filename already exists?
+  thumbnail = {
+    path: "uploads/thumbnail_" + filename,
+    filename: "thumbnail_" + filename,
   };
-  var finish = 0;
+
   var done = function () {
     console.log("done");
     if (++finish === 2) {
-      return res.redirect("/");
+      media.save(function (err) {
+        console.log("err: ", err);
+        // Do something if error happens
+        return res.redirect("/");
+      });
     }
   };
 
-  console.log("file: ", file);
-  console.log("thumbnail: ", thumbnail);
   im.crop({
     srcPath: file.path,
     dstPath: thumbnail.path,
     width: 100,
     height: 100,
     quality: 1
-  }, function(err, stdout, stderr){
-    console.log
-    console.log("err: ", err);
-    console.log("stdout: ", stdout);
-    console.log("stderr: ", stderr);
+  }, function(err, stdout, stderr) {
 
-    media.addFile(req.files.file, opts, function(err, result) {
-      console.log("image done");
+    gridfs.putFile(filename, file.path, options,
+     function(err, result) {
+      media.src = result._id;
       done();
     });
-    media.addFile(thumbnail, opts, function(err, result) {
-      console.log("thumbnail done");
+
+    gridfs.putFile(thumbnail.filename, thumbnail.path, options,
+     function(err, result) {
+      media.thumbnail = result._id;
       done();
     });
-  })
+  });
 
-  // return content.addFile(req.files.file, opts, function(err, result) {
-  //   return res.redirect("/");
-  // });
 });
 
 app.get("/file/:id", function(req, res) {

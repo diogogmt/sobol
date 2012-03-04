@@ -5,25 +5,16 @@ var mongoose = require('mongoose')
   , Schema = mongoose.Schema;
 
 
-exports.all = function (req, res) {
-  console.log("tag all");
-  var arr = new Array();
-	arr[0] = 'haha';
-	arr[1] = 'hehe';
-
-	var tag = new Tag();
-	tag.name = "first tag";
-	tag.save(function (err) {
-		console.log("tag.save");
-	});
+exports.get = function (req, res) {
+  console.log("tag get");
 
 	var tags = new Array();
 	Tag.find({}, ['name'], function (err, obj) {
-		console.log("obj", obj);
+		// console.log("obj", obj);
 		for (var i = 0; i < obj.length; i++) {
 			tags.push(obj[i].name);
 		};
-		console.log("tags: ", tags);
+		// console.log("tags: ", tags);
 		res.send(tags);
 	});
 };
