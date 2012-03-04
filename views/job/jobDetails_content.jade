@@ -5,20 +5,14 @@
     .portlet-content
       div#breadCrumb.breadCrumb.module
         ul
-          li
-            a(href="#")
-              |Home
+          li.first
+            a(href="/customers/")
           li
             a(href="/customer/#{breadcrumb.cust.id}")
               |#{breadcrumb.cust.name}
-          li
+          li.last
             |#{breadcrumb.job.name}
       br
       br
       include jobDetails_job.jade
       include jobDetails_estimates.jade
-
-script(type="text/javascript")
-  $(document).ready(function() {
-    $('#breadCrumb').jBreadCrumb();
-  });
