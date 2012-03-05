@@ -110,7 +110,7 @@ exports.Media = (function () {
     'desc' : String,
     'src' : ObjectId,
     'thumbnail' : ObjectId,
-    'tags' : [exports.Tag]
+    'tags' : [ObjectId]
   });
 
   return db.model('Media', Media);

@@ -14,23 +14,19 @@
             input#addtagType(name="tagtype", value="tag", type="hidden")
             input#addFilter(name="addFilter", value="Add a Tag Filter",
               type="text")
+            input#filters(name='filters', type='hidden', value='')
             button#searchMediaBtn.btn 
               |Search
         div#searchTags.tagList
-          script(id="searchMediaTmpl", type="text/x-jQuery-tmpl")
-              div.tag(query="${query}", rem="True", wt="tag", a="goToTag")
-                div.removeFilter(query="${query}")
-                div.filter
-                  span.name
-                    |${query}
+          
 
         
         
       br
       br
       ul#mediaList.gallery
-        
-     
+      div#mediaOverlay
+
    .portlet.x4
         .portlet-header
           h4 Upload File
@@ -47,28 +43,47 @@
             .field.clearfix
               label(for='file') File Upload 
               input#file.file(name="file", style='opacity: 0;', size='35', type='file')
-            .field
-              label(for='tags') Tags 
-              | tag 1
-              a(href='#') X
-              br
 
-              select#tags
-                option(value='') Add Existing Tag
-                option(value='Tag5') Tag 5
-                
-                
-                
-              br
-              input#file_name(name='tagName', size='20', type='text', value='tag 7')
-              button.btn Add Tag
+            div.field
+              label(for='tags') Tags 
+              div#tagsList.field
+
+            div.field
+              select#tagsAvailable
+                option(value="default") Select a tag
+
+            div.field
+              input#tagName(name='tagName', size='20',
+                type='text', value='tag 7')
+              button#createTag.btn Add Tag
+
+            input#newTags(name='newTags', type='hidden', value='')
+            input#existingTags(name='existingTags', type='hidden', value='')
+
+            div.field
             .buttonrow
               button#createMedia.btn Upload File
-              a#test(href="#") Bind Listeners
+
+
+script(id="searchMediaTmpl", type="text/x-jQuery-tmpl")
+  div.tag(query="${name}", class="${name}")
+    div.removeFilter(query="${name}")
+    div.filter
+      span.name
+        |${name}
+
+
+script(id="availableTagsTmpl", type="text/x-jQuery-tmpl")
+  option(value="${_id}") ${name}
+
+
+script(id="mediaOverlayTmpl", type="text/x-jQuery-tmpl")
+  div.apple_overlay(id="${src}")
+    img(alt='', src='/media/${src}')
 
 
 script(id="mediaGalleryTmpl", type="text/x-jQuery-tmpl")
-  li(id="${_id}")
+  li(id="${_id}", data-id="${_id}")
     b ${name}
     br
     img(alt='', src='/media/${thumbnail}', width='150', height='150')
@@ -76,11 +91,11 @@ script(id="mediaGalleryTmpl", type="text/x-jQuery-tmpl")
       button.btn.btn-orange.btn-small.various(rel='#${src}') View
       button.btn.btn-orange.btn-small.editImg(href='#editImage') Edit
       button.btn.btn-grey.btn-small.delete.deleteImage(media="${_id}") Delete
-  div.apple_overlay(id="${src}")
-    img(alt='', src='/media/${src}')
+
 
 script
   function bindImageListeners() {
+    console.log("bindImageListeners");
     $("button[rel]").overlay({mask: '#000', effect: 'apple'});
     /*
     *   Update media
@@ -94,27 +109,51 @@ script
       var mediaID = $(this).attr("media")
         , that = this;
       $.post("/media/delete", { "mediaID": mediaID }, function (data) {
-        $("#"+mediaID).remove();
+        // $("#"+mediaID).remove();
+        searchMedia();
+        setExistingTags();
       })
     });
   }
  
- 
- 
   function searchMedia () {
     console.log("search media");
-    $.post("/media/search", function(data) {
-      $("#mediaGalleryTmpl").tmpl(data).appendTo("#mediaList");
-      bindImageListeners();
+    var filters = $("#filters").val();
+    console.log("filters: " + filters);
+    $.post("/media/search", { filters: filters }, function(data) {
+      console.log("data");
+      console.log(data);
+      // $("#mediaGalleryTmpl").tmpl(data).appendTo("#mediaList");
+      $("#mediaOverlayTmpl").tmpl(data).appendTo("#mediaOverlay");
+ 
+      $('.gallery').quicksand( $("#mediaGalleryTmpl").tmpl(data), {
+          adjustHeight: 'dynamic'
+        }, function () {
+          console.log("quicksand callback");
+          bindImageListeners();
+        });
+      
+    });
+  }
+ 
+  function setExistingTags() {
+    console.log("setExistingTags");
+    $.get("/tags/get", function (data) {
+      console.log("get tags");
+      // console.log(data);
+      // console.log($("#availableTagsTmpl"));
+      $("#tagsAvailable").empty();
+      $("#newTags").val("");
+      $("#existingTags").empty("");
+      $("#availableTagsTmpl").tmpl(data).appendTo("#tagsAvailable");
     });
   }
  
  
- 
   $(document).ready(function () {
-    $("#test").click(function (e) {
-      bindImageListeners();
-    });
+    searchMedia();
+    setExistingTags();
+ 
     // bind form using 'ajaxForm' 
     $('#add-user-form').ajaxForm({
       url:       "media/create",
@@ -130,20 +169,58 @@ script
         return true;
       },
       success: function (data) {
-        $("#mediaGalleryTmpl").tmpl(data).prependTo("#mediaList");
-        bindImageListeners();
-      },
-    });
+        console.log("create media success");
+        // $("#mediaGalleryTmpl").tmpl(data).prependTo("#mediaList");
+        // bindImageListeners();
+        searchMedia();
  
-    searchMedia();
-      $("button").click(function (e) {
+        $("#tagsList").empty();
+        setExistingTags();
+        
+      },
     });
  
     $("#searchMediaBtn").click(function (e) {
       var data = {
-        "query": $("#addFilter").val()
+        name: $("#addFilter").val()
       };
       $("#searchMediaTmpl").tmpl(data).appendTo("#searchTags");
-      e.preventDefault();
+      console.log("filters: " + $("#filters").val());
+      $("#filters").val($("#filters").val() + "," + data.name);
+      console.log("filters: " + $("#filters").val());
+      searchMedia();
+      return false;
     }); // CLOSE searchMediaBtn.click
+ 
+    $("#createTag").click(function (e) {
+      console.log("create tag click");
+      var tag = {
+        name: $("#tagName").val(),
+      };
+      $("#searchMediaTmpl").tmpl(tag).appendTo("#tagsList");
+      $("#newTags").val($("#newTags").val() + "," + tag.name);
+      $("#tagName").val("")
+      console.log("newTags: " + $("#newTags").val());
+      return false;
+    }); // CLOSE createTag.click
+ 
+  $("#tagsAvailable").change(function () {
+    console.log("tags available change");
+    console.log('$("#tagsAvailable").val()');
+    console.log($("#tagsAvailable").val());
+    if ($("#tagsAvailable").val() == "default") {
+      return false;
+    }
+    var tag = {
+      name: $("#tagsAvailable :selected").text(),
+    };
+    $("#existingTags").val(
+      $("#existingTags").val() + "," + $("#tagsAvailable").val()
+    );
+    $("#searchMediaTmpl").tmpl(tag).appendTo("#tagsList");
+    $('#tagsAvailable :selected').remove(); 
+  }); // CLOSE tagsAvailable.change
+ 
+  
+ 
   }); // CLOSE document.ready

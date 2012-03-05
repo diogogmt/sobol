@@ -8,14 +8,9 @@ var mongoose = require('mongoose')
 exports.get = function (req, res) {
   console.log("tag get");
 
-	var tags = new Array();
-	Tag.find({}, ['name'], function (err, obj) {
+	Tag.find({}, function (err, obj) {
 		// console.log("obj", obj);
-		for (var i = 0; i < obj.length; i++) {
-			tags.push(obj[i].name);
-		};
-		// console.log("tags: ", tags);
-		res.send(tags);
+		res.send(obj);
 	});
 };
 
