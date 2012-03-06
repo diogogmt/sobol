@@ -25,7 +25,7 @@ exports.add = function (req, res) {
   Job.findOne({ _id : new ObjectId(req.params.id) }, function (err, job) {
     if(job){
       var estimateSet = job.estimateSet;
-      console.log("Pushing Estimate into Job EstimateSet: ", estimate);
+      //console.log("Pushing Estimate into Job EstimateSet: ", estimate);
       estimateSet.push(estimate);
       job.save(function(err) {
         if(err){
@@ -38,13 +38,16 @@ exports.add = function (req, res) {
       });
     }else{
       console.log("finding job for add estimate - Not success");
+      return estimateAddFailed();
     }
   });
 };
 
 exports.edit = function (req, res) {
   console.log("edit estimate route");
-  var formEstimate = req.body.estimate;
+  var formEstimate = req.body.formEstimate;
+  var breadcrumb = req.session.breadcrumb;
+  var jobID = breadcrumb.job.id;
   //console.log("customer: %o", req.body.cust);
   function estimateEditFailed() {
     console.log("edit estimate FAIL");
@@ -57,29 +60,29 @@ exports.edit = function (req, res) {
     });
   };
 
-  /*var conditions  = { _id : new ObjectId(formCustomer.id) }
-    , update      = { firstName : formCustomer.firstName
-                    , lastName : formCustomer.lastName
-                    , email : formCustomer.email
-                    , phone1 : formCustomer.phone1
-                    , phone2 : formCustomer.phone2
-                    , address1 : formCustomer.address1
-                    , address2 : formCustomer.address2
-                    , postal : formCustomer.postal
-                    , city : formCustomer.city
-                    , province : formCustomer.province
-                    , country : formCustomer.country
-                    }
-  ;
-  Customer.update(conditions, update, function (err, numAffected) {
-    if (err || numAffected == 0){
-      console.log("err: " + err);
-      return customerEditFailed();
+  Job.findOne({ _id : new ObjectId(jobID) }, function (err, job) {
+    if(job){
+      var estimateSet = job.estimateSet;
+      for(var i = 0; i < estimateSet.length; i++){
+        if(estimateSet[i]._id == formEstimate.id){
+          estimateSet[i].name = formEstimate.name;
+          var conditions  = { _id : new ObjectId(jobID) }
+            , update      = { estimateSet : estimateSet }
+          ;
+          Job.update(conditions, update, function (err, numAffected) {
+            if (err || numAffected == 0){
+              return estimateEditFailed();
+            }
+            console.log("Editing Estimate SUCCESS", job);
+            res.redirect('/job/' + jobID + '/estimate/' + formEstimate.id);
+          });
+        }
+      }
+    }else{
+      console.log("finding job for edit estimate - Not success");
+      return estimateEditFailed();
     }
-    console.log("Editing SUCCEED");
-    //req.flash('info', 'The customer has been added');
-    res.redirect('/customer/' + formCustomer.id);
-  });*/
+  });
 };
 
 exports.details = function (req, res) {

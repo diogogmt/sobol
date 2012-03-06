@@ -138,6 +138,7 @@ app.get('/test', routes.test.generate);
 // Estimate
 app.get('/datatable/estimate/getJobEstimates/:id', loadUser, routes.estimate.getJobEstimates);
 app.post('/estimate/add/:id', loadUser, routes.estimate.add);
+app.post('/estimate/edit', loadUser, routes.estimate.edit);
 app.get('/job/:jobId/estimate/:estimateId', loadUser, routes.estimate.details);
 
 var GridFS, GridFSSchema;
