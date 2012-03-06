@@ -11,7 +11,7 @@ var mongoose = require('mongoose')
 exports.all = function (req, res) {
   console.log("all jobs route");
   console.log("req.currentUser: %o", req.currentUser);
-  res.render('customer/customers',
+  res.render('job/jobs',
     {
       layout: 'includes/layout',
       title: 'Jobs',
@@ -88,11 +88,12 @@ exports.findAll = function (req, res) {
       var dataSet = new Array();
       for(i = 0; i < jobs.length; i++){
         dataSet.push([
-            jobs[i]._id,
+           jobs[i]._id,
             jobs[i].name,
             jobs[i].description,
             jobs[i].creationDate,
-            jobs[i].status
+            jobs[i].status,
+            jobs[i].customerID
         ]);
       }
 
@@ -167,23 +168,27 @@ exports.details = function (req, res) {
 exports.validateJob = function (req, res, next) {
   console.log("validating the job");
   
-  var customer = new Customer(req.body.cust);
-//  console.log("This is the customer firstname", customer._id);
-//  customer.id = req.params.id;
+var job = new Job(req.body.job);
 
-  var errors = jobValidator(req.body.formJob, function (err) {
+  var errors = jobValidator(req.body.job, function (err) {
     if (Object.keys(err).length) {
-      console.log("HAS ERRORS rendering create again");
 
-      res.render('customer/custDetails',
-        { 
-          layout: "includes/layout",
-          title: "Job",
-          job: req.body.formJob,
-          customer: customer,
-          errors: err 
-        }
-      );
+     console.log("HAS ERRORS rendering create again");
+     Customer.findOne({ _id : new ObjectId(req.params.id) }, function (err, customer){
+              
+              var breadcrumb = req.session.breadcrumb;  
+              res.render('customer/custDetails',
+                { 
+                    layout: 'includes/layout',
+                    title: 'Customer',
+                    customer: customer,
+                    breadcrumb: breadcrumb,
+                    errors: false
+                }
+              );
+              
+      });
+
       return false;
     }
     next();  

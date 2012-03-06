@@ -124,6 +124,7 @@ app.get('/datatable/job/getCustJobs/:id', loadUser, routes.job.getCustJobs);
 app.get('/datatable/job/findAll', loadUser, routes.job.findAll);
 
 app.post('/job/add/:id', loadUser, routes.job.validateJob, routes.job.add);
+//app.post('/job/add/:id', loadUser, routes.job.add);
 app.post('/job/edit', loadUser, routes.job.validateEditJob, routes.job.edit);
 //app.post('/job/edit', loadUser, routes.job.edit);
 
