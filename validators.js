@@ -54,7 +54,7 @@ exports.userValidator = function (user, callback) {
 }
 
 exports.loginValidator = function (user, callback) {
-  console.log("loginUser");
+  //console.log("loginUser");
 
   var errors = new Array();
 

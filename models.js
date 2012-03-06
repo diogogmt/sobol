@@ -12,13 +12,10 @@ var crypto = require('crypto')
   , Schema = mongoose.Schema
   , ObjectId = Schema.ObjectId;
 
-console.log("model.js");
-
-
-
+//console.log("model.js");
 
 exports.File = (function () {
-  console.log("File model");
+  //console.log("File model");
   // GridFSSchema = new mongoose.Schema({
   //   name: String,
   //   files: [mongoose.Schema.Mixed]
@@ -42,7 +39,7 @@ exports.File = (function () {
 * Model: User
 */
 exports.User = (function () {
-  console.log("User model");
+  //console.log("User model");
   User = new Schema({
     'username': {
       type: String,
@@ -63,10 +60,10 @@ exports.User = (function () {
     });
 
   User.method('authenticate', function(plainText) {
-    console.log("user authenticate");
-    console.log("password: ", plainText);
-    console.log("hashed_password: ", this.hashed_password);
-    console.log("encryptPassword: ", this.encryptPassword(plainText));
+    // console.log("user authenticate");
+    // console.log("password: ", plainText);
+    // console.log("hashed_password: ", this.hashed_password);
+    // console.log("encryptPassword: ", this.encryptPassword(plainText));
     return this.encryptPassword(plainText) === this.hashed_password;
   });
 
@@ -89,7 +86,7 @@ exports.User = (function () {
 * Model: Tag
 */
 exports.Tag = (function () {
-  console.log("Tag model");
+  //console.log("Tag model");
   Tag = new Schema({
     'name' : String
   });
@@ -101,7 +98,7 @@ exports.Tag = (function () {
 * Model: Media
 */
 exports.Media = (function () {
-  console.log("Media model");
+  //console.log("Media model");
   Media = new Schema({
     'name' : String,
     'desc' : String,
@@ -116,7 +113,7 @@ exports.Media = (function () {
 * Model: Customer
 */
 exports.Customer = (function () {
-  console.log("Customer model");
+  //console.log("Customer model");
   Customer = new mongoose.Schema({
     'firstName' : String,
     'lastName' : String,
@@ -147,7 +144,7 @@ exports.Customer = (function () {
 * Model: Job
 */
 exports.Job = (function () {
-  console.log("Job model");
+  //console.log("Job model");
 
  Job = new Schema({
     'name' : String,
@@ -166,7 +163,7 @@ exports.Job = (function () {
 * Model: Estimate Line Item
 */
 exports.EstimateLineItem = (function () {
-  console.log("Estimate Line Item model");
+  //console.log("Estimate Line Item model");
 
  EstimateLineItem = new Schema({
     'name' : String,
@@ -183,7 +180,7 @@ exports.EstimateLineItem = (function () {
 * Model: Estimate
 */
 exports.Estimate = (function () {
-  console.log("Estimate model");
+  //console.log("Estimate model");
 
  Estimate = new Schema({
     'name' : String,
@@ -197,4 +194,4 @@ exports.Estimate = (function () {
   return db.model('Estimate', Estimate);
 })();
 
-console.log("exports", exports);
+//console.log("exports", exports);

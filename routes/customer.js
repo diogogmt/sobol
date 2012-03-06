@@ -12,8 +12,8 @@ var mongoose = require('mongoose')
 // });
 
 exports.all = function (req, res) {
-  console.log("all customers route");
-  console.log("req.currentUser: %o", req.currentUser);
+  // console.log("all customers route");
+  // console.log("req.currentUser: %o", req.currentUser);
   res.render('customer/customers', 
     {
       layout: 'includes/layout',
@@ -22,13 +22,13 @@ exports.all = function (req, res) {
 };
 
 exports.findAll = function (req, res) {
-  console.log("all customers route");
+  //console.log("all customers route");
   //console.log("req.currentUser: %o", req.currentUser);
 
   Customer.find({}, function (err, customers) {
-    console.log("customer callback");
+    //console.log("customer callback");
     if(customers){
-      console.log("get all customers success");
+      //console.log("get all customers success");
       //console.log(customers);
 
       var dataSet = new Array();

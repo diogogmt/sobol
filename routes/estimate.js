@@ -9,7 +9,7 @@ var mongoose = require('mongoose')
   , ObjectId = mongoose.Types.ObjectId;
 
 exports.add = function (req, res) {
-  console.log("add estimate route");
+  //console.log("add estimate route");
   var estimate = new Estimate(req.body.estimate);
   var jobID = new ObjectId(req.params.id);
   function estimateAddFailed() {
@@ -32,7 +32,7 @@ exports.add = function (req, res) {
           console.log("Error saving job after adding estimate");
           return estimateAddFailed();
         }
-        console.log("Adding Estimate SUCCESS");
+        //console.log("Adding Estimate SUCCESS");
         //req.flash('info', 'The estimate has been added');
         res.redirect('/job/' + jobID);
       });
@@ -44,7 +44,7 @@ exports.add = function (req, res) {
 };
 
 exports.edit = function (req, res) {
-  console.log("edit estimate route");
+  //console.log("edit estimate route");
   var formEstimate = req.body.formEstimate;
   var breadcrumb = req.session.breadcrumb;
   var jobID = breadcrumb.job.id;
@@ -73,7 +73,7 @@ exports.edit = function (req, res) {
             if (err || numAffected == 0){
               return estimateEditFailed();
             }
-            console.log("Editing Estimate SUCCESS", job);
+            //console.log("Editing Estimate SUCCESS", job);
             res.redirect('/job/' + jobID + '/estimate/' + formEstimate.id);
           });
         }
@@ -94,8 +94,8 @@ exports.details = function (req, res) {
       var estimates = job.estimateSet;
       if(estimates.length > 0){
         for(var i = 0; i < estimates.length; i++){
-          console.log("Found estimate: ", estimates[i]);
-          console.log("Comparing against ID: " + req.params.estimateId);
+          //console.log("Found estimate: ", estimates[i]);
+          //console.log("Comparing against ID: " + req.params.estimateId);
           if(estimates[i]._id == req.params.estimateId){
             estimate = estimates[i];
           }
@@ -124,7 +124,7 @@ exports.getJobEstimates = function (req, res) {
   Job.findOne({ _id : new ObjectId(req.params.id) }, function (err, job) {
     //console.log("The current customer is " + req.params.id);
     if(job){
-      console.log("Get specific job for estimates list - SUCCESS");
+      //console.log("Get specific job for estimates list - SUCCESS");
       var dataSet = new Array();
       var estimates = job.estimateSet;
       for(i = 0; i < estimates.length; i++){
