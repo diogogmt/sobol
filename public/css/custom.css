@@ -382,7 +382,7 @@ ul.gallery { padding: 0; margin: 0; }
 }
 
 
-.tag .removeFilter {
+.tag .removeFilter, .tag .removeTag {
 	margin-left: -15px;
 	margin-top: -1px;
 	margin-bottom: -1px;

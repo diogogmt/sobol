@@ -14,7 +14,6 @@
             input#addtagType(name="tagtype", value="tag", type="hidden")
             input#addFilter(name="addFilter", value="Add a Tag Filter",
               type="text")
-            input#filters(name='filters', type='hidden', value='')
             button#searchMediaBtn.btn 
               |Search
         div#searchTags.tagList
@@ -72,6 +71,13 @@ script(id="searchMediaTmpl", type="text/x-jQuery-tmpl")
       span.name
         |${name}
 
+script(id="mediaTagsTmpl", type="text/x-jQuery-tmpl")
+  div.tag(query="${name}", class="${name}")
+    div.removeTag(query="${name}")
+    div.filter
+      span.name
+        |${name}
+
 
 script(id="availableTagsTmpl", type="text/x-jQuery-tmpl")
   option(value="${_id}") ${name}
@@ -94,6 +100,10 @@ script(id="mediaGalleryTmpl", type="text/x-jQuery-tmpl")
 
 
 script
+  var searchFilters = new Array()
+    , existingMediaTags = {}
+    , newMediaTags = new Array();
+ 
   function bindImageListeners() {
     console.log("bindImageListeners");
     $("button[rel]").overlay({mask: '#000', effect: 'apple'});
@@ -118,11 +128,11 @@ script
  
   function searchMedia () {
     console.log("search media");
-    var filters = $("#filters").val();
-    console.log("filters: " + filters);
-    $.post("/media/search", { filters: filters }, function(data) {
-      console.log("data");
+    console.log(searchFilters);
+    $.post("/media/search", { filters: searchFilters }, function(data) {
+      console.log("post media search");
       console.log(data);
+      if (data) {
       // $("#mediaGalleryTmpl").tmpl(data).appendTo("#mediaList");
       $("#mediaOverlayTmpl").tmpl(data).appendTo("#mediaOverlay");
  
@@ -132,6 +142,10 @@ script
           console.log("quicksand callback");
           bindImageListeners();
         });
+      }
+      else {
+        $('.gallery').empty();
+      }
       
     });
   }
@@ -146,6 +160,7 @@ script
       $("#newTags").val("");
       $("#existingTags").empty("");
       $("#availableTagsTmpl").tmpl(data).appendTo("#tagsAvailable");
+      
     });
   }
  
@@ -172,8 +187,10 @@ script
         console.log("create media success");
         // $("#mediaGalleryTmpl").tmpl(data).prependTo("#mediaList");
         // bindImageListeners();
+        searchFilters = new Array();
         searchMedia();
- 
+        existingMediaTags = {};
+        newMediaTags = new Array();
         $("#tagsList").empty();
         setExistingTags();
         
@@ -181,14 +198,25 @@ script
     });
  
     $("#searchMediaBtn").click(function (e) {
+      console.log("search media button click");
       var data = {
         name: $("#addFilter").val()
       };
-      $("#searchMediaTmpl").tmpl(data).appendTo("#searchTags");
-      console.log("filters: " + $("#filters").val());
-      $("#filters").val($("#filters").val() + "," + data.name);
-      console.log("filters: " + $("#filters").val());
+ 
+      searchFilters.push(data.name);
       searchMedia();
+ 
+      var item = $("#searchMediaTmpl").tmpl(data).appendTo("#searchTags");
+      console.log(item);
+      console.log($(item).find(".removeFilter"));
+      $(item).find(".removeFilter").click( function (e) {
+        console.log("remove filter click");
+        console.log($(this).attr("query"));
+        $(this).parent().empty();
+        searchFilters.splice(searchFilters.indexOf($(this).attr("query")), 1);
+        searchMedia();
+      });
+      
       return false;
     }); // CLOSE searchMediaBtn.click
  
@@ -197,30 +225,68 @@ script
       var tag = {
         name: $("#tagName").val(),
       };
-      $("#searchMediaTmpl").tmpl(tag).appendTo("#tagsList");
-      $("#newTags").val($("#newTags").val() + "," + tag.name);
+      newMediaTags.push(tag.name);
       $("#tagName").val("")
-      console.log("newTags: " + $("#newTags").val());
+      $("#mediaTagsTmpl").tmpl(tag).appendTo("#tagsList");
+      
+      $(".removeTag").click(function (e) {
+        console.log("remove tag click");
+        $(this).parent().empty();
+        newMediaTags.splice(newMediaTags.indexOf($(this).attr("query")), 1);
+      });
+ 
       return false;
     }); // CLOSE createTag.click
  
   $("#tagsAvailable").change(function () {
     console.log("tags available change");
-    console.log('$("#tagsAvailable").val()');
-    console.log($("#tagsAvailable").val());
+    Array.prototype.slice.apply(existingMediaTags, 
+      [
+        Array.prototype.indexOf.apply(existingMediaTags,
+          ["aaaa"]), 1
+      ]
+    );
     if ($("#tagsAvailable").val() == "default") {
       return false;
     }
     var tag = {
       name: $("#tagsAvailable :selected").text(),
     };
-    $("#existingTags").val(
-      $("#existingTags").val() + "," + $("#tagsAvailable").val()
-    );
-    $("#searchMediaTmpl").tmpl(tag).appendTo("#tagsList");
+    console.log($("tagsAvailable").val());
+    console.log($("tagsAvailable").text());
+    console.log(tag);
+    existingMediaTags[tag.name] = $("#tagsAvailable").val();
+    // existingMediaTags.push([$("#tagsAvailable").val() = tag.name]);
+    var item = $("#mediaTagsTmpl").tmpl(tag).appendTo("#tagsList");
+    console.log("item");
+    console.log($(item).find(".removeTag"));
+    $(item).find(".removeTag").click( function (e) {
+      console.log("remove existing tag click");
+      $(this).parent().empty();
+      for (var key in  existingMediaTags) {
+        console.log("key: " + key);
+        if (key === tag.name) {
+          delete existingMediaTags[key];
+          console.log("deleting: " + key + " from existingMediaTags obj");
+          console.log(existingMediaTags);
+        }
+      }
+    })
     $('#tagsAvailable :selected').remove(); 
   }); // CLOSE tagsAvailable.change
  
-  
+  $("#createMedia").click(function (e) {
+    console.log("create media button");
+    console.log(existingMediaTags);
+    console.log(newMediaTags);
+    var tagsArray = new Array();
+    for (var key in  existingMediaTags) {
+      console.log("key: " + key);
+      tagsArray.push(existingMediaTags[key]);
+    }
+    console.log(tagsArray);
+    $("#newTags").val(newMediaTags);
+    $("#existingTags").val(tagsArray);
+  }); // CLOSE createMedia.click
  
   }); // CLOSE document.ready

@@ -54,21 +54,54 @@ exports.one = function (req, res) {
 // TODO keep working on searches
 exports.search = function (req, res) {
 	console.log("media search");
-  var filters = req.body.filters.split(",");
+  // var filters = req.body.filters.split(",")
+  var filters = req.body.filters ? req.body.filters : new Array
+    , i
+    , query = new Array();
   console.log("filters: ", filters);
 
-  filters.shift();
+  // filters.shift();
   console.log("filters: ", filters);
-
-  Media.find({}, function (err, obj) {
-    console.log("obj: ", obj);
-    res.send(obj);
+  var filters = filters.filter(function (itm, i, a) {
+    return i == a.indexOf(itm);
   });
+  console.log("unique filters: ", filters);
+  for (i = 0; i < filters.length; i++) {
+    query.push({"name" : filters[i]});
+  }
+
+  console.log("query: ", query);
+
+  Tag.find( { $or: query }, ["_id"], function (err, tags) {
+    console.log("tag or");
+    console.log("err: ", err);
+    console.log("tags: ", tags);
+    console.log("tags.length: ", tags ? tags.length : 0);
+    console.log("filters: ", filters);
+    console.log("filters.length: ", filters ? filters.length : 0);
+    if (!tags) {
+      tags = null;
+    }
+    else if ((tags && tags.length) != (filters && filters.length)) {
+      res.send();
+      return;
+    }
+    Media.find( { tags: {$all : tags} }, function (err, media) {
+      console.log("media find");
+      console.log("err: ", err);
+      console.log("media: ", media);
+      res.send(media);
+    });
+  });
+
+  
 };
 
 exports.create = function (req, res) {
 	console.log("media create");
-
+  console.log("params: ", req.params);
+  console.log("body: ", req.body);
+  console.log("files: ", req.files);
   var media
   , options
   , thumbnail
@@ -76,18 +109,16 @@ exports.create = function (req, res) {
   , file = req.files.file
   , filename = req.body.filename
   , description = req.body.description
-  , newTags = req.body.newTags.split(",")
-  , existingTags = req.body.existingTags.split(",")
+  , newTags = req.body.newTags ? req.body.newTags.split(",") : new Array()
+  , existingTags = req.body.existingTags ? req.body.existingTags.split(",") : new Array()
   , tags
   , tag
   , i
-  , waitForAsync = (newTags.length -1) + 2
+  , waitForAsync = newTags.length + 2
   , media = new Media();
 
 
-  console.log("params: ", req.params);
-  console.log("body: ", req.body);
-  console.log("files: ", req.files);
+  
 
   console.log("existingTags: ", existingTags);
   console.log("existingTags.length: ", existingTags.length);
@@ -95,7 +126,7 @@ exports.create = function (req, res) {
   console.log("newTags.length: ", newTags.length);
   console.log("media: ", media);
   console.log("media.tags: ", media.tags);
-  for (i = 1; i < newTags.length; i++) {
+  for (i = 0; i < newTags.length; i++) {
     console.log("i: ", i)
     tag = new Tag();
     tag.name = newTags[i];
@@ -120,7 +151,7 @@ exports.create = function (req, res) {
   // Init on the media constructor
   media.name = filename;
   media.desc = description;  
-  for (i = 1; i < existingTags.length; i++) {
+  for (i = 0; i < existingTags.length; i++) {
     console.log("i: ", i)
     media.tags.push(new ObjectId(existingTags[i]));
   }
