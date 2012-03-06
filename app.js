@@ -83,6 +83,16 @@ app.get('/customer/:id', loadUser, routes.customer.details);
 app.get('/datatable/customer/findAll', loadUser, routes.customer.findAll);
 app.get('/datatable/customer/findActive', loadUser, routes.customer.findActive);
 
+// Customer Notes
+app.get('/customer/notes/:id', loadUser, routes.note.all);
+app.post('/customer/note/add/:id', loadUser, routes.note.add);
+app.post('/customer/note/delete/:id', loadUser, routes.note.delete);
+app.get('/datatable/customer/getCustomerNotes/:id', loadUser, routes.note.getCustomerNotes);
+
+//app.post('/customer/note/edit', loadUser, routes.note.edit);
+//app.get('/customer/note/:id', loadUser, routes.note.details);
+
+
 // User
 app.get('/user/create', routes.user.create);
 app.post('/user/create', routes.user.validateUser, routes.user.save);

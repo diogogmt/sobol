@@ -6,6 +6,7 @@ var crypto = require('crypto')
   , Job
   , EstimateLineItem
   , Estimate
+  , Note
   , config = require('./config')
   , gridfs = require("./gridfs")
   , db = mongoose.connect(config.mongo.connectionString)
@@ -130,7 +131,8 @@ exports.Customer = (function () {
     'province' : String,
     'country' : String,
     'registrationDate' : { type: Date, default: Date.now },
-    'status' : { type: String, default: "Active" }
+    'status' : { type: String, default: "Active" },
+    'noteSet' : [exports.Note]
   });
 
   Customer.virtual('tel1a');
@@ -196,5 +198,23 @@ exports.Estimate = (function () {
 
   return db.model('Estimate', Estimate);
 })();
+
+
+/**
+* Model: Note
+*/
+exports.Note = (function () {
+  console.log("Note model");
+
+ Note = new Schema({
+    'noteText' : String,
+    'creationDate' : { type: Date, default: Date.now },
+  });
+
+  return db.model('Note', Note);
+})();
+
+
+
 
 console.log("exports", exports);

@@ -28,11 +28,13 @@ exports.add = function(req, res) {
   console.log("job: %o", job);
   function jobSaveFailed() {
     console.log("failed creating job");
+    req.session.breadcrumb = breadcrumb;
     res.render('customer/custDetails/',
     {
       layout: 'includes/layout',
       title: 'Customer',
-      errors: false
+      errors: false,
+      breadcrumb: breadcrumb,
     });
   }
 

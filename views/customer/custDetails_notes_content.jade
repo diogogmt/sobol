@@ -1,0 +1,74 @@
+#content.xfluid
+  .portlet.x12
+    .portlet-header
+      h4 Customer Management
+    .portlet-content
+      div#breadCrumb.breadCrumb.module
+        ul
+          li
+            a(href="#")
+              |Home
+          li
+            |#{breadcrumb.cust.name}
+      br
+      br
+      include custDetails_customer.jade
+      br
+      a#addNote.btn(href='#newNote') Add Note      
+      a#viewJobs.btn(href='/customer/#{customer.id}') View Jobs
+      div(style='display: none;')
+        #newNote(style='width: 800px; height: 400px; overflow: auto;')
+          h4 Add Note
+          form.form.label-inline(id='addNoteForm', action='/customer/note/add/#{customer.id}', method='post')
+            table
+              tr
+                td
+                  .field
+                    label(for='noteText') Note Text
+                    input#noteText.large(name='custnote[noteText]', size='20', type='text', value='')
+              tr
+                td
+                    input#saveNote.btn(type='submit', value='Add')
+              
+
+      table#noteTable.display(cellpadding='0', cellspacing='0', border='0', rel='datatable')
+        thead
+          tr
+            th ID
+            th Note 
+            th Created On
+        tbody
+
+script(type="text/javascript")
+  $(document).ready(function() {
+    /*
+    *   Add new note
+    */
+    $("#addNote").fancybox({
+      'titlePosition'   : 'inside',
+      'transitionIn'    : 'none',
+      'transitionOut'   : 'none'
+    });
+    var dTable = $("#noteTable").dataTable( {
+      "bProcessing": true,
+      "bDestroy": true,
+      "sAjaxSource": "/datatable/customer/getCustomerNotes/#{customer.id}",
+      "aoColumnDefs": [
+        { "bVisible" : false, "aTargets" : [0] }
+      ],
+      "aaSorting": [[4, "desc"]]
+    });
+    
+    //$("#noteTable tbody tr").live("click", function() {
+      //var data = dTable.fnGetData(this);
+      //var noteID = data[0];
+      //window.location = "/customer/notes/" + noteID + "#newNote";
+    //});
+
+  });
+
+
+script(type="text/javascript")
+  $(document).ready(function() {
+    $('#breadCrumb').jBreadCrumb();
+  });

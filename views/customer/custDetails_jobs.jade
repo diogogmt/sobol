@@ -1,5 +1,7 @@
 br
 a#addJob.btn(href='#newJob') Add Job      
+a#viewNotes.btn(href='/customer/notes/#{customer.id}') View Notes      
+
 div(style='display: none;')
   #newJob(style='width: 800px; height: 400px; overflow: auto;')
     h4 Add Job
@@ -20,7 +22,6 @@ div(style='display: none;')
         tr
           td
               input#saveJob.btn(type='submit', value='Add')
-        
 
 table#jobTable.display(cellpadding='0', cellspacing='0', border='0', rel='datatable')
   thead
