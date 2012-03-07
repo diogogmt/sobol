@@ -71,7 +71,7 @@ exports.findAll = function (req, res) {
 
 
 exports.add = function (req, res) {
-  console.log("add customer route");
+  //console.log("add customer route");
   var customer = new Customer(req.body.cust);
   //console.log("customer: %o", req.body.cust);
   function customerAddFailed() {
@@ -90,14 +90,14 @@ exports.add = function (req, res) {
       console.log("err: " + err);
       return customerAddFailed();
     }
-    console.log("Adding SUCCEED");
+    //console.log("Adding SUCCEED");
     //req.flash('info', 'The customer has been added');
     res.redirect('/customers');
   });
 };
 
 exports.edit = function (req, res) {
-  console.log("edit customer route");
+  //console.log("edit customer route");
   var formCustomer = req.body.cust;
   //console.log("customer: %o", req.body.cust);
   function customerEditFailed() {
@@ -131,7 +131,7 @@ exports.edit = function (req, res) {
       console.log("err: " + err);
       return customerEditFailed();
     }
-    console.log("Editing SUCCEED");
+    //console.log("Editing SUCCEED");
     //req.flash('info', 'The customer has been added');
     res.redirect('/customer/' + formCustomer.id);
   });
@@ -168,13 +168,13 @@ exports.details = function (req, res) {
 
 
 exports.findActive = function (req, res) {
-  console.log("all customers route");
+  //console.log("all customers route");
   //console.log("req.currentUser: %o", req.currentUser);
 
   Customer.find({ status : "Active"}, function (err, customers) {
-    console.log("customer callback");
+    //console.log("customer callback");
     if(customers){
-      console.log("get all customers success");
+      //console.log("get all customers success");
       //console.log(customers);
 
       var dataSet = new Array();
@@ -217,7 +217,7 @@ exports.findActive = function (req, res) {
 };
 
 exports.validateCustomer = function (req, res, next) {
-  console.log("validating the customer");
+  //console.log("validating the customer");
   var errors = customerValidator(req.body.cust, function (err) {
     // console.log('err: ', err);
     // console.log("err.length: ", Object.keys(err).length);
@@ -241,7 +241,7 @@ exports.validateCustomer = function (req, res, next) {
 
 
 exports.validateEditCustomer = function (req, res, next) {
-  console.log("validating the customer");
+  //console.log("validating the customer");
   var errors = customerValidator(req.body.cust, function (err) {
     // console.log('err: ', err);
     // console.log("err.length: ", Object.keys(err).length);
