@@ -5,10 +5,12 @@ form.form.label-inline(id='editJobForm', action='/job/edit', method='post')
         .field
           label(for='name') Name
           input#name.medium(name='formJob[name]', size='20', type='text', value='#{job.name}')
+          span #{errors.name}
       td
         .field
           label(for='desc') Description
           input#desc.medium(name='formJob[description]', size='45', type='text', value='#{job.description}')
+          span #{errors.description}
     tr
       td
         .field

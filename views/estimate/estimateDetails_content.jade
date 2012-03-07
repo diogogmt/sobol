@@ -1,8 +1,21 @@
 #content.xfluid
   .portlet.x12
     .portlet-header
-      h4 Job Management
+      h4 Estimate Management
     .portlet-content
+      div#breadCrumb.breadCrumb.module
+        ul
+          li.first
+            a(href="/customers/")
+          li
+            a(href="/customer/#{breadcrumb.cust.id}")
+              |#{breadcrumb.cust.name}
+          li
+            a(href="/job/#{breadcrumb.job.id}")
+              |#{breadcrumb.job.name}
+          li.last
+            |#{breadcrumb.estimate.name}
       br
-      include jobDetails_job.jade
-      include jobDetails_estimates.jade
+      br
+      include estimateDetails_estimate.jade
+      //include estimateDetails_lineitems.jade

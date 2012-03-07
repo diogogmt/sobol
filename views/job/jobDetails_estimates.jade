@@ -1,12 +1,24 @@
 br
 a#addEstimate.btn(href='#newEstimate') Add Estimate
+div(style='display: none;')
+  #newEstimate(style='width: 800px; height: 400px; overflow: auto;')
+    h4 Add Estimate
+    form.form.label-inline(id='addEstimateForm', action='/estimate/add/#{job.id}', method='post')
+      table
+        tr
+          td
+            .field
+              label(for='name') Name
+              input#name.medium(name='estimate[name]', size='20', type='text', value='')
+        tr
+          td
+              input#saveJob.btn(type='submit', value='Add')
 table#estimateTable.display(cellpadding='0', cellspacing='0', border='0', rel='datatable')
   thead
     tr
       th ID
-      th Custom ID
-      th Job Name
-      th Job Description
+      th Name
+      th Final Total
       th Created On
       th Status
   tbody
@@ -17,5 +29,20 @@ script(type="text/javascript")
       'titlePosition'   : 'inside',
       'transitionIn'    : 'none',
       'transitionOut'   : 'none'
+    });
+    var dTable = $("#estimateTable").dataTable( {
+      "bProcessing": true,
+      "bDestroy": true,
+      "sAjaxSource": "/datatable/estimate/getJobEstimates/" + '#{job.id}',
+      "aoColumnDefs": [
+        { "bVisible" : false, "aTargets" : [0] }
+      ],
+      "aaSorting": [[3, "desc"]]
+    });
+    $("#estimateTable tbody tr").live("click", function() {
+      var data = dTable.fnGetData(this);
+      var estimateID = data[0];
+      var jobID = "#{job.id}";
+      window.location = "/job/" + jobID + "/estimate/" + estimateID;
     });
   });
