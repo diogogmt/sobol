@@ -1,5 +1,4 @@
 var mongoose = require('mongoose')
-  , Job = require('./../models').Job
   , Customer = require('./../models').Customer
   , Note = require('./../models').Note
   , config = require('./../config')
@@ -23,7 +22,7 @@ exports.all = function (req, res) {
         }
       }
       req.session.breadcrumb = breadcrumb;
-      res.render('customer/custDetails_notes',
+      res.render('customer/custDetails_content',
         {
           layout: 'includes/layout',
           title: 'Customer',
@@ -66,13 +65,12 @@ exports.getCustomerNotes = function (req, res) {
 }
 
 exports.add = function (req, res) {
-  console.log("add estimate route");
+  console.log("add note route");
   var note = new Note(req.body.custnote);
   var custID = new ObjectId(req.params.id);
   function estimateAddFailed() {
     console.log("add note FAIL");
-    //req.flash('addError', 'Estimate Add failed');
-    res.render('customer/custDetails_notes/',
+    res.render('customer/custDetails_content/',
     {
       layout: 'includes/layout',
       title: 'Customer',
@@ -92,8 +90,6 @@ exports.add = function (req, res) {
           return noteAddFailed();
         }
         console.log("Adding note SUCCESS");
-        //req.flash('info', 'The estimate has been added');
-        //res.redirect('/customer/' + custID);
         var breadcrumb = {
           cust : {
             id : customer._id,
@@ -101,7 +97,7 @@ exports.add = function (req, res) {
           }
         }
         req.session.breadcrumb = breadcrumb;
-        res.render('customer/custDetails_notes',
+        res.render('customer/custDetails_content',
           {
             layout: 'includes/layout',
             title: 'Customer',
@@ -161,7 +157,7 @@ exports.delete = function (req, res) {
         }
       }
       req.session.breadcrumb = breadcrumb;
-      res.render('customer/custDetails_notes',
+      res.render('customer/custDetails_content',
         {
           layout: 'includes/layout',
           title: 'Customer',
@@ -171,7 +167,7 @@ exports.delete = function (req, res) {
         }
       );
       }else{
-        console.log("No estimates found for this job. This shouldn't be possible");
+        console.log("No notes found for this customer.");
       }
     }
   });  

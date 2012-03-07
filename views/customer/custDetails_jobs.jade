@@ -1,7 +1,4 @@
 br
-a#addJob.btn(href='#newJob') Add Job      
-a#viewNotes.btn(href='/customer/notes/#{customer.id}') View Notes      
-
 div(style='display: none;')
   #newJob(style='width: 800px; height: 400px; overflow: auto;')
     h4 Add Job
@@ -22,16 +19,19 @@ div(style='display: none;')
         tr
           td
               input#saveJob.btn(type='submit', value='Add')
-
-table#jobTable.display(cellpadding='0', cellspacing='0', border='0', rel='datatable')
-  thead
-    tr
-      th ID
-      th Name
-      th Description
-      th Estimates
-      th Created On
-      th Status
+div#jobList
+  a#addJob.btn(href='#newJob') Add Job      
+  a#viewNotes.btn View Notes 
+  br    
+  table#jobTable.display(cellpadding='0', cellspacing='0', border='0', rel='datatable')
+    thead
+      tr
+        th ID
+        th Name
+        th Description
+        th Estimates
+        th Created On
+        th Status
   tbody
 
 script(type="text/javascript")
@@ -58,4 +58,12 @@ script(type="text/javascript")
       var jobID = data[0];
       window.location = "/job/" + jobID;
     });
+    $("#viewNotes").click(function() {
+      $("#notesList").toggle();
+      $("#jobList").toggle();
+    });
   });
+
+
+
+

@@ -34,4 +34,17 @@ script(type="text/javascript")
       var custID = data[0];
       window.location = "./customer/" + custID;
     });
+
+    $('#showArchived').click(function() {
+        $('#showArchived').is(':checked')
+          var dTable = $("#customerTable").dataTable( {
+          "bProcessing": true,
+          "bDestroy": true,
+          "sAjaxSource": "/datatable/customer/findAll",
+          "aoColumnDefs": [
+            { "bVisible" : false, "aTargets" : [0] }
+          ],
+          "aaSorting": [[6, "desc"], [1, "asc"]]
+          })
+    });
   });
