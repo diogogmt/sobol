@@ -1,6 +1,17 @@
+var mongoose = require('mongoose')
+  , Tag = require('./../models').Tag
+  , config = require('./../config')
+  , domain = 'http://localhost:11342/'
+  , Schema = mongoose.Schema;
 
-exports.all = function (req, res) {
-  console.log("tag all");
+
+exports.get = function (req, res) {
+  console.log("tag get");
+
+	Tag.find({}, function (err, obj) {
+		// console.log("obj", obj);
+		res.send(obj);
+	});
 };
 
 

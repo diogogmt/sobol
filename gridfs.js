@@ -28,30 +28,16 @@ exports.get = function(id, fn) {
   });
 };
 
-exports.put = function() {
-  console.log("put");
-  var buf, db, fn, name, options, _i;
-  buf = arguments[0], name = arguments[1], options = 4 <= arguments.length ? __slice.call(arguments, 2, _i = arguments.length - 1) : (_i = 2, []), fn = arguments[_i++];
-  db = mongoose.connection.db;
-  // console.log("db: ", db);
-  options = parse(options);
-  options.metadata.filename = name;
-  return new GridStore(db, name, "w", options).open(function(err, file) {
-    if (err) {
-      return fn(err);
-    }
-    return file.write(buf, true, fn);
-  });
-};
 
-exports.putFile = function(path, name, options, fn) {
+exports.putFile = function(filename, path, options, fn) {
   console.log("putFile");
-  var db;
-  db = mongoose.connection.db;
-  // console.log("db: ", db);
-  options = parse(options);
-  options.metadata.filename = name;
-  return new GridStore(db, name, "w", options).open(function(err, file) {
+  console.log("filename: ", filename);
+  console.log("path: ", path);
+  console.log("options: ", options);
+  var db = mongoose.connection.db;
+
+  return new GridStore(db, filename, "w", options).open(function(err, file) {
+    console.log("grid opened");
     if (err) {
       return fn(err);
     }
@@ -59,15 +45,11 @@ exports.putFile = function(path, name, options, fn) {
   });
 };
 
-parse = function(options) {
-  console.log("parse");
-  var opts;
-  opts = {};
-  if (options.length > 0) {
-    opts = options[0];
-  }
-  if (!opts.metadata) {
-    opts.metadata = {};
-  }
-  return opts;
+
+exports.unlink = function(filename, fn) {
+  console.log("unlink");
+  console.log("filename: ", filename);
+  var db = mongoose.connection.db;
+
+  return GridStore.unlink(db, filename, fn);
 };

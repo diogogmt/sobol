@@ -38,7 +38,6 @@ exports.findAll = function (req, res) {
         //console.log("count: " + i);
         var countJob = function (i) {
           Job.count({ customerID : customers[i]._id }, function (err, count) {
-            
             //console.log("inside count: " + i);
             dataSet.push([
               innerCust[i]._id,
@@ -144,6 +143,7 @@ exports.details = function (req, res) {
     if(!customer){
       console.log("get specific customer not successful");
     }else{
+
       var breadcrumb = {
         cust : {
           id : customer._id,
@@ -151,6 +151,7 @@ exports.details = function (req, res) {
         }
       }
       req.session.breadcrumb = breadcrumb;
+
       res.render('customer/custDetails',
         {
           layout: 'includes/layout',

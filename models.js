@@ -18,26 +18,29 @@ console.log("model.js");
 
 
 
-exports.File = (function () {
-  console.log("File model");
-  // GridFSSchema = new mongoose.Schema({
-  //   name: String,
-  //   files: [mongoose.Schema.Mixed]
-  // });
+// exports.Content = (function () {
+//   console.log("Content model");
 
-  // GridFSSchema.methods.addFile = function(file, options, fn) {
-  //   var that = this;
-  //   return gridfs.putFile(file.path, file.filename, options, function(err, result) {
-  //     that.files.push(result);
-  //     return application.save(fn);
-  //   });
-  // };
+//   ContentSchema = new mongoose.Schema({
+//     name: String,
+//     files: [mongoose.Schema.Mixed]
+//   });
 
-  // GridFS = mongoose.model("application", GridFSSchema);
+//   ContentSchema.methods.addFile = function(file, options, fn) {
+//     var media;
+//     content = this;
+//     return gridfs.putFile(file.path, options.metadata.name, options,
+//      function(err, result) {
+//       console.log("fn*******************");
+//       console.log("err: ", err);
+//       console.log("result: ", result);
 
-
-  // db.model('File', File);
-})();
+//       content.files.push(result);
+//       return content.save(fn);
+//     });
+//   };
+//   return db.model('Content', ContentSchema);
+// })();
 
 /**
 * Model: User
@@ -49,9 +52,9 @@ exports.User = (function () {
       type: String,
       index: { unique: true }
     },
-    'email': { 
+    'email': {
       type: String,
-      index: { unique: true } 
+      index: { unique: true }
     },
     'hashed_password': String
   });
@@ -106,12 +109,14 @@ exports.Media = (function () {
   Media = new Schema({
     'name' : String,
     'desc' : String,
-    'src' : String,
-    'tags' : [exports.Tag]
+    'src' : ObjectId,
+    'thumbnail' : ObjectId,
+    'tags' : [ObjectId]
   });
 
   return db.model('Media', Media);
 })();
+
 
 /**
 * Model: Customer
@@ -144,6 +149,7 @@ exports.Customer = (function () {
 
   return db.model('Customer', Customer);
 })();
+
 
 /**
 * Model: Job
@@ -213,8 +219,5 @@ exports.Note = (function () {
 
   return db.model('Note', Note);
 })();
-
-
-
 
 console.log("exports", exports);

@@ -220,7 +220,14 @@ body
 	box-shadow: 1px 1px 3px rgba(0,0,0,.35);
 }
 
-#content { width: 95%; margin: 0 auto; position: relative; z-index: 10; }
+#content { 
+	width: 95%; 
+	margin: 0 auto; 
+	position: relative; 
+	/*z-index: 10;  
+		Give problems when display an image inside an overlay
+	*/
+}
 
 #footer
 {
