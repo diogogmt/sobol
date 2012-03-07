@@ -243,15 +243,24 @@ exports.validateCustomer = function (req, res, next) {
 exports.validateEditCustomer = function (req, res, next) {
   console.log("validating the customer");
   var errors = customerValidator(req.body.cust, function (err) {
+  var customer = req.body.cust;
     // console.log('err: ', err);
     // console.log("err.length: ", Object.keys(err).length);
     if (Object.keys(err).length) {
       console.log("HAS ERRORS rendering create again");
+      var breadcrumb = {
+        cust : {
+          id : customer._id,
+          name : customer.firstName + " " + customer.lastName
+        }
+      }
+      req.session.breadcrumb = breadcrumb;
       res.render('customer/custDetails',
         { 
           layout: "includes/layout",
           title: "Customer",
           customer: req.body.cust,
+          breadcrumb: breadcrumb,
           errors: err 
         }
       );
