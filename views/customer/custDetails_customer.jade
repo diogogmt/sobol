@@ -18,12 +18,12 @@ form.form.label-inline(id='editCustForm', action='/customer/edit', method='post'
         .field
           label(for='address1') Address 1
           input#address1.large(name='cust[address1]', value='#{customer.address1}', type='text')
+          br
+          span #{errors.address1}
       td
         .field
           label(for='address1') Address 2
           input#address2.large(name='cust[address2]', value='#{customer.address2}', type='text')
-          br
-          span #{errors.address1}
     tr
       td
         .field
