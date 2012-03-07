@@ -1,19 +1,21 @@
 var mongoose = require('mongoose')
   , Job = require('./../models').Job
+  , Customer = require('./../models').Customer
   , config = require('./../config')
   , domain = 'http://localhost:11342/'
   , Schema = mongoose.Schema
+  , jobValidator = require('./../validators.js').jobValidator
   , ObjectId = mongoose.Types.ObjectId;
-
 
 
 exports.all = function (req, res) {
   //console.log("all jobs route");
   //console.log("req.currentUser: %o", req.currentUser);
-  res.render('customer/customers',
+  res.render('job/jobs',
     {
       layout: 'includes/layout',
-      title: 'Jobs'
+      title: 'Jobs',
+      errors: false
     });
 };
 
@@ -26,10 +28,13 @@ exports.add = function(req, res) {
   //console.log("job: %o", job);
   function jobSaveFailed() {
     console.log("failed creating job");
-    res.render('customer/custDetails/', 
+    req.session.breadcrumb = breadcrumb;
+    res.render('customer/custDetails/',
     {
       layout: 'includes/layout',
-      title: 'Customer'
+      title: 'Customer',
+      errors: false,
+      breadcrumb: breadcrumb,
     });
   }
 
@@ -41,7 +46,7 @@ exports.add = function(req, res) {
     //console.log("creating job");
     res.redirect('/customer/' + job.customerID);
     // req.flash('info', 'Job has been added');
-  });  
+  });
 };
 
 exports.edit = function (req, res) {
@@ -49,16 +54,17 @@ exports.edit = function (req, res) {
   var formJob = req.body.formJob;
   function jobEditFailed() {
     console.log("edit job FAIL");
-    res.render('job/jobDetails', 
+    res.render('job/jobDetails',
     {
       layout: 'includes/layout',
       title: 'Job',
-      job: formJob
+      job: formJob,
+      errors: false
     });
   };
 
-  var conditions  = { _id : new ObjectId(formJob.id) }
-    , update      = { name : formJob.name
+  var conditions = { _id : new ObjectId(formJob.id) }
+    , update = { name : formJob.name
                     , description : formJob.description
                     }
   ;
@@ -82,11 +88,12 @@ exports.findAll = function (req, res) {
       var dataSet = new Array();
       for(i = 0; i < jobs.length; i++){
         dataSet.push([
-            jobs[i]._id,
+           jobs[i]._id,
             jobs[i].name,
             jobs[i].description,
             jobs[i].creationDate,
-            jobs[i].status
+            jobs[i].status,
+            jobs[i].customerID
         ]);
       }
 
@@ -123,7 +130,7 @@ exports.getCustJobs = function (req, res) {
       };
       res.json(aaData);
     }
-    else 
+    else
     {
       console.log("get all this customers jobs Not success");
     }
@@ -145,14 +152,68 @@ exports.details = function (req, res) {
         id : job._id,
         name : job.name
       }
-      res.render('job/jobDetails', 
+      res.render('job/jobDetails',
         {
           layout: 'includes/layout',
           title: 'Job',
           job: job,
-          breadcrumb: breadcrumb
+          breadcrumb: breadcrumb,
+          errors: false
         }
       );
     }
-  });  
+  });
 };
+
+exports.validateJob = function (req, res, next) {
+  console.log("validating the job");
+  
+var job = new Job(req.body.job);
+
+  var errors = jobValidator(req.body.job, function (err) {
+    if (Object.keys(err).length) {
+
+     console.log("HAS ERRORS rendering create again");
+     Customer.findOne({ _id : new ObjectId(req.params.id) }, function (err, customer){
+              
+              var breadcrumb = req.session.breadcrumb;  
+              res.render('customer/custDetails',
+                { 
+                    layout: 'includes/layout',
+                    title: 'Customer',
+                    customer: customer,
+                    breadcrumb: breadcrumb,
+                    errors: false
+                }
+              );
+              
+      });
+
+      return false;
+    }
+    next();  
+  });
+  
+}
+
+
+exports.validateEditJob = function (req, res, next) {
+  console.log("validating the job");
+
+  var errors = jobValidator(req.body.formJob, function (err) {
+    if (Object.keys(err).length) {
+      console.log("HAS ERRORS rendering create again");
+      res.render('job/jobDetails',
+        { 
+          layout: "includes/layout",
+          title: "Job",
+          job: req.body.formJob,
+          errors: err 
+        }
+      );
+      return false;
+    }
+    next();  
+  });
+  
+}

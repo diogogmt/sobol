@@ -8,13 +8,15 @@ var express = require('express')
   , connectTimeout = require('connect-timeout')
   , mongoStore = require('connect-mongodb')
   , stylus = require('stylus')
+  , im = require('imagemagick')
   , mongoose = require('mongoose')
   , connect = require('connect')
   , jade = require('jade')
   , routes = require('./routes')
   , config = require('./config')
   , gridfs = require("./gridfs")
-  , User = require('./models').User;
+  , User = require('./models').User
+  , Media = require('./models').Media;
 
 
 var app = module.exports = express.createServer();
@@ -27,9 +29,11 @@ app.configure(function() {
   app.use(express.favicon());
   app.use(connect.bodyParser({uploadDir:'./uploads'}));
   app.use(express.cookieParser());
-  app.use(connectTimeout({ time: 10000 }));
-  app.use(express.session({ store: mongoStore(app.set('db-uri')), secret: 'topsecret' }));
-  app.use(express.logger({ format: '\x1b[1m:method\x1b[0m \x1b[33m:url\x1b[0m :response-time ms' }));
+  app.use(connectTimeout({ time: 100000 }));
+  app.use(express.session({ store: mongoStore(app.set('db-uri')),
+    secret: 'topsecret' }));
+  app.use(express.logger({ format:
+    '\x1b[1m:method\x1b[0m \x1b[33m:url\x1b[0m :response-time ms' }));
   app.use(express.methodOverride());
   app.use(stylus.middleware({ src: __dirname + '/public' }));
   app.use(express.static(__dirname + '/public'));
@@ -42,6 +46,8 @@ app.configure(function() {
     pretty: true
   });
   app.use(express.errorHandler({ showStack: true, dumpExceptions: true }));
+  // Serve static files
+  app.use("/public", express.static("./public"));
 });
 
 
@@ -75,11 +81,24 @@ app.post('/login', routes.general.auth);
 app.get('/logout', loadUser, routes.general.logout);
 
 // Customer
+
 app.get('/customers', loadUser, routes.customer.all);
-app.post('/customer/add', loadUser, routes.customer.add);
-app.post('/customer/edit', loadUser, routes.customer.edit);
+app.post('/customer/add', loadUser, routes.customer.validateCustomer, routes.customer.add);
+app.post('/customer/edit', loadUser, routes.customer.validateEditCustomer, routes.customer.edit);
 app.get('/customer/:id', loadUser, routes.customer.details);
 app.get('/datatable/customer/findAll', loadUser, routes.customer.findAll);
+app.get('/datatable/customer/findActive', loadUser, routes.customer.findActive);
+
+// Customer Notes
+app.get('/customer/notes/:id', loadUser, routes.note.all);
+app.post('/customer/note/add/:id', loadUser, routes.note.add);
+app.get('/customer/:custid/note/delete/:noteid', loadUser, routes.note.delete);
+app.get('/datatable/customer/getCustomerNotes/:id', loadUser, routes.note.getCustomerNotes);
+app.get('/note/:id', loadUser, routes.note.details);
+
+//app.post('/customer/note/edit', loadUser, routes.note.edit);
+//app.get('/customer/note/:id', loadUser, routes.note.details);
+
 
 // User
 app.get('/user/create', routes.user.create);
@@ -90,29 +109,44 @@ app.post('/user/forgot', routes.user.forgot);
 app.get('/user/reset/:id/:ts', routes.user.reset);
 
 
+app.get('/media/get', routes.media.get);
+
 // Media
 app.get('/media', routes.media.all);
-app.get('/media/:id', loadUser, routes.media.one);
-app.get('/media/search', loadUser, routes.media.search);
-app.post('/media/create', loadUser, routes.media.create);
+app.get('/media/:id', routes.media.one);
+app.post('/media/search', routes.media.search);
+app.post('/media/create', routes.media.create);
 app.get('/media/update/:id', loadUser, routes.media.update);
 app.post('/media/update/:id', loadUser, routes.media.save);
-app.post('/media/delete/:id', loadUser, routes.media.delete);
+app.post('/media/delete', routes.media.delete);
+
+
 
 
 //Tags
-app.get('/tags', loadUser, routes.tag.all);
+app.get('/tags/get', routes.tag.get);
 app.get('/media/:id/tag/create', loadUser, routes.tag.create);
 app.post('/media/:id/tag/delete/:id', loadUser, routes.tag.delete);
+
 
 
 // Job
 app.get('/jobs', loadUser, routes.job.all);
 app.get('/datatable/job/getCustJobs/:id', loadUser, routes.job.getCustJobs);
 app.get('/datatable/job/findAll', loadUser, routes.job.findAll);
-app.post('/job/add/:id', loadUser, routes.job.add);
-app.post('/job/edit', loadUser, routes.job.edit);
+
+app.post('/job/add/:id', loadUser, routes.job.validateJob, routes.job.add);
+//app.post('/job/add/:id', loadUser, routes.job.add);
+app.post('/job/edit', loadUser, routes.job.validateEditJob, routes.job.edit);
+//app.post('/job/edit', loadUser, routes.job.edit);
+
+
 app.get('/job/:id', loadUser, routes.job.details);
+
+// test data generation
+app.get('/test', routes.test.generate);
+
+
 
 // Estimate
 app.get('/datatable/estimate/getJobEstimates/:id', loadUser, routes.estimate.getJobEstimates);
@@ -123,7 +157,6 @@ app.get('/job/:jobId/estimate/:estimateId', loadUser, routes.estimate.details);
 // Line Item
 app.get('/datatable/getLineItems/:jobId/:estimateId', loadUser, routes.lineItem.getLineItems);
 app.post('/estimate/addLineItem/:jobId/:estimateId', loadUser, routes.lineItem.add);
-
 
 var GridFS, GridFSSchema;
 
@@ -144,34 +177,82 @@ GridFS = mongoose.model("application", GridFSSchema);
 
 app.get("/", function(req, res) {
   console.log("root");
-  return GridFS.find({}, function(err, files) {
-    // console.log("files: ", files)
+  return Media.find({}, function(err, files) {
+    console.log("files: ", files)
+    console.log("err: ", err)
     return res.render("gridIndex", {
       layout: false,
       title: "GridFS Example",
       files: files
     });
   });
+
 });
 
 app.post("/new", function(req, res) {
-  console.log("new");
-  // console.log("req.body: ", req.body);
-  // console.log("req.body.name: ", req.body.name);
-  // console.log("req.files: ", req.files);
-  var application, opts;
-  application = new File();
-  application.name = req.body.name;
-  opts = {
-    content_type: req.files.file.type
+  var media
+    , options
+    , thumbnail
+    , finish = 0
+    , file = req.files.file
+    , filename = req.body.name
+    , media = new Media();
+
+  // TODO
+  // Init on the media constructor
+  media.name = filename;
+  media.desc = "media description";
+
+  options = {
+    "content_type": file.type,
+    metadata: {
+      "info": "something useful",
+    },
   };
-  return application.addFile(req.files.file, opts, function(err, result) {
-    return res.redirect("/");
+
+  // TODO
+  // What if  filename already exists?
+  thumbnail = {
+    path: "uploads/thumbnail_" + filename,
+    filename: "thumbnail_" + filename,
+  };
+
+  var done = function () {
+    console.log("done");
+    if (++finish === 2) {
+      media.save(function (err) {
+        console.log("err: ", err);
+        // Do something if error happens
+        return res.redirect("/");
+      });
+    }
+  };
+
+  im.crop({
+    srcPath: file.path,
+    dstPath: thumbnail.path,
+    width: 100,
+    height: 100,
+    quality: 1
+  }, function(err, stdout, stderr) {
+
+    gridfs.putFile(filename, file.path, options,
+     function(err, result) {
+      media.src = result._id;
+      done();
+    });
+
+    gridfs.putFile(thumbnail.filename, thumbnail.path, options,
+     function(err, result) {
+      media.thumbnail = result._id;
+      done();
+    });
   });
+
 });
 
 app.get("/file/:id", function(req, res) {
-  console.log("file/id");
+  console.log("/id");
   return gridfs.get(req.params.id, function(err, file) {
     res.header("Content-Type", file.type);
     res.header("Content-Disposition", "attachment; filename=" + file.filename);
@@ -180,10 +261,11 @@ app.get("/file/:id", function(req, res) {
 });
 
 
-
 if (!module.parent) {
   app.listen(11342);
-  console.log('Express server listening on port %d, environment: %s', app.address().port, app.settings.env);
-  console.log('Using connect %s, Express %s, Jade %s', connect.version, express.version, jade.version);
+    console.log('Express server listening on port %d, environment: %s', 
+    app.address().port, app.settings.env);
+  console.log('Using connect %s, Express %s, Jade %s', connect.version,
+    express.version, jade.version);
 }
 

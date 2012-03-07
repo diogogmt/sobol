@@ -11,10 +11,10 @@ slate = function ()
 		$('#search').find ('input').live ('click' , function () { $(this).val ('') });
 		$("form.form select, form.form input:checkbox, form.form input:radio, form.form input:file").uniform();
 				
-		$('*[rel=datatable]').dataTable ();
+		// $('*[rel=datatable]').dataTable ();
 		
-		$("*[rel=tooltip]").tipsy ({ gravity: 's' });
-		$("*[rel=facebox]").facebox ();
+		// $("*[rel=tooltip]").tipsy ({ gravity: 's' });
+		// $("*[rel=facebox]").facebox ();
 		
 		$('table.stats').each(function() 
 		{		

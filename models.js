@@ -6,6 +6,7 @@ var crypto = require('crypto')
   , Job
   , EstimateLineItem
   , Estimate
+  , Note
   , config = require('./config')
   , gridfs = require("./gridfs")
   , db = mongoose.connect(config.mongo.connectionString)
@@ -13,27 +14,6 @@ var crypto = require('crypto')
   , ObjectId = Schema.ObjectId;
 
 //console.log("model.js");
-
-exports.File = (function () {
-  //console.log("File model");
-  // GridFSSchema = new mongoose.Schema({
-  //   name: String,
-  //   files: [mongoose.Schema.Mixed]
-  // });
-
-  // GridFSSchema.methods.addFile = function(file, options, fn) {
-  //   var that = this;
-  //   return gridfs.putFile(file.path, file.filename, options, function(err, result) {
-  //     that.files.push(result);
-  //     return application.save(fn);
-  //   });
-  // };
-
-  // GridFS = mongoose.model("application", GridFSSchema);
-
-
-  // db.model('File', File);
-})();
 
 /**
 * Model: User
@@ -45,9 +25,9 @@ exports.User = (function () {
       type: String,
       index: { unique: true }
     },
-    'email': { 
+    'email': {
       type: String,
-      index: { unique: true } 
+      index: { unique: true }
     },
     'hashed_password': String
   });
@@ -102,12 +82,14 @@ exports.Media = (function () {
   Media = new Schema({
     'name' : String,
     'desc' : String,
-    'src' : String,
-    'tags' : [exports.Tag]
+    'src' : ObjectId,
+    'thumbnail' : ObjectId,
+    'tags' : [ObjectId]
   });
 
   return db.model('Media', Media);
 })();
+
 
 /**
 * Model: Customer
@@ -127,7 +109,8 @@ exports.Customer = (function () {
     'province' : String,
     'country' : String,
     'registrationDate' : { type: Date, default: Date.now },
-    'status' : { type: String, default: "Active" }
+    'status' : { type: String, default: "Active" },
+    'noteSet' : [exports.Note]
   });
 
   Customer.virtual('tel1a');
@@ -139,6 +122,7 @@ exports.Customer = (function () {
 
   return db.model('Customer', Customer);
 })();
+
 
 /**
 * Model: Job
@@ -192,6 +176,20 @@ exports.Estimate = (function () {
   });
 
   return db.model('Estimate', Estimate);
+})();
+
+/**
+* Model: Note
+*/
+exports.Note = (function () {
+  //console.log("Note model");
+
+ Note = new Schema({
+    'noteText' : String,
+    'creationDate' : { type: Date, default: Date.now },
+  });
+
+  return db.model('Note', Note);
 })();
 
 //console.log("exports", exports);
