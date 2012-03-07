@@ -100,12 +100,17 @@ app.get('/media/get', routes.media.get);
 
 // Media
 app.get('/media', routes.media.all);
-app.get('/media/:id', routes.media.one);
+app.get('/media/tags', routes.media.tags);
 app.post('/media/search', routes.media.search);
 app.post('/media/create', routes.media.create);
 app.get('/media/update/:id', loadUser, routes.media.update);
 app.post('/media/update/:id', loadUser, routes.media.save);
 app.post('/media/delete', routes.media.delete);
+app.get('/media/:id', routes.media.one);
+// Tags
+
+
+console.log("routes/media/tags ", routes.media.tags);
 
 
 
