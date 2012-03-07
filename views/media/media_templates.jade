@@ -1,0 +1,86 @@
+script(id="editMediaOverlayTmpl", type="text/x-jQuery-tmpl")
+
+  a.close()
+  div#content.xfluid
+    div.portlet.x10
+      div.portlet-header
+        h4 Edit Media
+      div.portlet-content
+        form#mediaForm-edit.form.label-top
+          div.field
+            label(for='filename') File Name 
+            input#fileName-edit(name='filename', size='30', type='text', value='${name}')
+          div.field
+            label(for='description') Description 
+            input#description-edit(name='description', size='30', type='text', value='${desc}')
+          div.field.clearfix
+          div#uniform-file.uploader.active
+            input.#file-edit.file(id="file", name="file", style="opacity: 0; ", size="35", type="file")
+            span.filename
+              |No file selected
+            span.action
+              |Choose File
+            label(for='file') File Upload 
+            input#file.file(name="file", style='opacity: 0;', size='35', type='file')
+          div.field
+            img(src="/media/${thumbnail}")
+
+          div.field
+            label(for='tags') Tags 
+            div#tagsList-edit.field
+
+          div.field
+            select#selectTags-edit
+              option(value="default") Select a tag
+
+          div.field
+            input#tagName-edit(name='tagName', size='20',
+              type='text', value='tag 7')
+            button#createTagBtn-edit.btn Add Tag
+
+          input#freshTags-edit(name='tags', type='hidden', value='')
+
+          div.field
+          div.buttonrow
+            button#submitMediaBtn-edit.btn Update Media
+
+script(id="searchMediaTmpl", type="text/x-jQuery-tmpl")
+  div.tag(query="${name}", class="${name}")
+    div.removeFilter(query="${name}")
+    div.filter
+      span.name
+        |${name}
+
+
+script(id="mediaTagsTmpl", type="text/x-jQuery-tmpl")
+  div.tag(query="${name}", class="${name}")
+    div.removeTag(query="${name}")
+    div.filter
+      span.name
+        |${name}
+
+
+script(id="availableTagsTmpl", type="text/x-jQuery-tmpl")
+  option(value="${value}") ${text}
+
+
+script(id="viewMediaOverlayTmpl", type="text/x-jQuery-tmpl")
+  a.close()
+  #content.xfluid
+    .portlet.x10
+      .portlet-header
+        h4 ${name}
+      .portlet-content
+        img(alt='', src='/media/${src}')
+        p ${desc}
+
+
+script(id="mediaGalleryTmpl", type="text/x-jQuery-tmpl")
+  li(id="${_id}", data-id="${_id}")
+    b ${name}
+    br
+    img(alt='', src='/media/${thumbnail}', width='150', height='150')
+    .actions
+      button.viewMedia.btn.btn-orange.btn-small.various(i="${i}") View
+      button.editMedia.btn.btn-orange.btn-small.various(i="${i}") Edit
+      button.btn.btn-grey.btn-small.delete.deleteImage(media="${_id}") Delete

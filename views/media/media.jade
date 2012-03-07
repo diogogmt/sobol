@@ -1,3 +1,17 @@
 include ../includes/menu
 include media_content
 include ../includes/footer
+include media_templates.jade
+script(type="text/javascript", src="/js/mediaSearch.js")
+script(type="text/javascript", src="/js/mediaManagement.js")
+
+script
+  var mediaSearch
+    , manageCreateMedia
+    , manageEditMedia
+ 
+ 
+  $(document).ready(function () {
+    mediaSearch = new MediaSearch();
+    manageCreateMedia = new MediaManagement({"type": CREATE_MEDIA});
+  }); // CLOSE document.ready

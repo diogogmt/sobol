@@ -103,8 +103,7 @@ app.get('/media', routes.media.all);
 app.get('/media/tags', routes.media.tags);
 app.post('/media/search', routes.media.search);
 app.post('/media/create', routes.media.create);
-app.get('/media/update/:id', loadUser, routes.media.update);
-app.post('/media/update/:id', loadUser, routes.media.save);
+app.post('/media/edit', routes.media.edit);
 app.post('/media/delete', routes.media.delete);
 app.get('/media/:id', routes.media.one);
 // Tags
