@@ -120,6 +120,10 @@ app.post('/estimate/add/:id', loadUser, routes.estimate.add);
 app.post('/estimate/edit', loadUser, routes.estimate.edit);
 app.get('/job/:jobId/estimate/:estimateId', loadUser, routes.estimate.details);
 
+// Line Item
+app.get('/datatable/getLineItems/:jobId/:estimateId', loadUser, routes.lineItem.getLineItems);
+app.post('/estimate/addLineItem/:jobId/:estimateId', loadUser, routes.lineItem.add);
+
 
 var GridFS, GridFSSchema;
 

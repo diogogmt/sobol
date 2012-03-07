@@ -169,8 +169,8 @@ exports.EstimateLineItem = (function () {
     'name' : String,
     'description' : String,
     'quantity' : Number,
-    'cost' : Number,
-    'media' : ObjectId
+    'cost' : Number
+    //'media' : ObjectId
   });
 
   return db.model('EstimateLineItem', EstimateLineItem);
