@@ -201,13 +201,23 @@ exports.validateEditJob = function (req, res, next) {
   console.log("validating the job");
 
   var errors = jobValidator(req.body.formJob, function (err) {
+    var job = req.body.formJob;
     if (Object.keys(err).length) {
       console.log("HAS ERRORS rendering create again");
+
+      var breadcrumb = req.session.breadcrumb;
+      breadcrumb.job = {
+        id : job._id,
+        name : job.name
+      }
+
+      req.session.breadcrumb = breadcrumb;
       res.render('job/jobDetails',
         { 
           layout: "includes/layout",
           title: "Job",
           job: req.body.formJob,
+          breadcrumb: breadcrumb,
           errors: err 
         }
       );
