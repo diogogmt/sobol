@@ -73,7 +73,7 @@ function loadUser(req, res, next) {
 // Routes
 
 // Index
-// app.get('/', loadUser, routes.general.index);
+app.get('/', loadUser, routes.general.index);
 
 // Login
 app.get('/login', routes.general.login);
@@ -128,94 +128,6 @@ app.get('/datatable/job/findAll', loadUser, routes.job.findAll);
 app.post('/job/add/:id', loadUser, routes.job.add);
 app.post('/job/edit', loadUser, routes.job.edit);
 app.get('/job/:id', loadUser, routes.job.details);
-
-
-
-
-app.get("/", function(req, res) {
-  console.log("root");
-  return Media.find({}, function(err, files) {
-    console.log("files: ", files)
-    console.log("err: ", err)
-    return res.render("gridIndex", {
-      layout: false,
-      title: "GridFS Example",
-      files: files
-    });
-  });
-
-});
-
-app.post("/new", function(req, res) {
-  var media
-    , options
-    , thumbnail
-    , finish = 0
-    , file = req.files.file
-    , filename = req.body.name
-    , media = new Media();
-
-  // TODO
-  // Init on the media constructor
-  media.name = filename;
-  media.desc = "media description";
-
-  options = {
-    "content_type": file.type,
-    metadata: {
-      "info": "something useful",
-    },
-  };
-
-  // TODO
-  // What if  filename already exists?
-  thumbnail = {
-    path: "uploads/thumbnail_" + filename,
-    filename: "thumbnail_" + filename,
-  };
-
-  var done = function () {
-    console.log("done");
-    if (++finish === 2) {
-      media.save(function (err) {
-        console.log("err: ", err);
-        // Do something if error happens
-        return res.redirect("/");
-      });
-    }
-  };
-
-  im.crop({
-    srcPath: file.path,
-    dstPath: thumbnail.path,
-    width: 100,
-    height: 100,
-    quality: 1
-  }, function(err, stdout, stderr) {
-
-    gridfs.putFile(filename, file.path, options,
-     function(err, result) {
-      media.src = result._id;
-      done();
-    });
-
-    gridfs.putFile(thumbnail.filename, thumbnail.path, options,
-     function(err, result) {
-      media.thumbnail = result._id;
-      done();
-    });
-  });
-
-});
-
-app.get("/file/:id", function(req, res) {
-  console.log("/id");
-  return gridfs.get(req.params.id, function(err, file) {
-    res.header("Content-Type", file.type);
-    res.header("Content-Disposition", "attachment; filename=" + file.filename);
-    return file.stream(true).pipe(res);
-  });
-});
 
 
 
