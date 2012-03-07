@@ -37,6 +37,7 @@
             th ID
             th Note 
             th Created On
+            th
         tbody
 
 script(type="text/javascript")
@@ -59,11 +60,11 @@ script(type="text/javascript")
       "aaSorting": [[4, "desc"]]
     });
     
-    //$("#noteTable tbody tr").live("click", function() {
-      //var data = dTable.fnGetData(this);
+    $("#noteTable tbody tr").live("click", function() {
+      var data = dTable.fnGetData(this);
       //var noteID = data[0];
-      //window.location = "/customer/notes/" + noteID + "#newNote";
-    //});
+      //window.location = "/customer/note/delete/" + noteID;
+    });
 
   });
 

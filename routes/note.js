@@ -45,10 +45,12 @@ exports.getCustomerNotes = function (req, res) {
       var dataSet = new Array();
       var notes = customer.noteSet;
       for(i = 0; i < notes.length; i++){
+        var deleteUrl = "<a href='/customer/" + customer._id + "/note/delete/" + notes[i]._id + "'>Delete This Note</a>";
         dataSet.push([
             notes[i]._id,
             notes[i].noteText,
             new Date(notes[i].creationDate).toDateString(),
+            deleteUrl
         ]);
       }
       var aaData = {
@@ -91,7 +93,25 @@ exports.add = function (req, res) {
         }
         console.log("Adding note SUCCESS");
         //req.flash('info', 'The estimate has been added');
-        res.redirect('/customer/' + custID);
+        //res.redirect('/customer/' + custID);
+        var breadcrumb = {
+          cust : {
+            id : customer._id,
+            name : customer.firstName + " " + customer.lastName
+          }
+        }
+        req.session.breadcrumb = breadcrumb;
+        res.render('customer/custDetails_notes',
+          {
+            layout: 'includes/layout',
+            title: 'Customer',
+            customer: customer,
+            breadcrumb: breadcrumb,
+            errors: false
+          }
+        );
+
+
       });
     }else{
       console.log("finding customer for add note - Not success");
@@ -100,9 +120,61 @@ exports.add = function (req, res) {
 };
 
 
-exports.edit = function (req, res) {
-  console.log("edit note route");
-  res.redirect('/customers');
+exports.delete = function (req, res) {
+  console.log("delete note route");
+
+  Customer.findOne({ _id : new ObjectId(req.params.custid) }, function (err, customer) {
+    if(!customer){
+      console.log("get specific customer for note not successful");
+    }else{
+      var note;
+      var notes = customer.noteSet;
+      var newNoteset = new Array();
+      if(notes.length > 0){
+        for(var i = 0; i < notes.length; i++){
+          console.log("Found note: ", notes[i]);
+          console.log("Comparing against ID: " + req.params.noteid);
+          if(notes[i]._id != req.params.noteid){
+            //console.log("delete the note");
+            newNoteset.push(notes[i]);
+            console.log("newNoteset contains: ", newNoteset[i]);
+          }
+        }
+
+        /***************************/
+
+          var conditions  = { _id : new ObjectId(req.params.custid) }
+            , update      = { noteSet : newNoteset }
+          ;
+          Customer.update(conditions, update, function (err, numAffected) {
+            if (err || numAffected == 0){
+              return customerEditFailed();
+            }
+          });
+
+        /********************************/
+
+      var breadcrumb = {
+        cust : {
+          id : customer._id,
+          name : customer.firstName + " " + customer.lastName
+        }
+      }
+      req.session.breadcrumb = breadcrumb;
+      res.render('customer/custDetails_notes',
+        {
+          layout: 'includes/layout',
+          title: 'Customer',
+          customer: customer,
+          breadcrumb: breadcrumb,
+          errors: false
+        }
+      );
+      }else{
+        console.log("No estimates found for this job. This shouldn't be possible");
+      }
+    }
+  });  
 };
 
 
