@@ -15,7 +15,8 @@ script(type="text/javascript")
     var dTable = $("#customerTable").dataTable( {
       "bProcessing": true,
       "bDestroy": true,
-      "sAjaxSource": "/datatable/customer/findAll",
+      //"sAjaxSource": "/datatable/customer/findAll",
+      "sAjaxSource": "/datatable/customer/findActive",
       "aoColumnDefs": [
         { "bVisible" : false, "aTargets" : [0] }
       ],
@@ -29,5 +30,22 @@ script(type="text/javascript")
       var data = dTable.fnGetData(this);
       var custID = data[0];
       window.location = "./customer/" + custID;
+    });
+    $('#showArchived').click(function() {
+        var ajaxSourceURL;
+        if($('#showArchived').is(':checked')){
+          ajaxSourceURL = "/datatable/customer/findAll";
+        }else{
+          ajaxSourceURL = "/datatable/customer/findActive";
+        }
+        var dTable = $("#customerTable").dataTable( {
+          "bProcessing": true,
+          "bDestroy": true,
+          "sAjaxSource": ajaxSourceURL,
+          "aoColumnDefs": [
+            { "bVisible" : false, "aTargets" : [0] }
+          ],
+          "aaSorting": [[6, "desc"], [1, "asc"]]
+        });
     });
   });

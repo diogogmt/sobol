@@ -1,0 +1,78 @@
+br
+div(style='display: none;')
+  #newNote(style='width: 800px; height: 400px; overflow: auto;')
+    h4 Add Note
+    form.form.label-inline(id='addNoteForm', action='/customer/note/add/#{customer.id}', method='post')
+     table
+       tr
+         td
+           .field
+            label(for='noteText') Note Text
+            input#noteText.large(name='custnote[noteText]', size='20', type='text', value='')
+        tr
+          td
+            input#saveNote.btn(type='submit', value='Add')
+div(style='display: none;')
+  #editNote(style='width: 800px; height: 400px; overflow: auto;')
+    h4 Edit Note
+    form.form.label-inline(id='editNoteForm', action='/customer/note/edit/#{customer.id}', method='post')
+     table
+       tr
+         td
+           .field
+            label(for='noteText') Note Text
+            input#noteText.large(name='custnote[noteText]', size='20', type='text', value='')
+        tr
+          td
+            input#saveNote.btn(type='submit', value='Edit')
+            //a#delete.btn(href='/customer/#{customer.id}/note/delete/#{note.id}') Delete Note
+div(style='display: none;')
+  a#noteDetail.btn(href='#editNote') HiddenEditNote
+div#notesList(style='display: none;')
+  a#addNote.btn(href='#newNote') Add Note
+  a#viewJobs.btn View Jobs
+  br
+  table#noteTable.display(cellpadding='0', cellspacing='0', border='0', rel='datatable', width='100%')
+    thead
+      tr
+        th ID
+        th Note 
+        th Created On
+        th
+    tbody
+script(type="text/javascript")
+  $(document).ready(function() {
+    $("#addNote").fancybox({
+      'titlePosition'   : 'inside',
+      'transitionIn'    : 'none',
+      'transitionOut'   : 'none'
+    });
+    $("#noteDetail").fancybox({
+      'titlePosition'   : 'inside',
+      'transitionIn'    : 'none',
+      'transitionOut'   : 'none'
+    });
+    var dTable = $("#noteTable").dataTable( {
+      "bProcessing": true,
+      "bDestroy": true,
+      "sAjaxSource": "/datatable/customer/getCustomerNotes/#{customer.id}",
+      "aoColumnDefs": [
+        { "bVisible" : false, "aTargets" : [0] }
+      ],
+      "aaSorting": [[4, "desc"]]
+    });
+    $("#noteTable tbody tr").live("click", function() {
+      var data = dTable.fnGetData(this);
+      var noteID = data[0];
+      var noteText = data[1];
+      var createdDate = data[2];
+      $('#noteDetail').click();
+      $('#editNoteForm').focus(function() {
+        $('#noteText').val(noteText);
+      });
+    });
+    $("#viewJobs").click(function() {
+      $("#notesList").toggle();
+      $("#jobList").toggle();
+    });
+  });

@@ -53,7 +53,7 @@ app.configure(function() {
 
 
 function loadUser(req, res, next) {
-  console.log("loaduser");
+  //console.log("loaduser");
   if (req.session.user_id) {
     User.findOne({_id: req.session.user_id}, function(err, user) {
       if (user) {
@@ -81,11 +81,24 @@ app.post('/login', routes.general.auth);
 app.get('/logout', loadUser, routes.general.logout);
 
 // Customer
+
 app.get('/customers', loadUser, routes.customer.all);
-app.post('/customer/add', loadUser, routes.customer.add);
-app.post('/customer/edit', loadUser, routes.customer.edit);
+app.post('/customer/add', loadUser, routes.customer.validateCustomer, routes.customer.add);
+app.post('/customer/edit', loadUser, routes.customer.validateEditCustomer, routes.customer.edit);
 app.get('/customer/:id', loadUser, routes.customer.details);
 app.get('/datatable/customer/findAll', loadUser, routes.customer.findAll);
+app.get('/datatable/customer/findActive', loadUser, routes.customer.findActive);
+
+// Customer Notes
+app.get('/customer/notes/:id', loadUser, routes.note.all);
+app.post('/customer/note/add/:id', loadUser, routes.note.add);
+app.get('/customer/:custid/note/delete/:noteid', loadUser, routes.note.delete);
+app.get('/datatable/customer/getCustomerNotes/:id', loadUser, routes.note.getCustomerNotes);
+app.get('/note/:id', loadUser, routes.note.details);
+
+//app.post('/customer/note/edit', loadUser, routes.note.edit);
+//app.get('/customer/note/:id', loadUser, routes.note.details);
+
 
 // User
 app.get('/user/create', routes.user.create);
@@ -125,11 +138,27 @@ app.post('/media/:id/tag/delete/:id', loadUser, routes.tag.delete);
 app.get('/jobs', loadUser, routes.job.all);
 app.get('/datatable/job/getCustJobs/:id', loadUser, routes.job.getCustJobs);
 app.get('/datatable/job/findAll', loadUser, routes.job.findAll);
-app.post('/job/add/:id', loadUser, routes.job.add);
-app.post('/job/edit', loadUser, routes.job.edit);
+
+app.post('/job/add/:id', loadUser, routes.job.validateJob, routes.job.add);
+//app.post('/job/add/:id', loadUser, routes.job.add);
+app.post('/job/edit', loadUser, routes.job.validateEditJob, routes.job.edit);
+//app.post('/job/edit', loadUser, routes.job.edit);
+
+
 app.get('/job/:id', loadUser, routes.job.details);
 
+// test data generation
+app.get('/test', routes.test.generate);
 
+// Estimate
+app.get('/datatable/estimate/getJobEstimates/:id', loadUser, routes.estimate.getJobEstimates);
+app.post('/estimate/add/:id', loadUser, routes.estimate.add);
+app.post('/estimate/edit', loadUser, routes.estimate.edit);
+app.get('/job/:jobId/estimate/:estimateId', loadUser, routes.estimate.details);
+
+// Line Item
+app.get('/datatable/getLineItems/:jobId/:estimateId', loadUser, routes.lineItem.getLineItems);
+app.post('/estimate/addLineItem/:jobId/:estimateId', loadUser, routes.lineItem.add);
 
 if (!module.parent) {
   app.listen(11342);

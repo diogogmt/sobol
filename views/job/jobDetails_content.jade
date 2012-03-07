@@ -3,6 +3,16 @@
     .portlet-header
       h4 Job Management
     .portlet-content
+      div#breadCrumb.breadCrumb.module
+        ul
+          li.first
+            a(href="/customers/")
+          li
+            a(href="/customer/#{breadcrumb.cust.id}")
+              |#{breadcrumb.cust.name}
+          li.last
+            |#{breadcrumb.job.name}
+      br
       br
       include jobDetails_job.jade
       include jobDetails_estimates.jade
