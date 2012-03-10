@@ -1,7 +1,8 @@
 
-var ip = '96.126.106.151',
+//var ip = '96.126.106.151',
+var ip = 'localhost',
 
-		port = '8888',
+		port = '27017',
 		db =	'sobol';
 
 exports.mongo = {
