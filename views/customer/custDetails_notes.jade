@@ -21,11 +21,13 @@ div(style='display: none;')
          td
            .field
             label(for='noteText') Note Text
-            input#noteText.large(name='custnote[noteText]', size='20', type='text', value='')
+            input#editNoteText.large(name='custnote[noteText]', size='20', type='text', value='')
+            input#editNoteID.large(value='', type='hidden')
+            input#editNoteCreatedDate.large(value='', type='hidden')
         tr
           td
             input#saveNote.btn(type='submit', value='Edit')
-            //a#delete.btn(href='/customer/#{customer.id}/note/delete/#{note.id}') Delete Note
+            a#delete.btn(href='/customer/#{customer.id}/note/delete/$(#editNoteID).text(value)') Delete Note
 div(style='display: none;')
   a#noteDetail.btn(href='#editNote') HiddenEditNote
 div#notesList(style='display: none;')
@@ -40,6 +42,7 @@ div#notesList(style='display: none;')
         th Created On
         th
   tbody
+
 script(type="text/javascript")
   $(document).ready(function() {
     $("#addNote").fancybox({
@@ -66,15 +69,30 @@ script(type="text/javascript")
       var noteID = data[0];
       var noteText = data[1];
       var createdDate = data[2];
-
       $('#noteDetail').click();
-      $('#editNoteForm').focus(function() {
-        $('#noteText').val(noteText);
-      });
     });
+    
     $("#viewJobs").click(function() {
       $("#notesList").toggle();
       $("#jobList").toggle();
     });
+    $('#editNote').click(function() {
+      $('#editNoteText').val(noteText);
+    });
+
+/************
+
+
+    $("#noteDetail").click(function() {
+     $('#viewJobs').click();
+    });
+
+    function popFields() {
+      $('#editNote').click()
+
+    }
+****************/
+
+
   });
 
