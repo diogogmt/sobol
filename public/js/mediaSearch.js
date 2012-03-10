@@ -124,7 +124,9 @@ MediaSearch.prototype.bindClearAddFilterInputHandler = function() {
 MediaSearch.prototype.searchMedia = function() {
 	console.log("searchMedia");
 	var that = this;
+  console.log(that.searchFilters);
 	$.post("/media/search", { filters: that.searchFilters }, function(data) {
+    console.log(data);
     var counter = 0;
     that.media = data;
     if (data) {
