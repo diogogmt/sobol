@@ -1,7 +1,31 @@
-br
-a#addLineItem.btn(href='#newLineItem') Add Line Item
-div(style='display: none;')
-  #newLineItem(style='width: 800px; height: 400px; overflow: auto;')
+script(id="editLineItemTmpl", type="text/x-jQuery-tmpl")
+
+  table
+    tr
+      td
+        .field
+          label(for='name') Name
+          input#name.medium(name='formEstimate[name]', size='20', type='text', value='#{estimate.name}')
+      td
+
+    tr
+      td
+        .field
+          label Creation Date
+          #{estimate.creationDate}
+      td
+        .field
+          label Status
+          #{estimate.status}
+    tr
+      td
+        input#editEstimate.btn(type='submit', value='Update')
+      td
+        input#id(name='formEstimate[id]', value='#{estimate._id}', type='hidden')
+
+
+script(id="addLineItemOverlayTmpl", type="text/x-jQuery-tmpl")
+
     h4 Add Estimate Line Item
     form.form.label-inline(id='addLineItemForm', action='/estimate/addLineItem/#{jobID}/#{estimate._id}', method='post')
       table
@@ -28,29 +52,14 @@ div(style='display: none;')
             input#saveLineItem.btn(type='submit', value='Add')
           td
 
-table#lineItemTable.display(cellpadding='0', cellspacing='0', border='0', rel='datatable')
-  thead
-    tr
-      th ID
-      th Name
-      th Description
-      th Quantity
-      th Cost
-  tbody
+script(id="lineItemDataTableOverlayTmpl", type="text/x-jQuery-tmpl")
 
-script(type="text/javascript")
-  $(document).ready(function() {
-    $("#addLineItem").fancybox({
-      'titlePosition'   : 'inside',
-      'transitionIn'    : 'none',
-      'transitionOut'   : 'none'
-    });
-    var dTable = $("#lineItemTable").dataTable( {
-      "bProcessing": true,
-      "bDestroy": true,
-      "sAjaxSource": "/datatable/getLineItems/" + '#{jobID}' + "/" + '#{estimate._id}',
-      "aoColumnDefs": [
-        { "bVisible" : false, "aTargets" : [0] }
-      ]
-    });
-  });
+  
+    thead
+      tr
+        th ID
+        th Name
+        th Description
+        th Quantity
+        th Cost
+    tbody

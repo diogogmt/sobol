@@ -1,3 +1,28 @@
 include ../includes/menu.jade
 include estimateDetails_content.jade
 include ../includes/footer.jade
+include estimate_templates.jade
+
+script(type="text/javascript", src="/js/estimateManagement.js")
+
+script
+  var estimateManagement;
+ 
+  $(document).ready(function () {
+    estimateManagement = new EstimateManagement();
+ 
+    $("#addLineItem").fancybox({
+      'titlePosition'   : 'inside',
+      'transitionIn'    : 'none',
+      'transitionOut'   : 'none'
+    });
+    var dTable = $("#lineItemTable").dataTable( {
+      "bProcessing": true,
+      "bDestroy": true,
+      "sAjaxSource": "/datatable/getLineItems/" + '#{jobID}' + "/" + '#{estimate._id}',
+      "aoColumnDefs": [
+        { "bVisible" : false, "aTargets" : [0] }
+      ]
+    });
+ 
+  })
