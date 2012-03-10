@@ -116,6 +116,9 @@ exports.create = function (req, res) {
     height: 100,
     quality: 1
   }, function(err, stdout, stderr) {
+    console.log(stdout);
+    console.log(stderr);
+    console.log(err);
     gridfs.putFile(filename, file.path, options, function(err, result) {
       media.src = result._id;
       done();

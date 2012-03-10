@@ -9,8 +9,8 @@ var mongoose = require('mongoose')
 
 
 exports.all = function (req, res) {
-  console.log("all jobs route");
-  console.log("req.currentUser: %o", req.currentUser);
+  //console.log("all jobs route");
+  //console.log("req.currentUser: %o", req.currentUser);
   res.render('job/jobs',
     {
       layout: 'includes/layout',
@@ -21,11 +21,11 @@ exports.all = function (req, res) {
 
  
 exports.add = function(req, res) {
-  console.log("add job route");
+  //console.log("add job route");
 
   var job = new Job(req.body.job);
   job.customerID = new ObjectId(req.params.id);
-  console.log("job: %o", job);
+  //console.log("job: %o", job);
   function jobSaveFailed() {
     console.log("failed creating job");
     req.session.breadcrumb = breadcrumb;
@@ -42,15 +42,15 @@ exports.add = function(req, res) {
     if (err) {
       console.log("err: " + err);
       return jobSaveFailed();
-    }
-    console.log("creating job");
+    } 
+    //console.log("creating job");
     res.redirect('/customer/' + job.customerID);
     // req.flash('info', 'Job has been added');
   });
 };
 
 exports.edit = function (req, res) {
-  console.log("edit job route");
+  //console.log("edit job route");
   var formJob = req.body.formJob;
   function jobEditFailed() {
     console.log("edit job FAIL");
@@ -73,18 +73,18 @@ exports.edit = function (req, res) {
       console.log("err: " + err);
       return jobEditFailed();
     }
-    console.log("Editing SUCCEED");
+    //console.log("Editing SUCCEED");
     res.redirect('/job/' + formJob.id);
   });
 };
 
 exports.findAll = function (req, res) {
-  console.log("all jobs route");
+  //console.log("all jobs route");
 
  Job.find({}, function (err, jobs) {
-    console.log("Find Job ");
+    //console.log("Find Job ");
     if(jobs){
-      console.log("get all jobs success");
+      //console.log("get all jobs success");
       var dataSet = new Array();
       for(i = 0; i < jobs.length; i++){
         dataSet.push([
@@ -113,7 +113,7 @@ exports.getCustJobs = function (req, res) {
   Job.find({ customerID : new ObjectId(req.params.id) }, function (err, jobs) {
     //console.log("The current customer is " + req.params.id);
     if(jobs){
-      console.log("get all this customers jobs success: " + jobs.length);
+      //console.log("get all this customers jobs success: " + jobs.length);
       var dataSet = new Array();
       for(i = 0; i < jobs.length; i++){
         dataSet.push([
@@ -139,7 +139,7 @@ exports.getCustJobs = function (req, res) {
 
 
 exports.details = function (req, res) {
-  console.log("job details route");
+  //console.log("job details route");
   //console.log("job ID: " + req.params.id);
 
   Job.findOne({ _id : new ObjectId(req.params.id) }, function (err, job) {

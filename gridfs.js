@@ -36,8 +36,13 @@ exports.putFile = function(filename, path, options, fn) {
   console.log("options: ", options);
   var db = mongoose.connection.db;
 
+  console.log(db);
+
   return new GridStore(db, filename, "w", options).open(function(err, file) {
     console.log("grid opened");
+    // console.log("error: ", err);
+    // console.log("file: ", file);
+    // console.log("path: ", path);
     if (err) {
       return fn(err);
     }

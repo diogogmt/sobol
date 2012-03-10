@@ -11,7 +11,7 @@ var mongoose = require('mongoose')
 
 // Users
 exports.create = function(req, res) {
-  console.log("getCreate");
+  //console.log("getCreate");
   res.render('users/create',
     { 
       layout: "includes/layout",
@@ -23,7 +23,7 @@ exports.create = function(req, res) {
 };
 
 exports.save = function(req, res, next) {
-  console.log("save user");
+  //console.log("save user");
   // console.log("next: ", next);
   var user = new User(req.body.user);
   //console.log("user: \n", user);

@@ -12,16 +12,16 @@ exports.index = function(req, res) {
 };
 
 exports.auth = function (req, res) {
-  console.log("auth route");
+  //console.log("auth route");
 
   loginValidator(req.body.user, function (errors) {
-    console.log("loginValidator");
+    //console.log("loginValidator");
     if (!Object.keys(errors).length) {
-      console.log("no errors");
+      //console.log("no errors");
       User.findOne({ username: req.body.user.username }, function(err, user) {
-        console.log("user: ", user);
-        console.log("err: ", err);
-        console.log("user id: " + user._id);
+        //console.log("user: ", user);
+        //console.log("err: ", err);
+        //console.log("user id: " + user._id);
         if (user && user.authenticate(req.body.user.password)) {
           req.session.user_id = user._id;
           res.redirect("/customers");
@@ -53,7 +53,7 @@ exports.auth = function (req, res) {
 
 
 exports.login = function (req, res) {
-  console.log("login route");
+  //console.log("login route");
   res.render('general/login', 
     {
       layout: "includes/layout",

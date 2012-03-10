@@ -53,7 +53,7 @@ app.configure(function() {
 
 
 function loadUser(req, res, next) {
-  console.log("loaduser");
+  //console.log("loaduser");
   if (req.session.user_id) {
     User.findOne({_id: req.session.user_id}, function(err, user) {
       if (user) {
@@ -73,7 +73,7 @@ function loadUser(req, res, next) {
 // Routes
 
 // Index
-// app.get('/', loadUser, routes.general.index);
+app.get('/', loadUser, routes.general.index);
 
 // Login
 app.get('/login', routes.general.login);
@@ -150,116 +150,15 @@ app.get('/job/:id', loadUser, routes.job.details);
 // test data generation
 app.get('/test', routes.test.generate);
 
-
-
 // Estimate
 app.get('/datatable/estimate/getJobEstimates/:id', loadUser, routes.estimate.getJobEstimates);
 app.post('/estimate/add/:id', loadUser, routes.estimate.add);
 app.post('/estimate/edit', loadUser, routes.estimate.edit);
 app.get('/job/:jobId/estimate/:estimateId', loadUser, routes.estimate.details);
 
-var GridFS, GridFSSchema;
-
-GridFSSchema = new mongoose.Schema({
-  name: String,
-  files: [mongoose.Schema.Mixed]
-});
-
-GridFSSchema.methods.addFile = function(file, options, fn) {
-  var that = this;
-  return gridfs.putFile(file.path, file.filename, options, function(err, result) {
-    that.files.push(result);
-    return application.save(fn);
-  });
-};
-
-GridFS = mongoose.model("application", GridFSSchema);
-
-app.get("/", function(req, res) {
-  console.log("root");
-  return Media.find({}, function(err, files) {
-    console.log("files: ", files)
-    console.log("err: ", err)
-    return res.render("gridIndex", {
-      layout: false,
-      title: "GridFS Example",
-      files: files
-    });
-  });
-
-});
-
-app.post("/new", function(req, res) {
-  var media
-    , options
-    , thumbnail
-    , finish = 0
-    , file = req.files.file
-    , filename = req.body.name
-    , media = new Media();
-
-  // TODO
-  // Init on the media constructor
-  media.name = filename;
-  media.desc = "media description";
-
-  options = {
-    "content_type": file.type,
-    metadata: {
-      "info": "something useful",
-    },
-  };
-
-  // TODO
-  // What if  filename already exists?
-  thumbnail = {
-    path: "uploads/thumbnail_" + filename,
-    filename: "thumbnail_" + filename,
-  };
-
-  var done = function () {
-    console.log("done");
-    if (++finish === 2) {
-      media.save(function (err) {
-        console.log("err: ", err);
-        // Do something if error happens
-        return res.redirect("/");
-      });
-    }
-  };
-
-  im.crop({
-    srcPath: file.path,
-    dstPath: thumbnail.path,
-    width: 100,
-    height: 100,
-    quality: 1
-  }, function(err, stdout, stderr) {
-
-    gridfs.putFile(filename, file.path, options,
-     function(err, result) {
-      media.src = result._id;
-      done();
-    });
-
-    gridfs.putFile(thumbnail.filename, thumbnail.path, options,
-     function(err, result) {
-      media.thumbnail = result._id;
-      done();
-    });
-  });
-
-});
-
-app.get("/file/:id", function(req, res) {
-  console.log("/id");
-  return gridfs.get(req.params.id, function(err, file) {
-    res.header("Content-Type", file.type);
-    res.header("Content-Disposition", "attachment; filename=" + file.filename);
-    return file.stream(true).pipe(res);
-  });
-});
-
+// Line Item
+app.get('/datatable/getLineItems/:jobId/:estimateId', loadUser, routes.lineItem.getLineItems);
+app.post('/estimate/addLineItem/:jobId/:estimateId', loadUser, routes.lineItem.add);
 
 if (!module.parent) {
   app.listen(11342);
