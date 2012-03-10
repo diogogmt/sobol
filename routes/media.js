@@ -8,6 +8,9 @@ var mongoose = require('mongoose')
   , ObjectId = mongoose.Types.ObjectId
   , Schema = mongoose.Schema;
 
+im.identify.path = "/opt/local/bin/identify";
+im.convert.path = "/opt/local/bin/convert";
+
 
 exports.all = function (req, res) {
 	console.log("media all");

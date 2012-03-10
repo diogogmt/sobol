@@ -31,12 +31,12 @@ exports.get = function(id, fn) {
 
 exports.putFile = function(filename, path, options, fn) {
   console.log("putFile");
-  console.log("filename: ", filename);
-  console.log("path: ", path);
-  console.log("options: ", options);
+  // console.log("filename: ", filename);
+  // console.log("path: ", path);
+  // console.log("options: ", options);
   var db = mongoose.connection.db;
 
-  console.log(db);
+  //console.log(db);
 
   return new GridStore(db, filename, "w", options).open(function(err, file) {
     console.log("grid opened");
