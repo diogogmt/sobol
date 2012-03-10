@@ -56,7 +56,8 @@ MediaManagement.prototype.bindAjaxForm = function() {
       return true;
     },
     success: function (data) {
-      // console.log("create media success");
+      console.log("create media success");
+      console.log(data);
       // $("#mediaGalleryTmpl").tmpl(data).prependTo("#mediaList");
       // bindImageListeners();
       mediaSearch.clearFilter();

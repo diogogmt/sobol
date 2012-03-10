@@ -134,6 +134,8 @@ exports.edit = function (req, res) {
 	console.log("media edit route");
   console.log("req.body", req.body);
   console.log("req.files", req.files);
+
+  res.send(req.body);
 };
 
 exports.save = function (req, res) {
