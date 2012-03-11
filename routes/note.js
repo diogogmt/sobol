@@ -44,12 +44,10 @@ exports.getCustomerNotes = function (req, res) {
       var dataSet = new Array();
       var notes = customer.noteSet;
       for(i = 0; i < notes.length; i++){
-        var deleteUrl = "<a href='/customer/" + customer._id + "/note/delete/" + notes[i]._id + "'>Delete This Note</a>";
         dataSet.push([
             notes[i]._id,
             notes[i].noteText,
             new Date(notes[i].creationDate).toDateString(),
-            deleteUrl
         ]);
       }
       var aaData = {
@@ -123,14 +121,13 @@ exports.delete = function (req, res) {
     if(!customer){
       console.log("get specific customer for note not successful");
     }else{
-      var note;
       var notes = customer.noteSet;
       var newNoteset = new Array();
       if(notes.length > 0){
         for(var i = 0; i < notes.length; i++){
           console.log("Found note: ", notes[i]);
-          console.log("Comparing against ID: " + req.params.noteid);
-          if(notes[i]._id != req.params.noteid){
+          console.log("Comparing against ID: " + (req.params.noteid));
+          if(notes[i]._id != (req.params.noteid)){
             //console.log("delete the note");
             newNoteset.push(notes[i]);
             console.log("newNoteset contains: ", newNoteset[i]);
@@ -174,8 +171,68 @@ exports.delete = function (req, res) {
 };
 
 
-exports.details = function (req, res) {
-  console.log("notes details route");
-  res.redirect('/customers');
+exports.edit = function (req, res) {
+  console.log("edit notes route");
+ 
+
+  Customer.findOne({ _id : new ObjectId(req.params.custid) }, function (err, customer) {
+    if(!customer){
+      console.log("get specific customer for note not successful");
+    }else{
+      var note = req.body.custnote;
+      var notes = customer.noteSet;
+      var newNoteset = new Array();
+      if(notes.length > 0){
+        for(var i = 0; i < notes.length; i++){
+          console.log("Found note: ", notes[i]);
+          console.log("Comparing against ID: " + note.id);
+          if(notes[i]._id ==  note.id){
+            console.log("update the note");
+            notes[i].noteText = note.noteText;
+          }
+            newNoteset.push(notes[i]);
+            console.log("newNoteset contains: ", newNoteset[i]);
+        }
+
+        /***************************/
+
+          var conditions  = { _id : new ObjectId(req.params.custid) }
+            , update      = { noteSet : newNoteset }
+          ;
+          Customer.update(conditions, update, function (err, numAffected) {
+            if (err || numAffected == 0){
+              return customerEditFailed();
+            }
+          });
+
+        /********************************/
+
+      var breadcrumb = {
+        cust : {
+          id : customer._id,
+          name : customer.firstName + " " + customer.lastName
+        }
+      }
+      req.session.breadcrumb = breadcrumb;
+      res.render('customer/custDetails_content',
+        {
+          layout: 'includes/layout',
+          title: 'Customer',
+          customer: customer,
+          breadcrumb: breadcrumb,
+          errors: false
+        }
+      );
+      }else{
+        console.log("No notes found for this customer.");
+      }
+    }
+  });  
+
+
+
+
+
+
 };
 

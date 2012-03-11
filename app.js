@@ -94,11 +94,11 @@ app.get('/customer/notes/:id', loadUser, routes.note.all);
 app.post('/customer/note/add/:id', loadUser, routes.note.add);
 app.get('/customer/:custid/note/delete/:noteid', loadUser, routes.note.delete);
 app.get('/datatable/customer/getCustomerNotes/:id', loadUser, routes.note.getCustomerNotes);
-app.get('/note/:id', loadUser, routes.note.details);
 
-//app.post('/customer/note/edit', loadUser, routes.note.edit);
+app.post('/customer/:custid/note/edit/', loadUser, routes.note.edit);
 //app.get('/customer/note/:id', loadUser, routes.note.details);
-
+//app.get('/customer/:custid/note/delete/:noteid', loadUser, routes.note.delete);
+//app.post('/customer/:custid/note/edit/:noteid', loadUser, routes.note.edit);
 
 // User
 app.get('/user/create', routes.user.create);

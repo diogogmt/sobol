@@ -15,24 +15,25 @@ div(style='display: none;')
 div(style='display: none;')
   #editNote(style='width: 800px; height: 400px; overflow: auto;')
     h4 Edit Note
-    form.form.label-inline(id='editNoteForm', action='/customer/note/edit/#{customer.id}', method='post')
+    form.form.label-inline(id='editNoteForm', action='/customer/#{customer.id}/note/edit/', method='post')
      table
        tr
          td
            .field
             label(for='noteText') Note Text
             input#editNoteText.large(name='custnote[noteText]', size='20', type='text', value='')
-            //input#editNoteID.large(value='', type='hidden')
+            input#editNoteID.large(name='custnote[id]', size='20', type='hidden', value='')
+            //input#editNoteID.large(name='custnote[id]' value='', type='hidden')
             //input#editNoteCreatedDate.large(value='', type='hidden')
-            input#editNoteID.large(name='custnote[noteText]', size='20', type='text', value='')
-            input#editNoteCreatedDate.large(name='custnote[noteText]', size='20', type='text', value='')
-
         tr
           td
-            input#saveNote.btn(type='submit', value='Edit')
-            a#delete.btn(href='/customer/#{customer.id}/note/delete/$(#editNoteID).text(value)') Delete Note
+            input#editNote.btn(type='submit', value='Update')
+            #deleteNote.btn Delete
 div(style='display: none;')
+  //hidden button for calling the edit note popup
   a#noteDetail.btn(href='#editNote') HiddenEditNote
+  //hidden field for passing the note id
+  input#NoteID.large(value='')
 div#notesList(style='display: none;')
   a#addNote.btn(href='#newNote') Add Note
   a#viewJobs.btn View Jobs
@@ -43,7 +44,6 @@ div#notesList(style='display: none;')
         th ID
         th Note 
         th Created On
-        th
   tbody
 
 script(type="text/javascript")
@@ -72,13 +72,21 @@ script(type="text/javascript")
       var noteID = data[0];
       var noteText = data[1];
       var createdDate = data[2];
-      $('#noteDetail').click();
-      $('#editNote').click(function() {
+      $('#editNote').blur(function() {
          $('#editNoteText').val(noteText);
          $('#editNoteID').val(noteID);
-         $('#editNoteCreatedDate').val(createdDate);
       });
-      $('#editNote').click();
+      $('#NoteID').val(noteID);
+      $('#editNote').blur();
+      $('#noteDetail').click();
+    });
+    $('#deleteNote').click(function() {
+      var ID = $('#NoteID').val();
+      window.location = "/customer/#{customer.id}/note/delete/" + ID;
+    });
+    $("#viewJobs").click(function() {
+      $("#notesList").toggle();
+      $("#jobList").toggle();
     });
   });
 
