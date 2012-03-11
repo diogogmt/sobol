@@ -22,7 +22,7 @@ exports.all = function (req, res) {
         }
       }
       req.session.breadcrumb = breadcrumb;
-      res.render('customer/custDetails_content',
+      res.render('customer/custDetails',
         {
           layout: 'includes/layout',
           title: 'Customer',
@@ -68,7 +68,7 @@ exports.add = function (req, res) {
   var custID = new ObjectId(req.params.id);
   function estimateAddFailed() {
     console.log("add note FAIL");
-    res.render('customer/custDetails_content/',
+    res.render('customer/custDetails',
     {
       layout: 'includes/layout',
       title: 'Customer',
@@ -95,7 +95,7 @@ exports.add = function (req, res) {
           }
         }
         req.session.breadcrumb = breadcrumb;
-        res.render('customer/custDetails_content',
+        res.render('customer/custDetails',
           {
             layout: 'includes/layout',
             title: 'Customer',
@@ -154,7 +154,7 @@ exports.delete = function (req, res) {
         }
       }
       req.session.breadcrumb = breadcrumb;
-      res.render('customer/custDetails_content',
+      res.render('customer/custDetails',
         {
           layout: 'includes/layout',
           title: 'Customer',
@@ -215,7 +215,7 @@ exports.edit = function (req, res) {
         }
       }
       req.session.breadcrumb = breadcrumb;
-      res.render('customer/custDetails_content',
+      res.render('customer/custDetails',
         {
           layout: 'includes/layout',
           title: 'Customer',
@@ -229,11 +229,6 @@ exports.edit = function (req, res) {
       }
     }
   });  
-
-
-
-
-
 
 };
 
