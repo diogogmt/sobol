@@ -5,6 +5,7 @@ var mongoose = require('mongoose')
   , config = require('./../config')
   , domain = 'http://localhost:11342/'
   , Schema = mongoose.Schema
+  , breadcrumbs = require('./../breadcrumbs')
   , ObjectId = mongoose.Types.ObjectId;
 
 exports.add = function (req, res) {
@@ -89,6 +90,7 @@ exports.edit = function (req, res) {
 };
 
 exports.details = function (req, res) {
+  console.log("estimate details");
   Job.findOne({ _id : new ObjectId(req.params.jobId) }, function (err, job) {
     if(!job){
       console.log("get specific job for estimate not successful");
@@ -104,21 +106,26 @@ exports.details = function (req, res) {
             break;
           }
         }
-        //console.log("This is the passed Estimate: ", estimate);
-        var breadcrumb = req.session.breadcrumb;
-        breadcrumb.estimate = {
-          id : estimate._id,
-          name : estimate.name
-        }
-        res.render('estimate/estimateDetails', 
-        {
-          layout: 'includes/layout',
-          title: 'Estimate',
-          estimate: estimate,
-          jobID: req.params.jobId,
-          breadcrumb: breadcrumb
+        breadcrumbs.createBreadcrumb({ customerID: job.customerID }, function (breadcrumb) {
+          breadcrumb["job"] = {
+            id : job._id,
+            name : job.name
+          };
+          breadcrumb["estimate"] = {
+            id : estimate._id,
+            name : estimate.name
+          };
+          res.render('estimate/estimateDetails', 
+          {
+            layout: 'includes/layout',
+            title: 'Estimate',
+            estimate: estimate,
+            jobID: req.params.jobId,
+            breadcrumb: breadcrumb
+          });
         });
-      }else{
+      }
+      else{
         console.log("No estimates found for this job. This shouldn't be possible");
       }
     }

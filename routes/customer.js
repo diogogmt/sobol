@@ -142,8 +142,8 @@ exports.details = function (req, res) {
   Customer.findOne({ _id : new ObjectId(req.params.id) }, function (err, customer) {
     if(!customer){
       console.log("get specific customer not successful");
-    }else{
-
+    }
+    else{
       var breadcrumb = {
         cust : {
           id : customer._id,

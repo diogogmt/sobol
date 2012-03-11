@@ -1,5 +1,6 @@
 var mongoose = require('mongoose')
   , Job = require('./../models').Job
+  , breadcrumbs = require('./../breadcrumbs')
   , Customer = require('./../models').Customer
   , config = require('./../config')
   , domain = 'http://localhost:11342/'
@@ -139,28 +140,32 @@ exports.getCustJobs = function (req, res) {
 
 
 exports.details = function (req, res) {
-  //console.log("job details route");
-  //console.log("job ID: " + req.params.id);
+  console.log("job details route");
+  console.log("job ID: " + req.params.id);
 
   Job.findOne({ _id : new ObjectId(req.params.id) }, function (err, job) {
-    if(!job){
+    if(!job) {
       console.log("get specific job not successful");
-    }else{
-      //console.log("Details job: ", job);
-      var breadcrumb = req.session.breadcrumb;
-      breadcrumb.job = {
-        id : job._id,
-        name : job.name
-      }
-      res.render('job/jobDetails',
-        {
-          layout: 'includes/layout',
-          title: 'Job',
-          job: job,
-          breadcrumb: breadcrumb,
-          errors: false
-        }
-      );
+    }
+    else {
+      console.log("job found");
+      breadcrumbs.createBreadcrumb({ customerID: job.customerID }, function (breadcrumb) {
+        console.log("breadcrumb: ", breadcrumb);
+        breadcrumb["job"] = {
+          id : job._id,
+          name : job.name
+        };
+        console.log("breadcrumb: ", breadcrumb);
+        res.render('job/jobDetails',
+          {
+            layout: 'includes/layout',
+            title: 'Job',
+            job: job,
+            breadcrumb: breadcrumb,
+            errors: false
+          }
+        );
+      });
     }
   });
 };
