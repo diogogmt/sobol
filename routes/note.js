@@ -47,7 +47,7 @@ exports.getCustomerNotes = function (req, res) {
         dataSet.push([
             notes[i]._id,
             notes[i].noteText,
-            new Date(notes[i].creationDate).toDateString(),
+            new Date(notes[i].LastModifiedDate).toDateString(),
         ]);
       }
       var aaData = {
@@ -189,6 +189,7 @@ exports.edit = function (req, res) {
           if(notes[i]._id ==  note.id){
             console.log("update the note");
             notes[i].noteText = note.noteText;
+            notes[i].LastModifiedDate = Date.now();
           }
             newNoteset.push(notes[i]);
             console.log("newNoteset contains: ", newNoteset[i]);

@@ -186,7 +186,7 @@ exports.Note = (function () {
 
  Note = new Schema({
     'noteText' : String,
-    'creationDate' : { type: Date, default: Date.now },
+    'LastModifiedDate' : { type: Date, default: Date.now },
   });
 
   return db.model('Note', Note);

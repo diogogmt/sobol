@@ -23,16 +23,14 @@ div(style='display: none;')
             label(for='noteText') Note Text
             input#editNoteText.large(name='custnote[noteText]', size='20', type='text', value='')
             input#editNoteID.large(name='custnote[id]', size='20', type='hidden', value='')
-            //input#editNoteID.large(name='custnote[id]' value='', type='hidden')
-            //input#editNoteCreatedDate.large(value='', type='hidden')
         tr
           td
             input#editNote.btn(type='submit', value='Update')
-            #deleteNote.btn Delete
+            a#deleteNote.btn Delete
 div(style='display: none;')
   //hidden button for calling the edit note popup
   a#noteDetail.btn(href='#editNote') HiddenEditNote
-  //hidden field for passing the note id
+  //hidden field for passing the note id for the delete note method
   input#NoteID.large(value='')
 div#notesList(style='display: none;')
   a#addNote.btn(href='#newNote') Add Note
@@ -42,8 +40,8 @@ div#notesList(style='display: none;')
     thead
       tr
         th ID
-        th Note 
-        th Created On
+        th Note
+        th Last Modified On
   tbody
 
 script(type="text/javascript")
@@ -71,18 +69,18 @@ script(type="text/javascript")
       var data = dTable.fnGetData(this);
       var noteID = data[0];
       var noteText = data[1];
-      var createdDate = data[2];
-      $('#editNote').blur(function() {
+      var LastModifiedDate = data[2];
+      $('#editNote').blur(function() {     //editNote popup fields will be populated once a blur event occurs
          $('#editNoteText').val(noteText);
          $('#editNoteID').val(noteID);
       });
       $('#NoteID').val(noteID);
-      $('#editNote').blur();
+      $('#editNote').blur();  //forcing a blur event to occur to populate the editNote fields
       $('#noteDetail').click();
     });
     $('#deleteNote').click(function() {
       var ID = $('#NoteID').val();
-      window.location = "/customer/#{customer.id}/note/delete/" + ID;
+      window.location = "/customer/#{customer.id}/note/delete/" + ID; 
     });
     $("#viewJobs").click(function() {
       $("#notesList").toggle();
