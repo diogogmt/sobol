@@ -9,62 +9,30 @@ var mongoose = require('mongoose')
   , ObjectId = mongoose.Types.ObjectId;
 
 exports.add = function (req, res) {
+  console.log("lineItem add route");
+  var estimateID = new ObjectId(body.estimateID);
   var lineItem = new EstimateLineItem(req.body.lineItem);
-  var estimateID = new ObjectId(req.params.estimateId);
-  var jobID = new ObjectId(req.params.jobId);
-  function lineItemAddFailed() {
-    console.log("add line item FAIL");
-    //req.flash('addError', 'Estimate Add failed');
-    res.render('estimate/estimateDetails', 
-    {
-      layout: 'includes/layout',
-      title: 'Estimate'
-    });
-  };
 
-  Job.update({ 'estimateSet._id' : estimateID }, { $push : { 'estimateSet[0].lineItemSet' : lineItem }}, function (err){
-    if(err){
-      console.log("Error adding estimate line item");
-      console.log(err);
-      return lineItemAddFailed();
+  Job.update(
+    {estimateSet: {"$elemMatch": {_id: estimateID}}},
+    {$push:
+      {
+        "estimateSet.$.lineItemSet":
+        {
+          'name' : lineItem.name,
+          'description' : lineItem.description,
+          'quantity' : parseInt(lineItem.quantity),
+          'cost' : parseInt(lineItem.cost),
+          '_id': lineItem._id
+        }
+      }
+    },
+    {upsert:false,safe:true},
+    function (err) {
+      console.log("Job.update - push lineItemSet");
+      console.log("err: ", err);
     }
-    res.redirect('/job/' + jobID + '/estimate/' + estimateID);
-  });
-
-  // Job.findOne({ _id : jobID }, function (err, job) {
-  //   if(job){
-  //     var estimateSet = job.estimateSet;
-  //     var estimate;
-
-  //     for(var i = 0; i < estimateSet.length; i++){
-  //       // console.log("Found estimate: ", estimateSet[i]);
-  //       // console.log("Comparing against ID: " + req.params.estimateId);
-  //       if(estimateSet[i]._id == req.params.estimateId){
-  //         estimate = estimateSet[i];
-  //         break;
-  //       }
-  //     }
-
-  //     estimate.lineItemSet.push(lineItem);
-
-  //      console.log(job);
-  //      console.log(job.estimateSet[0]);
-  //     // console.log(job.estimateSet[0].lineItemSet);
-  //     // console.log(job.estimateSet[0].lineItemSet[0]);
-
-  //     job.save(function(err) {
-  //       if(err){
-  //         console.log("Error saving job after adding estimate");
-  //         return lineItemAddFailed();
-  //       }
-  //       //req.flash('info', 'The estimate has been added');
-  //       res.redirect('/job/' + jobID + '/estimate/' + estimateID);
-  //     });
-  //   }else{
-  //     console.log("finding job for add estimate - Not success");
-  //     return lineItemAddFailed();
-  //   }
-  // });
+  );
 };
 
 exports.edit = function (req, res) {
