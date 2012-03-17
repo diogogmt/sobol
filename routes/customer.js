@@ -99,6 +99,7 @@ exports.add = function (req, res) {
 exports.edit = function (req, res) {
   //console.log("edit customer route");
   var formCustomer = req.body.cust;
+
   //console.log("customer: %o", req.body.cust);
   function customerEditFailed() {
     console.log("edit customer FAIL");
@@ -111,29 +112,41 @@ exports.edit = function (req, res) {
       errors: false
     });
   };
+  Job.find({ customerID : new ObjectId(formCustomer.id)}, function (err, jobs) {
+    var status = formCustomer.status;
+      if(jobs){
+        for(i = 0; i < jobs.length; i++){
+          console.log ("found an", jobs[i].status,  "job");
+          if(jobs[i].status = "Active"){
+            status = "Active";
+          }
+        }
+      }
 
-  var conditions = { _id : new ObjectId(formCustomer.id) }
-    , update = { firstName : formCustomer.firstName
-                    , lastName : formCustomer.lastName
-                    , email : formCustomer.email
-                    , phone1 : formCustomer.phone1
-                    , phone2 : formCustomer.phone2
-                    , address1 : formCustomer.address1
-                    , address2 : formCustomer.address2
-                    , postal : formCustomer.postal
-                    , city : formCustomer.city
-                    , province : formCustomer.province
-                    , country : formCustomer.country
-                    }
-  ;
-  Customer.update(conditions, update, function (err, numAffected) {
-    if (err || numAffected == 0){
-      console.log("err: " + err);
-      return customerEditFailed();
-    }
-    //console.log("Editing SUCCEED");
-    //req.flash('info', 'The customer has been added');
-    res.redirect('/customer/' + formCustomer.id);
+    var conditions = { _id : new ObjectId(formCustomer.id) }
+      , update = { firstName : formCustomer.firstName
+                      , lastName : formCustomer.lastName
+                      , email : formCustomer.email
+                      , phone1 : formCustomer.phone1
+                      , phone2 : formCustomer.phone2
+                      , address1 : formCustomer.address1
+                      , address2 : formCustomer.address2
+                      , postal : formCustomer.postal
+                      , city : formCustomer.city
+                      , province : formCustomer.province
+                      , country : formCustomer.country
+                      , status : status
+                      };
+
+    Customer.update(conditions, update, function (err, numAffected) {
+      if (err || numAffected == 0){
+        console.log("err: " + err);
+        return customerEditFailed();
+      }
+      //console.log("Editing SUCCEED");
+      //req.flash('info', 'The customer has been added');
+      res.redirect('/customer/' + formCustomer.id);
+    });
   });
 };
 

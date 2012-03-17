@@ -21,7 +21,11 @@ form.form.label-inline(id='editJobForm', action='/job/edit', method='post')
       td
         .field
           label Status
-          #{job.status}
+          select(name="formJob[status]")
+            option(value="Active") Active
+            option(value="Inactive") Inactive
+            //#{job.creationDate}
+          
     tr
       td
         input#editJob.btn(type='submit', value='Update')

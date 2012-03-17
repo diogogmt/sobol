@@ -62,20 +62,36 @@ exports.edit = function (req, res) {
       errors: false
     });
   };
-
-  var conditions = { _id : new ObjectId(formJob.id) }
-    , update = { name : formJob.name
-                    , description : formJob.description
-                    }
-  ;
-  Job.update(conditions, update, function (err, numAffected) {
-    if(err || numAffected == 0){
-      console.log("err: " + err);
-      return jobEditFailed();
+//*******************
+// Get estimate set from job and check for active estimates
+  Job.findOne({ _id : new ObjectId(formJob.id) }, function (err, job) {
+    var status = formJob.status;
+    if(job){
+      var estimateSet = job.estimateSet;
+      for(i = 0; i < estimateSet.length; i++){
+        console.log ("found an", estimateSet[i].status,  "estimate");
+        if(estimateSet[i].status = "Active"){
+          status = "Active";
+        }
+      }
     }
-    //console.log("Editing SUCCEED");
-    res.redirect('/job/' + formJob.id);
+  
+    var conditions = { _id : new ObjectId(formJob.id) }
+      , update = { name : formJob.name
+                      , description : formJob.description
+                      , status : status
+                      }
+    ;
+    Job.update(conditions, update, function (err, numAffected) {
+      if(err || numAffected == 0){
+        console.log("err: " + err);
+        return jobEditFailed();
+      }
+      //console.log("Editing SUCCEED");
+      res.redirect('/job/' + formJob.id);
+    });  
   });
+//*****************  
 };
 
 
@@ -91,30 +107,29 @@ exports.findAll = function (req, res) {
 
         var getCustomerName = function (i) {
           Customer.findOne({ _id : jobs[i].customerID }, function (err, customer) {
-          if(!customer){
-            customerName = "Undefined: Orphan Job"
-            console.log("customer is ", customerName);
-          }else{
-            customerName = customer.firstName + ", "  +  customer.lastName;
-            console.log("customer is ", customerName);
-          }
-          console.log("inner jobs are ", innerJobs[i].name);
-          dataSet.push([
-            innerJobs[i]._id,
-            innerJobs[i].name,
-            innerJobs[i].description,
-            innerJobs[i].creationDate,
-            innerJobs[i].status,
-            customerName
-          ]);
-          if(i == innerJobs.length - 1){
-            var aaData = {
-              "aaData" : dataSet
-            };
+            if(!customer){
+              customerName = "Undefined: Orphan Job"
+              console.log("customer is ", customerName);
+            }else{
+              customerName = customer.firstName + ", "  +  customer.lastName;
+              console.log("customer is ", customerName);
+            }
+            console.log("inner jobs are ", innerJobs[i].name);
+            dataSet.push([
+              innerJobs[i]._id,
+              innerJobs[i].name,
+              innerJobs[i].description,
+              innerJobs[i].creationDate,
+              innerJobs[i].status,
+              customerName
+            ]);
+            if(i == innerJobs.length - 1){
+              var aaData = {
+                "aaData" : dataSet
+              };
 
-            res.json(aaData);
-          }
-
+              res.json(aaData);
+            }
           })
         }(i);
       }
