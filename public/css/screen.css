@@ -76,32 +76,32 @@ hr { border: none; border-bottom: 1px dotted #CCC; margin-bottom: 1em; margin-to
 
 table { width: 100%; border: 0; margin-bottom: 2em;  }
 
-	 table thead th
-	 {
-	 	font-size: 13px;
-		font-weight: bold;
-		text-align: left;
-		padding: 10px;
-		
-		background-color: #263849 !important;
-		
-		color: #FFF;
-		
-		border-top: 1px solid #ccc;
-		border-bottom: 1px solid #ccc;
-	}		
+table thead th
+{
+	font-size: 13px;
+	font-weight: bold;
+	text-align: left;
+	padding: 10px;
 	
-	table td { vertical-align: top; }
+	background-color: #263849 !important;
 	
-	table tbody tr td { background: #FFF; border-bottom: 1px dotted #DDD; }
+	color: #FFF;
+	
+	border-top: 1px solid #ccc;
+	border-bottom: 1px solid #ccc;
+}		
 
-	table th { padding: 10px 0; }
-	table tbody td { padding: 0px; }
-	
-	table tr.even td { background: #F9F9F9; }
-	
-	tr:nth-child(odd) { background-color:#F9F9F9; }
-	tr:nth-child(even) { background-color:#FFF; }
+table td { vertical-align: top; }
+
+table tbody tr td { background: #FFF; border-bottom: 1px dotted #DDD; }
+
+table th { padding: 10px 0; }
+table tbody td { padding: 0px; }
+
+table tr.even td { background: #F9F9F9; }
+
+tr:nth-child(odd) { background-color:#F9F9F9; }
+tr:nth-child(even) { background-color:#FFF; }
 
 
 

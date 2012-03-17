@@ -135,7 +135,7 @@ exports.Job = (function () {
     'description' : String,
     'creationDate' : { type: Date, default: Date.now },
     'status' : { type: String, default: "Active" },
-    'scheduleDates' : String,
+    'scheduleDates' : [String],
     'customerID' : ObjectId,
     'estimateSet' : [exports.Estimate]
   });

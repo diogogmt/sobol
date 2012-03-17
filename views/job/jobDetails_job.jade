@@ -22,11 +22,26 @@ form.form.label-inline(id='editJobForm', action='/job/edit', method='post')
           #{job.status}
     tr
       td
+      td
+        table(style='width:auto')
+          tr
+            td
+              .field
+                label Scheduled Dates
+            td(align='left')
+              div#datepicker
+    tr
+      td
         input#editJob.btn(type='submit', value='Update')
       td
         input#id(name='formJob[id]', value='#{job._id}', type='hidden')
 
 script(type="text/javascript")
   $(document).ready(function() {
-    
+    $("#datepicker").multiDatesPicker();
+    // On edit form submit
+    $('#editJobForm').submit(function() {
+      var dates = $('#datepicker').multiDatesPicker('getDates');
+      console.log(dates);
+    });
   });
