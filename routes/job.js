@@ -78,30 +78,46 @@ exports.edit = function (req, res) {
   });
 };
 
+
 exports.findAll = function (req, res) {
   //console.log("all jobs route");
-
- Job.find({}, function (err, jobs) {
+  Job.find({}, function (err, jobs) {
     //console.log("Find Job ");
     if(jobs){
       //console.log("get all jobs success");
       var dataSet = new Array();
+      var innerJobs = jobs;
       for(i = 0; i < jobs.length; i++){
-        dataSet.push([
-           jobs[i]._id,
-            jobs[i].name,
-            jobs[i].description,
-            jobs[i].creationDate,
-            jobs[i].status,
-            jobs[i].customerID
-        ]);
+
+        var getCustomerName = function (i) {
+          Customer.findOne({ _id : jobs[i].customerID }, function (err, customer) {
+          if(!customer){
+            customerName = "Undefined: Orphan Job"
+            console.log("customer is ", customerName);
+          }else{
+            customerName = customer.firstName + ", "  +  customer.lastName;
+            console.log("customer is ", customerName);
+          }
+          console.log("inner jobs are ", innerJobs[i].name);
+          dataSet.push([
+            innerJobs[i]._id,
+            innerJobs[i].name,
+            innerJobs[i].description,
+            innerJobs[i].creationDate,
+            innerJobs[i].status,
+            customerName
+          ]);
+          if(i == innerJobs.length - 1){
+            var aaData = {
+              "aaData" : dataSet
+            };
+
+            res.json(aaData);
+          }
+
+          })
+        }(i);
       }
-
-      var aaData = {
-        "aaData" : dataSet
-      };
-
-      res.json(aaData);
     }
     else {
       console.log("get all jobs Not success");
