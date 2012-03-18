@@ -63,10 +63,12 @@ exports.edit = function (req, res) {
     });
   };
 
+  var scheduledDatesArray = formJob.scheduledDates.split(",");
   var conditions = { _id : new ObjectId(formJob.id) }
     , update = { name : formJob.name
-                    , description : formJob.description
-                    }
+               , description : formJob.description
+               , scheduledDates : scheduledDatesArray
+               }
   ;
   Job.update(conditions, update, function (err, numAffected) {
     if(err || numAffected == 0){
@@ -152,11 +154,22 @@ exports.details = function (req, res) {
         id : job._id,
         name : job.name
       }
+
+      var scheduledDates = job.scheduledDates.toString().split(",");
+      for(var i = 0; i < scheduledDates.length; i++){
+        var newDate = new Date(scheduledDates[i]);
+        scheduledDates[i] = (newDate.getMonth() + 1) + "/" + newDate.getDate() + "/" + newDate.getFullYear();
+        console.log(scheduledDates[i]);
+      }
+
+      console.log(scheduledDates);
+
       res.render('job/jobDetails',
         {
           layout: 'includes/layout',
           title: 'Job',
           job: job,
+          dates: scheduledDates,
           breadcrumb: breadcrumb,
           errors: false
         }

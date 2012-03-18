@@ -35,13 +35,18 @@ form.form.label-inline(id='editJobForm', action='/job/edit', method='post')
         input#editJob.btn(type='submit', value='Update')
       td
         input#id(name='formJob[id]', value='#{job._id}', type='hidden')
+        input#scheduledDates(name='formJob[scheduledDates]', value='#{job.scheduledDates}', type='hidden')
 
 script(type="text/javascript")
   $(document).ready(function() {
+    var dateArray = '#{dates}'.split(",");
     $("#datepicker").multiDatesPicker();
+    $("#datepicker").multiDatesPicker('addDates', dateArray);
     // On edit form submit
     $('#editJobForm').submit(function() {
       var dates = $('#datepicker').multiDatesPicker('getDates');
-      console.log(dates);
+      $("#scheduledDates").val(dates);
     });
   });
+script(type="text/javascript")
+  console.log("test");
