@@ -70,7 +70,7 @@ exports.edit = function (req, res) {
       var estimateSet = job.estimateSet;
       for(i = 0; i < estimateSet.length; i++){
         console.log ("found an", estimateSet[i].status,  "estimate");
-        if(estimateSet[i].status = "Active"){
+        if(estimateSet[i].status == "Active"){
           status = "Active";
         }
       }

@@ -133,6 +133,7 @@ exports.Job = (function () {
  Job = new Schema({
     'name' : String,
     'description' : String,
+    'PID' : { type: Number, default: 0 },
     'creationDate' : { type: Date, default: Date.now },
     'status' : { type: String, default: "Active" },
     'scheduleDates' : String,
@@ -168,6 +169,7 @@ exports.Estimate = (function () {
 
  Estimate = new Schema({
     'name' : String,
+    'quoteID' : Number,
     'subTotal' : Number,
     'finalTotal' : Number,
     'creationDate' : { type: Date, default: Date.now },

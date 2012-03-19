@@ -117,7 +117,7 @@ exports.edit = function (req, res) {
       if(jobs){
         for(i = 0; i < jobs.length; i++){
           console.log ("found an", jobs[i].status,  "job");
-          if(jobs[i].status = "Active"){
+          if(jobs[i].status == "Active"){
             status = "Active";
           }
         }

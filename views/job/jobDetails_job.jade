@@ -24,15 +24,16 @@ form.form.label-inline(id='editJobForm', action='/job/edit', method='post')
           select(name="formJob[status]")
             option(value="Active") Active
             option(value="Inactive") Inactive
-            //#{job.creationDate}
+          #{job.status}
           
     tr
       td
         input#editJob.btn(type='submit', value='Update')
       td
         input#id(name='formJob[id]', value='#{job._id}', type='hidden')
+        input#pid(name='formJob[PID]', value='#{job.PID}', type='hidden')
 
 script(type="text/javascript")
   $(document).ready(function() {
-    
+
   });

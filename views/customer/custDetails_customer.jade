@@ -84,7 +84,7 @@ form.form.label-inline(id='editCustForm', action='/customer/edit', method='post'
           select(name="cust[status]")
             option(value="Active", selected=('#{customer.status}' == "Active")) Active
             option(value="Inactive", selected=('#{customer.status}' == "Inactive")) Inactive
-          //#{customer.status}
+          #{customer.status}
     tr
       td
         input#editCust.btn(type='submit', value='Update')

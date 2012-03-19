@@ -10,40 +10,52 @@ var mongoose = require('mongoose')
 exports.add = function (req, res) {
   //console.log("add estimate route");
   var estimate = new Estimate(req.body.estimate);
-  var jobID = new ObjectId(req.params.id);
-  function estimateAddFailed() {
-    console.log("add estimate FAIL");
-    //req.flash('addError', 'Estimate Add failed');
-    res.render('job/jobDetails', 
-    {
-      layout: 'includes/layout',
-      title: 'Job'
-    });
-  };
-
+  var estimateCount = 0;
+  //*****************
+  // Get total number of estimates for all the jobs in the system 
+     Job.find({}, function (err, jobs) {
+      for(i = 0; i < jobs.length; i++){
+        estimateCount = estimateCount + jobs[i].estimateSet.length;
+      } 
+      estimate.quoteID = estimateCount + 1;
+      var jobID = new ObjectId(req.params.id);
+      function estimateAddFailed() {
+        console.log("add estimate FAIL");
+        //req.flash('addError', 'Estimate Add failed');
+        res.render('job/jobDetails', 
+        {
+          layout: 'includes/layout',
+          title: 'Job'
+        });
+      };
+  //*****************
+      var getCustomerName = function (i) {
+        Job.findOne({ _id : new ObjectId(req.params.id) }, function (err, job) {
+          if(job){
+            var estimateSet = job.estimateSet;
+            //console.log("Pushing Estimate into Job EstimateSet: ", estimate);
+            estimateSet.push(estimate);
+            job.save(function(err) {
+              if(err){
+                console.log("Error saving job after adding estimate");
+                return estimateAddFailed();
+              }
+              //console.log("Adding Estimate SUCCESS");
+              //req.flash('info', 'The estimate has been added');
+              res.redirect('/job/' + jobID);
+            });
+          }else{
+            console.log("finding job for add estimate - Not success");
+            return estimateAddFailed();
+          }
+        });        
+      }(estimate)
+  //*****************
+     });   
   /*
   Self-Note (Raffi) - Try this instead at some point:
   Customer.update( {_id: custID }, { $push: {estimateSet: newEstimate})
   */
-  Job.findOne({ _id : new ObjectId(req.params.id) }, function (err, job) {
-    if(job){
-      var estimateSet = job.estimateSet;
-      //console.log("Pushing Estimate into Job EstimateSet: ", estimate);
-      estimateSet.push(estimate);
-      job.save(function(err) {
-        if(err){
-          console.log("Error saving job after adding estimate");
-          return estimateAddFailed();
-        }
-        //console.log("Adding Estimate SUCCESS");
-        //req.flash('info', 'The estimate has been added');
-        res.redirect('/job/' + jobID);
-      });
-    }else{
-      console.log("finding job for add estimate - Not success");
-      return estimateAddFailed();
-    }
-  });
 };
 
 exports.edit = function (req, res) {
@@ -66,11 +78,25 @@ exports.edit = function (req, res) {
   Job.findOne({ _id : new ObjectId(jobID) }, function (err, job) {
     if(job){
       var estimateSet = job.estimateSet;
+      var pid = job.PID;
       for(var i = 0; i < estimateSet.length; i++){
+//****************
+// If Estimate is selected, then set all other estimates to unused
+         if(formEstimate.status == "Selected"){
+           estimateSet[i].status = "Unused";
+           pid = estimateSet[i].quoteID;
+         }
+// If Estimate is re-activated, then re-activate all estimates         
+         if(formEstimate.status == "Active"){
+           estimateSet[i].status = "Active";
+           pid = 0;
+         }
+//****************
         if(estimateSet[i]._id == formEstimate.id){
           estimateSet[i].name = formEstimate.name;
+          estimateSet[i].status = formEstimate.status;
           var conditions  = { _id : new ObjectId(jobID) }
-            , update      = { estimateSet : estimateSet }
+            , update      = { estimateSet : estimateSet, PID : pid }
           ;
           Job.update(conditions, update, function (err, numAffected) {
             if (err || numAffected == 0){
