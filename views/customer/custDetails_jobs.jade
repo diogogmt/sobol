@@ -62,4 +62,7 @@ script(type="text/javascript")
       $("#notesList").toggle();
       $("#jobList").toggle();
     });
+    if('#{customer.status}' == "Inactive") {
+      $("#addJob").toggle();
+    }
   });

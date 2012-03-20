@@ -21,11 +21,9 @@ form.form.label-inline(id='editJobForm', action='/job/edit', method='post')
       td
         .field
           label Status
-          select(name="formJob[status]")
+          select#jobStatus(name="formJob[status]")
             option(value="Active") Active
             option(value="Inactive") Inactive
-          #{job.status}
-          
     tr
       td
         input#editJob.btn(type='submit', value='Update')
@@ -35,5 +33,5 @@ form.form.label-inline(id='editJobForm', action='/job/edit', method='post')
 
 script(type="text/javascript")
   $(document).ready(function() {
-
+    $('#jobStatus').val('#{job.status}');
   });

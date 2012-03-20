@@ -81,10 +81,9 @@ form.form.label-inline(id='editCustForm', action='/customer/edit', method='post'
       td
         .field
           label Status
-          select(name="cust[status]")
+          select#custStatus(name="cust[status]")
             option(value="Active", selected=('#{customer.status}' == "Active")) Active
             option(value="Inactive", selected=('#{customer.status}' == "Inactive")) Inactive
-          #{customer.status}
     tr
       td
         input#editCust.btn(type='submit', value='Update')
@@ -108,4 +107,5 @@ script(type="text/javascript")
       $('#phone1').val($('#tel1a').val() + '-' + $('#tel1b').val() + '-' + $('#tel1c').val());
       $('#phone2').val($('#tel2a').val() + '-' + $('#tel2b').val() + '-' + $('#tel2c').val());
     });
+    $('#custStatus').val('#{customer.status}');
   });

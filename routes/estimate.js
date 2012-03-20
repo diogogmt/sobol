@@ -82,16 +82,16 @@ exports.edit = function (req, res) {
       for(var i = 0; i < estimateSet.length; i++){
 //****************
 // If Estimate is selected, then set all other estimates to unused
-         if(formEstimate.status == "Selected"){
-           estimateSet[i].status = "Unused";
+        if(formEstimate.status == "Selected"){
+            estimateSet[i].status = "Unused";
            pid = estimateSet[i].quoteID;
-         }
+        }
 // If Estimate is re-activated, then re-activate all estimates         
-         if(formEstimate.status == "Active"){
-           estimateSet[i].status = "Active";
+        if(formEstimate.status == "Active"){
+            estimateSet[i].status = "Active";
            pid = 0;
-         }
-//****************
+        }
+
         if(estimateSet[i]._id == formEstimate.id){
           estimateSet[i].name = formEstimate.name;
           estimateSet[i].status = formEstimate.status;
