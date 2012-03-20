@@ -6,12 +6,14 @@ var mongoose = require('mongoose')
   , config = require('./../config')
   , domain = 'http://localhost:11342/'
   , Schema = mongoose.Schema
-  , ObjectId = mongoose.Types.ObjectId;
+  , ObjectId = mongoose.Types.ObjectId
+  , schemaObjectId = Schema.ObjectId;
+
 
 exports.add = function (req, res) {
-  console.log("lineItem add route");
-  var estimateID = new ObjectId(body.estimateID);
-  var lineItem = new EstimateLineItem(req.body.lineItem);
+  var body = req.body
+    , estimateID = new ObjectId(body.estimateID)
+    , lineItem = new EstimateLineItem(req.body.lineItem);
 
   Job.update(
     {estimateSet: {"$elemMatch": {_id: estimateID}}},
@@ -29,7 +31,6 @@ exports.add = function (req, res) {
     },
     {upsert:false,safe:true},
     function (err) {
-      console.log("Job.update - push lineItemSet");
       console.log("err: ", err);
     }
   );
@@ -110,40 +111,46 @@ exports.details = function (req, res) {
         console.log("No estimates found for this job. This shouldn't be possible");
       }
     }
-  });  
+  });
 };
 
 exports.getLineItems = function (req, res) {
-  Job.findOne({ _id : new ObjectId(req.params.jobId) }, function (err, job) {
-    if(job){
-      var dataSet = new Array();
-      var estimate;
-      var estimates = job.estimateSet;
-      for(var i = 0; i < estimates.length; i++){
-        if(estimates[i]._id == req.params.estimateId){
-          estimate = estimates[i];
+  console.log("lineItem getLineItems")
+  var params = req.params;
+  var estimateId = params.estimateId;
+  var jobId = params.jobId;
+  console.log("params: ", params);
+
+  Job.findById(new ObjectId(jobId), function (err, job) {
+    console.log("job: ", job)
+    if(job) {
+      var i = job.estimateSet.length
+        , estimateSet = job.estimateSet
+        , data = {
+            "aaData": new Array(),
+          };
+
+      while (i--) {
+        if (estimateSet[i]._id == estimateId) {
+          var lineItemSet = estimateSet[i].lineItemSet
+            , j = lineItemSet.length;
+          while (j--) {
+            data.aaData.push([
+                lineItemSet[j]._id,
+                lineItemSet[j].name,
+                lineItemSet[j].description,
+                lineItemSet[j].quantity,
+                lineItemSet[j].cost
+            ]);
+          }
           break;
         }
       }
 
-      var lineItems = estimate.lineItemSet;
-      for(var i = 0; i < lineItems; i++){
-        dataSet.push([
-            lineItems[i]._id,
-            lineItems[i].name,
-            lineItems[i].description,
-            lineItems[i].quantity,
-            lineItems[i].cost
-        ]);
-      }
-
-      var aaData = {
-        "aaData" : dataSet
-      };
-      res.json(aaData);
+      console.log("data: ", data);
+      res.json(data);
     }
-    else 
-    {
+    else {
       console.log("get all this jobs estimates - Not success");
     }
   });
