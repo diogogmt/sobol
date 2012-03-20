@@ -51,7 +51,6 @@ app.configure(function() {
 });
 
 
-
 function loadUser(req, res, next) {
   //console.log("loaduser");
   if (req.session.user_id) {
@@ -127,7 +126,7 @@ app.get('/datatable/estimate/getJobEstimates/:id', routes.estimate.getJobEstimat
 
 
 // Line Item
-app.post('/estimate/addLineItem/:jobId/:estimateId', routes.lineItem.add);
+app.post('/lineItem/add', routes.lineItem.add);
 app.get('/datatable/getLineItems/:jobId/:estimateId', routes.lineItem.getLineItems);
 
 
