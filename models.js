@@ -1,26 +1,30 @@
 var crypto = require('crypto')
   , mongoose = require('mongoose')
-  , User
-  , Customer
-  , LoginToken
-  , Job
-  , EstimateLineItem
-  , Estimate
-  , Note
   , config = require('./config')
   , gridfs = require("./gridfs")
-  , db = mongoose.connect(config.mongo.connectionString)
   , Schema = mongoose.Schema
   , ObjectId = Schema.ObjectId;
 
-//console.log("model.js");
+
+// List of schemas
+var schemas = {
+  "user": null,
+  "customer": null,
+  "note": null,
+  "job": null,
+  "estimate": null,
+  "lineItem": null,
+  "media": null,
+}
+
+// Database connection
+var db = mongoose.connect(config.mongo.connectionString);
 
 /**
-* Model: User
+* User schema
 */
 exports.User = (function () {
-  //console.log("User model");
-  User = new Schema({
+  schemas.user = new Schema({
     'username': {
       type: String,
       index: { unique: true }
@@ -32,14 +36,14 @@ exports.User = (function () {
     'hashed_password': String
   });
 
-  User.virtual('password')
+  schemas.user.virtual('password')
     .set(function(password) {
       // TODO
       // validate password here
       this.hashed_password = this.encryptPassword(password);
     });
 
-  User.method('authenticate', function(plainText) {
+  schemas.user.method('authenticate', function(plainText) {
     // console.log("user authenticate");
     // console.log("password: ", plainText);
     // console.log("hashed_password: ", this.hashed_password);
@@ -48,38 +52,26 @@ exports.User = (function () {
   });
 
 
-  User.method('encryptPassword', function(password) {
+  schemas.user.method('encryptPassword', function(password) {
     return crypto.createHmac('sha1', config.salt).update(password).digest('hex');
   });
 
-  User.pre('save', function(next) {
+  schemas.user.pre('save', function(next) {
     //TODO
     //validate object before saving it
     next();
   });
 
-  return db.model('User', User);
+  return db.model('User', schemas.user);
 })();
 
 
-/**
-* Model: Tag
-*/
-exports.Tag = (function () {
-  //console.log("Tag model");
-  Tag = new Schema({
-    'name' : String
-  });
-
-  return db.model('Tag', Tag);
-})();
 
 /**
-* Model: Media
+* Media schema
 */
 exports.Media = (function () {
-  //console.log("Media model");
-  Media = new Schema({
+  schemas.media = new Schema({
     'name' : String,
     'desc' : String,
     'src' : ObjectId,
@@ -87,16 +79,28 @@ exports.Media = (function () {
     'tags' : [String]
   });
 
-  return db.model('Media', Media);
+  return db.model('Media', schemas.media);
 })();
 
 
 /**
-* Model: Customer
+* Note schema
+*/
+exports.Note = (function () {
+ schemas.note = new Schema({
+    'noteText' : String,
+    'creationDate' : { type: Date, default: Date.now },
+  });
+
+  return db.model('Note', schemas.note);
+})();
+
+
+/**
+* Customer schema
 */
 exports.Customer = (function () {
-  //console.log("Customer model");
-  Customer = new mongoose.Schema({
+  schemas.customer = new mongoose.Schema({
     'firstName' : String,
     'lastName' : String,
     'email' : String,
@@ -110,46 +114,25 @@ exports.Customer = (function () {
     'country' : String,
     'registrationDate' : { type: Date, default: Date.now },
     'status' : { type: String, default: "Active" },
-    'noteSet' : [exports.Note]
+    'noteSet' : [schemas.note]
   });
 
-  Customer.virtual('tel1a');
-  Customer.virtual('tel1b');
-  Customer.virtual('tel1c');
-  Customer.virtual('tel2a');
-  Customer.virtual('tel2b');
-  Customer.virtual('tel2c');
+  schemas.customer.virtual('tel1a');
+  schemas.customer.virtual('tel1b');
+  schemas.customer.virtual('tel1c');
+  schemas.customer.virtual('tel2a');
+  schemas.customer.virtual('tel2b');
+  schemas.customer.virtual('tel2c');
 
-  return db.model('Customer', Customer);
+  return db.model('Customer', schemas.customer);
 })();
 
 
 /**
-* Model: Job
-*/
-exports.Job = (function () {
-  //console.log("Job model");
-
- Job = new Schema({
-    'name' : String,
-    'description' : String,
-    'creationDate' : { type: Date, default: Date.now },
-    'status' : { type: String, default: "Active" },
-    'scheduleDates' : String,
-    'customerID' : ObjectId,
-    'estimateSet' : [exports.Estimate]
-  });
-
-  return db.model('Job', Job);
-})();
-
-/**
-* Model: Estimate Line Item
+* Line Item schema
 */
 exports.EstimateLineItem = (function () {
-  //console.log("Estimate Line Item model");
-
- EstimateLineItem = new Schema({
+ schemas.lineItem = new Schema({
     'name' : String,
     'description' : String,
     'quantity' : Number,
@@ -157,39 +140,40 @@ exports.EstimateLineItem = (function () {
     //'media' : ObjectId
   });
 
-  return db.model('EstimateLineItem', EstimateLineItem);
+  return db.model('EstimateLineItem', schemas.lineItem);
 })();
 
+
 /**
-* Model: Estimate
+* Estimate schema
 */
 exports.Estimate = (function () {
-  //console.log("Estimate model");
-
- Estimate = new Schema({
+ schemas.estimate = new Schema({
     'name' : String,
     'subTotal' : Number,
     'finalTotal' : Number,
     'creationDate' : { type: Date, default: Date.now },
     'status' : { type: String, default: "Active" },
-    'lineItemSet' : [exports.EstimateLineItem]
+    'lineItemSet' : [schemas.lineItem]
   });
 
-  return db.model('Estimate', Estimate);
+  return db.model('Estimate', schemas.estimate);
 })();
+
 
 /**
-* Model: Note
+* Job schema
 */
-exports.Note = (function () {
-  //console.log("Note model");
-
- Note = new Schema({
-    'noteText' : String,
+exports.Job = (function () {
+ schemas.job = new Schema({
+    'name' : String,
+    'description' : String,
     'creationDate' : { type: Date, default: Date.now },
+    'status' : { type: String, default: "Active" },
+    'scheduleDates' : String,
+    'customerID' : ObjectId,
+    'estimateSet' : [schemas.estimate]
   });
 
-  return db.model('Note', Note);
+  return db.model('Job', schemas.job);
 })();
-
-//console.log("exports", exports);
