@@ -9,46 +9,38 @@ var mongoose = require('mongoose')
   , ObjectId = mongoose.Types.ObjectId;
 
 exports.add = function (req, res) {
-  //console.log("add estimate route");
+  console.log("add estimate route");
   var estimate = new Estimate(req.body.estimate);
   var jobID = new ObjectId(req.params.id);
   function estimateAddFailed() {
     console.log("add estimate FAIL");
     //req.flash('addError', 'Estimate Add failed');
-    res.render('job/jobDetails', 
+    res.render('job/jobDetails',
     {
       layout: 'includes/layout',
       title: 'Job'
     });
   };
 
-  /*
-  Self-Note (Raffi) - Try this instead at some point:
-  Customer.update( {_id: custID }, { $push: {estimateSet: newEstimate})
-  */
-  Job.findOne({ _id : new ObjectId(req.params.id) }, function (err, job) {
-    if(job){
-      var estimateSet = job.estimateSet;
-      //console.log("Pushing Estimate into Job EstimateSet: ", estimate);
-      estimateSet.push(estimate);
-      job.save(function(err) {
-        if(err){
-          console.log("Error saving job after adding estimate");
-          return estimateAddFailed();
+  Job.update(
+    { "_id": jobID },
+    { $push: {"estimateSet": estimate} },
+    { upsert: false, safe:true },
+      function (err) {
+        console.log("Job.update - push estimateSet");
+        console.log("err: ", err);
+        if (err) {
+          estimateAddFailed();
         }
-        //console.log("Adding Estimate SUCCESS");
-        //req.flash('info', 'The estimate has been added');
-        res.redirect('/job/' + jobID);
-      });
-    }else{
-      console.log("finding job for add estimate - Not success");
-      return estimateAddFailed();
-    }
-  });
+        else {
+          res.redirect('/job/' + jobID);
+        }
+    });
+
 };
 
 exports.edit = function (req, res) {
-  //console.log("edit estimate route");
+  console.log("edit estimate route");
   var formEstimate = req.body.formEstimate;
   var breadcrumb = req.session.breadcrumb;
   var jobID = breadcrumb.job.id;
@@ -91,10 +83,16 @@ exports.edit = function (req, res) {
 
 exports.details = function (req, res) {
   console.log("estimate details");
-  Job.findOne({ _id : new ObjectId(req.params.jobId) }, function (err, job) {
-    if(!job){
+  var params = req.params;
+  var jobId = params.jobId
+    , estimateId = params.estimateId;
+
+  Job.findOne({ "estimateSet._id" : new ObjectId(estimateId) }, function (err, job) {
+    console.log("job: ", job);
+    if(!job) {
       console.log("get specific job for estimate not successful");
-    }else{
+    }
+    else {
       var estimate;
       var estimates = job.estimateSet;
       if(estimates.length > 0){
@@ -115,7 +113,7 @@ exports.details = function (req, res) {
             id : estimate._id,
             name : estimate.name
           };
-          res.render('estimate/estimateDetails', 
+          res.render('estimate/estimateDetails',
           {
             layout: 'includes/layout',
             title: 'Estimate',
@@ -129,33 +127,39 @@ exports.details = function (req, res) {
         console.log("No estimates found for this job. This shouldn't be possible");
       }
     }
-  });  
+  });
 };
 
 exports.getJobEstimates = function (req, res) {
-  Job.findOne({ _id : new ObjectId(req.params.id) }, function (err, job) {
-    //console.log("The current customer is " + req.params.id);
-    if(job){
-      //console.log("Get specific job for estimates list - SUCCESS");
-      var dataSet = new Array();
-      var estimates = job.estimateSet;
-      for(i = 0; i < estimates.length; i++){
-        dataSet.push([
-            estimates[i]._id,
-            estimates[i].name,
-            estimates[i].finalTotal,
-            new Date(estimates[i].creationDate).toDateString(),
-            estimates[i].status
+  console.log("job getJobEstimates");
+  console.log("req.params: ", req.params);
+  var jobID = req.params.id;
+  console.log("jobID: ", jobID);
+
+
+  Job.findById(new ObjectId(jobID), ["estimateSet"], function (err, job) {
+    console.log("err: ", err);
+    console.log("job: ", job);
+    if(job) {
+      var estimateSet = job.estimateSet
+        , i = estimateSet ? estimateSet.length : 0
+        , data = {
+            "aaData": new Array(),
+          };
+      while(i--) {
+        data.aaData.push([
+            estimateSet[i]._id,
+            estimateSet[i].name,
+            estimateSet[i].finalTotal,
+            new Date(estimateSet[i].creationDate).toDateString(),
+            estimateSet[i].status
         ]);
       }
-      var aaData = {
-        "aaData" : dataSet
-      };
-      res.json(aaData);
+      res.json(data);
     }
-    else 
-    {
+    else {
       console.log("get all this jobs estimates - Not success");
     }
+
   });
 };
