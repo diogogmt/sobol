@@ -115,6 +115,9 @@ app.post('/job/edit', routes.job.validateEditJob, routes.job.edit);
 app.get('/datatable/job/getCustJobs/:id', routes.job.getCustJobs);
 app.get('/datatable/job/findAll', routes.job.findAll);
 
+app.get('/jobs/calendar', routes.job.calendar);
+app.get('/jobs/calendarData', routes.job.calendarData);
+
 
 
 // Estimate

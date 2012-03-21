@@ -50,6 +50,75 @@ exports.add = function(req, res) {
   });
 };
 
+exports.calendar = function (req, res) {
+  res.render('job/jobsCalendar',
+    {
+      layout: 'includes/layout',
+      title: 'Jobs',
+      errors: false
+    });
+};
+
+// SELF NOTE (RAFFI) - CHANGE TO ONLY FIND ACTIVE JOBS
+exports.calendarData = function (req, res) {
+  console.log("Entering calendar data route");
+  Job.find({}, function (err, jobs) {
+    if(jobs){
+      var dataSet = new Array();
+      var rangeAdded = false;
+      var start = 0;
+      var end = 0;
+      for(var i = 0; i < jobs.length; i++){
+        for(var j = 0; j < jobs[i].scheduledDates.length; j++){
+          var d = jobs[i].scheduledDates[j];
+          var yn = d.getFullYear();
+          var mn = d.getMonth();
+          var dn = d.getDate();
+          var d1 = new Date(yn,0,1,12,0,0); // noon on Jan. 1
+          var d2 = new Date(yn,mn,dn,12,0,0); // noon on input date
+          var dayOfYearA = Math.round((d2-d1)/864e5) + 1;
+
+          if(jobs[i].scheduledDates[j+1]){
+            d = jobs[i].scheduledDates[j+1];
+            yn = d.getFullYear();
+            mn = d.getMonth();
+            dn = d.getDate();
+            d1 = new Date(yn,0,1,12,0,0); // noon on Jan. 1
+            d2 = new Date(yn,mn,dn,12,0,0); // noon on input date
+            var dayOfYearB = Math.round((d2-d1)/864e5) + 1;
+
+            if(dayOfYearA + 1 != dayOfYearB){
+              dataSet.push({
+                title : jobs[i].name,
+                start: jobs[i].scheduledDates[start],
+                end: jobs[i].scheduledDates[j],
+                url: "/job/" + jobs[i]._id,
+              });
+              start = j + 1;
+            }
+          }else{
+            dataSet.push({
+              title : jobs[i].name,
+              start: jobs[i].scheduledDates[start],
+              end: jobs[i].scheduledDates[j],
+              url: "/job/" + jobs[i]._id,
+            });
+          }
+        }
+      }
+
+      var events = {
+        "events" : dataSet
+      };
+
+      res.json(dataSet);
+    }
+    else {
+      console.log("get all jobs Not success");
+    }
+  });
+};
+
 exports.edit = function (req, res) {
   //console.log("edit job route");
   var formJob = req.body.formJob;
@@ -64,10 +133,12 @@ exports.edit = function (req, res) {
     });
   };
 
+  var scheduledDatesArray = formJob.scheduledDates.split(",");
   var conditions = { _id : new ObjectId(formJob.id) }
     , update = { name : formJob.name
-                    , description : formJob.description
-                    }
+               , description : formJob.description
+               , scheduledDates : scheduledDatesArray
+               }
   ;
   Job.update(conditions, update, function (err, numAffected) {
     if(err || numAffected == 0){
@@ -156,12 +227,21 @@ exports.details = function (req, res) {
           name : job.name
         };
         console.log("breadcrumb: ", breadcrumb);
+
+        var scheduledDates = job.scheduledDates.toString().split(",");
+        for(var i = 0; i < scheduledDates.length; i++){
+          var newDate = new Date(scheduledDates[i]);
+          scheduledDates[i] = (newDate.getMonth() + 1) + "/" + newDate.getDate() + "/" + newDate.getFullYear();
+          console.log(scheduledDates[i]);
+        }
+
         res.render('job/jobDetails',
           {
             layout: 'includes/layout',
             title: 'Job',
             job: job,
             breadcrumb: breadcrumb,
+            dates: scheduledDates,
             errors: false
           }
         );

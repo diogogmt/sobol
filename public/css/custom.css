@@ -512,11 +512,11 @@ table.calendar .not_current_month .day_number { color: #888; }
 
 
 h2.calendar_header { font-size: 56px; text-align: center; line-height: 48px; margin-bottom: .5em; margin-top: .25em; }
-	h2.calendar_header button { top: -10px; margin: 0 1em; position: relative; }
-		h2.calendar_header button:hover { color: #FFF !important; }
-		
-		h2.calendar_header button.previous { right: 25px; }
-		h2.calendar_header button.next { left: 25px; }
+h2.calendar_header button { top: -10px; margin: 0 1em; position: relative; }
+h2.calendar_header button:hover { color: #FFF !important; }
+
+h2.calendar_header button.previous { right: 25px; }
+h2.calendar_header button.next { left: 25px; }
 		
 		
 		
@@ -540,7 +540,7 @@ h2.calendar_header { font-size: 56px; text-align: center; line-height: 48px; mar
 
 #add-user-form { width: 270px; margin: 0 auto; }
 
-
+ 
 /* -------------------------------------------------------------- 
    Estimate Page
 -------------------------------------------------------------- */		
@@ -559,4 +559,43 @@ h2.calendar_header { font-size: 56px; text-align: center; line-height: 48px; mar
   /* hot CSS3 features for mozilla and webkit-based browsers (rounded borders) */
   -moz-border-radius:8px;
   -webkit-border-radius:8px;
+/* -------------------------------------------------------------- 
+   Jobs Page
+-------------------------------------------------------------- */
+
+#datepicker table thead th {
+	background-color: #FFFFFF !important;
+	color: #000000;
+	padding: 0;
+	margin: 0;
+	font-size: 11px;
+}
+
+#datepicker table tbody td {
+	font-size: 0.9em !important;
+	line-height: 1.4em;
+}
+
+.ui-datepicker-title {
+	margin: 0pt 2.3em;
+	padding: 0;
+	font-size: 12px;
+	line-height: 1.8em;
+}
+
+.ui-datepicker-header {
+	margin: 0;
+	padding: 0 !important;
+	line-height: 0;
+}
+
+/* begin: jQuery UI Datepicker emphasis on selected dates */
+.ui-datepicker .ui-datepicker-calendar .ui-state-highlight a {
+	background: #263849 none; /* a color that fits the widget theme */
+	color: white; /* a color that is readeable with the color above */
+}
+/* end: jQuery UI Datepicker emphasis on selected dates */
+
+.ui-datepicker { 
+	width: 15em !important;
 }
