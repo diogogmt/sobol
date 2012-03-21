@@ -363,7 +363,7 @@ body
 			
 			.portlet-tab-nav-active a:hover { text-decoration: none !important; }
 		
-		.portlet-tab-content-active { display: block !imporant; }		
+		.portlet-tab-content-active { display: block !important; }		
 			.portlet-tab-nav .portlet-tab-nav-active  a { color: #0B66B9; text-decoration: none; }
 
 

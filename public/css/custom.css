@@ -559,6 +559,8 @@ h2.calendar_header button.next { left: 25px; }
   /* hot CSS3 features for mozilla and webkit-based browsers (rounded borders) */
   -moz-border-radius:8px;
   -webkit-border-radius:8px;
+}
+
 /* -------------------------------------------------------------- 
    Jobs Page
 -------------------------------------------------------------- */

@@ -65,10 +65,10 @@ exports.calendarData = function (req, res) {
   Job.find({}, function (err, jobs) {
     if(jobs){
       var dataSet = new Array();
-      var rangeAdded = false;
-      var start = 0;
-      var end = 0;
+      //var rangeAdded = false;
       for(var i = 0; i < jobs.length; i++){
+        var start = 0;
+        var end = 0;
         for(var j = 0; j < jobs[i].scheduledDates.length; j++){
           var d = jobs[i].scheduledDates[j];
           var yn = d.getFullYear();
@@ -133,7 +133,13 @@ exports.edit = function (req, res) {
     });
   };
 
-  var scheduledDatesArray = formJob.scheduledDates.split(",");
+  var scheduledDatesArray;
+  if(formJob.scheduledDates.length > 0){
+    scheduledDatesArray = formJob.scheduledDates.split(",");
+  }else{
+    scheduledDatesArray = new Array();
+  }
+  console.log("The scheduled dates array on editing is: ", scheduledDatesArray)
   var conditions = { _id : new ObjectId(formJob.id) }
     , update = { name : formJob.name
                , description : formJob.description
@@ -228,11 +234,16 @@ exports.details = function (req, res) {
         };
         console.log("breadcrumb: ", breadcrumb);
 
-        var scheduledDates = job.scheduledDates.toString().split(",");
-        for(var i = 0; i < scheduledDates.length; i++){
-          var newDate = new Date(scheduledDates[i]);
-          scheduledDates[i] = (newDate.getMonth() + 1) + "/" + newDate.getDate() + "/" + newDate.getFullYear();
-          console.log(scheduledDates[i]);
+        var scheduledDates;
+        if(job.scheduledDates.length > 0){
+          scheduledDates = job.scheduledDates.toString().split(",");
+          for(var i = 0; i < scheduledDates.length; i++){
+            var newDate = new Date(scheduledDates[i]);
+            scheduledDates[i] = (newDate.getMonth() + 1) + "/" + newDate.getDate() + "/" + newDate.getFullYear();
+            console.log(scheduledDates[i]);
+          }
+        }else{
+          scheduledDates = "";
         }
 
         res.render('job/jobDetails',

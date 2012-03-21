@@ -39,14 +39,15 @@ form.form.label-inline(id='editJobForm', action='/job/edit', method='post')
 
 script(type="text/javascript")
   $(document).ready(function() {
-    var dateArray = '#{dates}'.split(",");
     $("#datepicker").multiDatesPicker();
-    $("#datepicker").multiDatesPicker('addDates', dateArray);
+    var dateString = '#{dates}';
+    if(dateString.length > 0){
+      var dateArray = dateString.split(",");
+      $("#datepicker").multiDatesPicker('addDates', dateArray);
+    }
     // On edit form submit
     $('#editJobForm').submit(function() {
       var dates = $('#datepicker').multiDatesPicker('getDates');
       $("#scheduledDates").val(dates);
     });
   });
-script(type="text/javascript")
-  console.log("test");
