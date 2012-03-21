@@ -91,6 +91,7 @@ app.get('/datatable/customer/findAll', routes.customer.findAll);
 app.get('/datatable/customer/findActive', routes.customer.findActive);
 
 // Customer Notes
+<<<<<<< HEAD
 app.get('/customer/notes/:id', routes.note.all);
 app.post('/customer/note/add/:id', routes.note.add);
 app.get('/customer/:custid/note/delete/:noteid', routes.note.delete);
@@ -98,6 +99,17 @@ app.get('/customer/:custid/note/delete/:noteid', routes.note.delete);
 app.get('/note/:id', routes.note.details);
 
 app.get('/datatable/customer/getCustomerNotes/:id', routes.note.getCustomerNotes);
+=======
+app.get('/customer/notes/:id', loadUser, routes.note.all);
+app.post('/customer/note/add/:id', loadUser, routes.note.add);
+app.get('/customer/:custid/note/delete/:noteid', loadUser, routes.note.delete);
+app.get('/datatable/customer/getCustomerNotes/:id', loadUser, routes.note.getCustomerNotes);
+
+app.post('/customer/:custid/note/edit/', loadUser, routes.note.edit);
+//app.get('/customer/note/:id', loadUser, routes.note.details);
+//app.get('/customer/:custid/note/delete/:noteid', loadUser, routes.note.delete);
+//app.post('/customer/:custid/note/edit/:noteid', loadUser, routes.note.edit);
+>>>>>>> remotes/DennisRepo/master
 
 //app.post('/customer/note/edit', routes.note.edit);
 //app.get('/customer/note/:id', routes.note.details);

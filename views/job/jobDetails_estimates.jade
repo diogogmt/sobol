@@ -45,4 +45,8 @@ script(type="text/javascript")
       var jobID = "#{job.id}";
       window.location = "/job/" + jobID + "/estimate/" + estimateID;
     });
+    if('#{job.PID}' > 0 || '#{job.status}' == "Inactive") {
+      $("#addEstimate").toggle();
+    } 
+       
   });

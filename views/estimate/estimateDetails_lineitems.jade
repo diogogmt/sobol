@@ -1,0 +1,62 @@
+br
+a#addLineItem.btn(href='#newLineItem') Add Line Item
+div(style='display: none;')
+  #newLineItem(style='width: 800px; height: 400px; overflow: auto;')
+    h4 Add Estimate Line Item
+    form.form.label-inline(id='addLineItemForm', action='/estimate/addLineItem/#{jobID}/#{estimate._id}', method='post')
+      table
+        tr
+          td
+            .field
+              label(for='name') Name
+              input#name.medium(name='lineItem[name]', size='20', type='text', value='')
+          td
+            .field
+              label(for='description') Description
+              input#description.medium(name='lineItem[description]', size='20', type='text', value='')
+        tr
+          td
+            .field
+              label(for='quantity') Quantity
+              input#quantity.medium(name='lineItem[quantity]', size='20', type='text', value='')
+          td
+            .field
+              label(for='cost') Cost
+              input#cost.medium(name='lineItem[cost]', size='20', type='text', value='')
+        tr
+          td
+            input#saveLineItem.btn(type='submit', value='Add')
+          td
+
+table#lineItemTable.display(cellpadding='0', cellspacing='0', border='0', rel='datatable')
+  thead
+    tr
+      th ID
+      th Name
+      th Description
+      th Quantity
+      th Cost
+  tbody
+
+script(type="text/javascript")
+  $(document).ready(function() {
+    $("#addLineItem").fancybox({
+      'titlePosition'   : 'inside',
+      'transitionIn'    : 'none',
+      'transitionOut'   : 'none'
+    });
+    var dTable = $("#lineItemTable").dataTable( {
+      "bProcessing": true,
+      "bDestroy": true,
+      "sAjaxSource": "/datatable/getLineItems/" + '#{jobID}' + "/" + '#{estimate._id}',
+      "aoColumnDefs": [
+        { "bVisible" : false, "aTargets" : [0] }
+      ]
+    });
+    if('#{estimate.status}' == "Unused") {
+      $("#addLineItem").toggle();
+    }
+    if('#{estimate.status}' == "Selected") {
+      $("#addLineItem").toggle();
+    }    
+  });

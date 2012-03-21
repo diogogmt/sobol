@@ -5,11 +5,13 @@ form.form.label-inline(id='editJobForm', action='/job/edit', method='post')
         .field
           label(for='name') Name
           input#name.medium(name='formJob[name]', size='20', type='text', value='#{job.name}')
+          br
           span #{errors.name}
       td
         .field
           label(for='desc') Description
           input#desc.medium(name='formJob[description]', size='45', type='text', value='#{job.description}')
+          br
           span #{errors.description}
     tr
       td
@@ -19,7 +21,9 @@ form.form.label-inline(id='editJobForm', action='/job/edit', method='post')
       td
         .field
           label Status
-          #{job.status}
+          select#jobStatus(name="formJob[status]")
+            option(value="Active") Active
+            option(value="Inactive") Inactive
     tr
       td
       td
@@ -35,6 +39,7 @@ form.form.label-inline(id='editJobForm', action='/job/edit', method='post')
         input#editJob.btn(type='submit', value='Update')
       td
         input#id(name='formJob[id]', value='#{job._id}', type='hidden')
+        input#pid(name='formJob[PID]', value='#{job.PID}', type='hidden')
         input#scheduledDates(name='formJob[scheduledDates]', value='#{job.scheduledDates}', type='hidden')
 
 script(type="text/javascript")
@@ -50,4 +55,5 @@ script(type="text/javascript")
       var dates = $('#datepicker').multiDatesPicker('getDates');
       $("#scheduledDates").val(dates);
     });
+    $('#jobStatus').val('#{job.status}');
   });

@@ -5,22 +5,25 @@ form.form.label-inline(id='editCustForm', action='/customer/edit', method='post'
         .field
           label(for='lname') First name
           input#firstName.medium(name='cust[firstName]', size='20', type='text', value='#{customer.firstName}')
+          br
           span #{errors.firstName}
       td
         .field
           label(for='lname') Last name
           input#lastName.medium(name='cust[lastName]', size='20', type='text', value='#{customer.lastName}')
+          br
           span #{errors.lastName}
     tr
       td
         .field
           label(for='address1') Address 1
           input#address1.large(name='cust[address1]', value='#{customer.address1}', type='text')
+          br
+          span #{errors.address1}
       td
         .field
           label(for='address1') Address 2
           input#address2.large(name='cust[address2]', value='#{customer.address2}', type='text')
-          span #{errors.address1}
     tr
       td
         .field
@@ -48,6 +51,7 @@ form.form.label-inline(id='editCustForm', action='/customer/edit', method='post'
           input#tel1b.xsmall(name='cust[tel1b]', size='3', value='', maxlength='3', type='text')
           | -
           input#tel1c.xsmall(name='cust[tel1c]', size='4', value='', maxlength='4', type='text')
+          br
           span #{errors.phone}
       td
         .field.phone_field
@@ -62,6 +66,7 @@ form.form.label-inline(id='editCustForm', action='/customer/edit', method='post'
         .field
           label(for='email') Email
           input#email.medium(name='cust[email]', value='#{customer.email}', size='20', type='text')
+          br
           span #{errors.email}
       td
         .field
@@ -76,7 +81,9 @@ form.form.label-inline(id='editCustForm', action='/customer/edit', method='post'
       td
         .field
           label Status
-          #{customer.status}
+          select#custStatus(name="cust[status]")
+            option(value="Active", selected=('#{customer.status}' == "Active")) Active
+            option(value="Inactive", selected=('#{customer.status}' == "Inactive")) Inactive
     tr
       td
         input#editCust.btn(type='submit', value='Update')
@@ -100,4 +107,5 @@ script(type="text/javascript")
       $('#phone1').val($('#tel1a').val() + '-' + $('#tel1b').val() + '-' + $('#tel1c').val());
       $('#phone2').val($('#tel2a').val() + '-' + $('#tel2b').val() + '-' + $('#tel2c').val());
     });
+    $('#custStatus').val('#{customer.status}');
   });

@@ -144,42 +144,59 @@ exports.edit = function (req, res) {
     , update = { name : formJob.name
                , description : formJob.description
                , scheduledDates : scheduledDatesArray
+               , status : status
                }
   ;
-  Job.update(conditions, update, function (err, numAffected) {
-    if(err || numAffected == 0){
-      console.log("err: " + err);
-      return jobEditFailed();
-    }
-    //console.log("Editing SUCCEED");
-    res.redirect('/job/' + formJob.id);
+    Job.update(conditions, update, function (err, numAffected) {
+      if(err || numAffected == 0){
+        console.log("err: " + err);
+        return jobEditFailed();
+      }
+      //console.log("Editing SUCCEED");
+      res.redirect('/job/' + formJob.id);
+    });  
   });
 };
 
+
 exports.findAll = function (req, res) {
   //console.log("all jobs route");
-
- Job.find({}, function (err, jobs) {
+  Job.find({}, function (err, jobs) {
     //console.log("Find Job ");
     if(jobs){
       //console.log("get all jobs success");
       var dataSet = new Array();
+      var innerJobs = jobs;
       for(i = 0; i < jobs.length; i++){
-        dataSet.push([
-           jobs[i]._id,
-            jobs[i].name,
-            jobs[i].description,
-            jobs[i].creationDate,
-            jobs[i].status,
-            jobs[i].customerID
-        ]);
+
+        var getCustomerName = function (i) {
+          Customer.findOne({ _id : jobs[i].customerID }, function (err, customer) {
+            if(!customer){
+              customerName = "Undefined: Orphan Job"
+              console.log("customer is ", customerName);
+            }else{
+              customerName = customer.firstName + ", "  +  customer.lastName;
+              console.log("customer is ", customerName);
+            }
+            console.log("inner jobs are ", innerJobs[i].name);
+            dataSet.push([
+              innerJobs[i]._id,
+              innerJobs[i].name,
+              innerJobs[i].description,
+              innerJobs[i].creationDate,
+              innerJobs[i].status,
+              customerName
+            ]);
+            if(i == innerJobs.length - 1){
+              var aaData = {
+                "aaData" : dataSet
+              };
+
+              res.json(aaData);
+            }
+          })
+        }(i);
       }
-
-      var aaData = {
-        "aaData" : dataSet
-      };
-
-      res.json(aaData);
     }
     else {
       console.log("get all jobs Not success");
@@ -297,13 +314,23 @@ exports.validateEditJob = function (req, res, next) {
   console.log("validating the job");
 
   var errors = jobValidator(req.body.formJob, function (err) {
+    var job = req.body.formJob;
     if (Object.keys(err).length) {
       console.log("HAS ERRORS rendering create again");
+
+      var breadcrumb = req.session.breadcrumb;
+      breadcrumb.job = {
+        id : job._id,
+        name : job.name
+      }
+
+      req.session.breadcrumb = breadcrumb;
       res.render('job/jobDetails',
         { 
           layout: "includes/layout",
           title: "Job",
           job: req.body.formJob,
+          breadcrumb: breadcrumb,
           errors: err 
         }
       );

@@ -7,10 +7,33 @@ script(type="text/javascript", src="/js/estimateManagement.js")
 
 script
   var estimateManagement;
-
   $(document).ready(function () {
     estimateManagement = new EstimateManagement({
       "jobId": '#{jobID}',
       "estimateId": '#{estimate._id}',
     });
+    if('#{estimate.status}' == "Unused") {
+      $("#addLineItem").toggle();
+    }
+    if('#{estimate.status}' == "Selected") {
+      $("#addLineItem").toggle();
+    }
+    $('#status').val('#{estimate.status}');
+    $("#estimateName").toggle();
+    $("#estimateStatuslbl").toggle();
+    if('#{estimate.status}' == "Unused") {
+      $("#editEstimate").toggle();
+      $("#estimateStatuslbl").toggle();
+      $("#status").toggle();
+      $("#estimateName").toggle();
+      $("#name").toggle();
+    }
+    if('#{estimate.status}' == "Selected") {
+      $("#estimateName").toggle();
+      $("#name").toggle();
+    }
+    if('#{estimate.status}' == "Inactive") {
+      $("#estimateName").toggle();
+      $("#name").toggle();
+    }
   });

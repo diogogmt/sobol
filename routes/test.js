@@ -1,8 +1,11 @@
 var mongoose = require('mongoose')
-  , models = require('./../models')
+  , Job = require('./../models').Job
+  , Customer = require('./../models').Customer
   , config = require('./../config')
   , domain = 'http://localhost:11342/'
-  , Schema = mongoose.Schema;
+  , Schema = mongoose.Schema
+  , jobValidator = require('./../validators.js').jobValidator
+  , ObjectId = mongoose.Types.ObjectId;
 
 /*
 models.defineModels(function(){
@@ -111,90 +114,90 @@ exports.generate = function (req, res) {
     customer6.country = "Canada";
 
 
-    job101_1.customid = "Meyer1"
+
     job101_1.name = "Front Door"
     job101_1.description = "Full replacement of broken front door"
     job101_1.status = "Closed"
     job101_1.customerID = 101
 
-    job101_2.customid = "Meyer2"
+
     job101_2.name = "Bedroom"
     job101_2.description = "installation of new bedroom door"
     job101_2.status = "Closed"
     job101_2.customerID = 101
 
-    job101_3.customid = "Meyer3"
+
     job101_3.name = "Kitchen"
     job101_3.description = "replacement of kitchen window"
     job101_3.customerID = 101
 
-    job101_4.customid = "Meyer4"
+
     job101_4.name = "Back Door"
     job101_4.description = "replacement of broken back door"
     job101_4.customerID = 101
 
-    job102_1.customid = "Wu1"
+
     job102_1.name = "Attic"
     job102_1.description = "replacement of old attic window"
     job102_1.status = "Closed"
     job102_1.customerID = 102
 
-    job102_2.customid = "Wu2"
+
     job102_2.name = "Basement Bedroom"
     job102_2.description = "installation of new basement bedroom window"
     job102_2.customerID = 102
 
-    job103_1.customid = "Vasquez1"
+
     job103_1.name = "Bathroom"
     job103_1.description = "replacement of bathroom window"
     job103_1.status = "Closed"
     job103_1.customerID = 103
 
-    job103_2.customid = "Vasquez2"
+
     job103_2.name = "Kitchen"
     job103_2.description = "new installation of kitchen window"
     job103_2.status = "Closed"
     job103_2.customerID = 103
 
-    job103_3.customid = "Vasquez3"
+
     job103_3.name = "childrens room"
     job103_3.description = "replacement of children's bedroom door"
     job103_3.status = "Closed"
     job103_3.customerID = 103
 
-    job103_4.customid = "Vasquez4"
+
     job103_4.name = "Basement Bathroom"
     job103_4.description = "replacement of broken basement bathroom window"
     job103_4.customerID = 103
 
-    job104_1.customid = "Ramirez1"
+
     job104_1.name = "Kitchen"
     job104_1.description = "replacement of broken kitchen window"
     job104_1.customerID = 104
 
-    job105_1.customid = "Ramirez2"
+
     job105_1.name = "Patio"
     job105_1.description = "installation of new patio door"
     job105_1.customerID = 105
 
-    job106_1.customid = "Mathews1"
+
     job106_1.name = "Bedroom1"
     job106_1.description = "installation of new bedroom window"
     job106_1.status = "Closed"
     job106_1.customerID = 106
 
-    job106_2.customid = "Mathews2"
+
     job106_2.name = "guest bedroom"
     job106_2.description = "replacement of old door in guest bedroom"
     job106_2.status = "Closed"
     job106_2.customerID = 106
 
-    job106_3.customid = "Mathews3"
+
     job106_3.name = "Bathroom"
     job106_3.description = "installation of new bathroom door"
     job106_3.customerID = 106
 
-    job106_4.customid = "Mathews4"
+
     job106_4.name = "Dining Room"
     job106_4.description = "replacement of broken dining room window"
     job106_4.customerID = 106
@@ -259,7 +262,7 @@ exports.generate = function (req, res) {
     job101_1.save(function(err) {
       if (err){
         console.log("err: " + err);
-        return jobAddFailed();
+        //return jobAddFailed();
       }
       console.log("Adding job 1 for customer1 SUCCEED");
     });
@@ -268,7 +271,7 @@ exports.generate = function (req, res) {
     job101_2.save(function(err) {
       if (err){
         console.log("err: " + err);
-        return jobAddFailed();
+        //return jobAddFailed();
       }
       console.log("Adding job 2 for customer1 SUCCEED");
     });
@@ -277,7 +280,7 @@ exports.generate = function (req, res) {
     job101_3.save(function(err) {
       if (err){
         console.log("err: " + err);
-        return jobAddFailed();
+        //return jobAddFailed();
       }
       console.log("Adding job 3 for customer1 SUCCEED");
     });
@@ -285,7 +288,7 @@ exports.generate = function (req, res) {
     job101_4.save(function(err) {
       if (err){
         console.log("err: " + err);
-        return jobAddFailed();
+        //return jobAddFailed();
       }
       console.log("Adding job 4 for customer1 SUCCEED");
     });
@@ -295,7 +298,7 @@ exports.generate = function (req, res) {
     job102_1.save(function(err) {
       if (err){
         console.log("err: " + err);
-        return jobAddFailed();
+        //return jobAddFailed();
       }
       console.log("Adding job 1 for customer2 SUCCEED");
     });
@@ -304,7 +307,7 @@ exports.generate = function (req, res) {
     job102_2.save(function(err) {
       if (err){
         console.log("err: " + err);
-        return jobAddFailed();
+        //return jobAddFailed();
       }
       console.log("Adding job 2 for customer2 SUCCEED");
     });
@@ -315,7 +318,7 @@ exports.generate = function (req, res) {
     job103_1.save(function(err) {
       if (err){
         console.log("err: " + err);
-        return jobAddFailed();
+        //return jobAddFailed();
       }
       console.log("Adding job 1 for customer3 SUCCEED");
     });
@@ -324,7 +327,7 @@ exports.generate = function (req, res) {
     job103_2.save(function(err) {
       if (err){
         console.log("err: " + err);
-        return jobAddFailed();
+        //return jobAddFailed();
       }
       console.log("Adding job 2 for customer3 SUCCEED");
     });
@@ -333,7 +336,7 @@ exports.generate = function (req, res) {
     job103_3.save(function(err) {
       if (err){
         console.log("err: " + err);
-        return jobAddFailed();
+        //return jobAddFailed();
       }
       console.log("Adding job 3 for customer3 SUCCEED");
     });
@@ -341,7 +344,7 @@ exports.generate = function (req, res) {
     job103_4.save(function(err) {
       if (err){
         console.log("err: " + err);
-        return jobAddFailed();
+        //return jobAddFailed();
       }
       console.log("Adding job 4 for customer3 SUCCEED");
     });
@@ -350,7 +353,7 @@ exports.generate = function (req, res) {
     job104_1.save(function(err) {
       if (err){
         console.log("err: " + err);
-        return jobAddFailed();
+        //return jobAddFailed();
       }
       console.log("Adding job 1 for customer4 SUCCEED");
     });
@@ -359,7 +362,7 @@ exports.generate = function (req, res) {
     job105_1.save(function(err) {
       if (err){
         console.log("err: " + err);
-        return jobAddFailed();
+        //return jobAddFailed();
       }
       console.log("Adding job 1 for customer5 SUCCEED");
     });
@@ -368,7 +371,7 @@ exports.generate = function (req, res) {
     job106_1.save(function(err) {
       if (err){
         console.log("err: " + err);
-        return jobAddFailed();
+        //return jobAddFailed();
       }
       console.log("Adding job 1 for customer6 SUCCEED");
     });
@@ -377,7 +380,7 @@ exports.generate = function (req, res) {
     job106_2.save(function(err) {
       if (err){
         console.log("err: " + err);
-        return jobAddFailed();
+        //return jobAddFailed();
       }
       console.log("Adding job 2 for customer6 SUCCEED");
     });
@@ -386,7 +389,7 @@ exports.generate = function (req, res) {
     job106_3.save(function(err) {
       if (err){
         console.log("err: " + err);
-        return jobAddFailed();
+        //return jobAddFailed();
       }
       console.log("Adding job 3 for customer6 SUCCEED");
     });
@@ -394,7 +397,7 @@ exports.generate = function (req, res) {
     job106_4.save(function(err) {
       if (err){
         console.log("err: " + err);
-        return jobAddFailed();
+        //return jobAddFailed();
       }
       console.log("Adding job 4 for customer6 SUCCEED");
     });
