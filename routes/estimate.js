@@ -51,8 +51,6 @@ exports.add = function (req, res) {
 exports.edit = function (req, res) {
   console.log("edit estimate route");
   var formEstimate = req.body.formEstimate;
-  var breadcrumb = req.session.breadcrumb;
-  var jobID = breadcrumb.job.id;
   //console.log("customer: %o", req.body.cust);
   function estimateEditFailed() {
     console.log("edit estimate FAIL");
@@ -65,18 +63,18 @@ exports.edit = function (req, res) {
     });
   };
 
-  Job.findOne({ _id : new ObjectId(jobID) }, function (err, job) {
+  Job.findOne({ "estimateSet._id" : new ObjectId(formEstimate.id) }, function (err, job) {
     if(job){
       var estimateSet = job.estimateSet;
       var pid = job.PID;
+      var jobID = job._id;
       for(var i = 0; i < estimateSet.length; i++){
-//****************
-// If Estimate is selected, then set all other estimates to unused
+        // If Estimate is selected, then set all other estimates to unused
         if(formEstimate.status == "Selected"){
             estimateSet[i].status = "Unused";
            pid = estimateSet[i].quoteID;
         }
-// If Estimate is re-activated, then re-activate all estimates         
+        // If Estimate is re-activated, then re-activate all estimates         
         if(formEstimate.status == "Active"){
             estimateSet[i].status = "Active";
            pid = 0;
@@ -85,8 +83,9 @@ exports.edit = function (req, res) {
         if(estimateSet[i]._id == formEstimate.id){
           estimateSet[i].name = formEstimate.name;
           estimateSet[i].status = formEstimate.status;
-          var conditions  = { _id : new ObjectId(jobID) }
-            , update      = { estimateSet : estimateSet, PID : pid }
+          var conditions  = { "estimateSet._id" : new ObjectId(formEstimate.id) }
+            , update      = { estimateSet : estimateSet
+                            , PID : pid }
           ;
           Job.update(conditions, update, function (err, numAffected) {
             if (err || numAffected == 0){

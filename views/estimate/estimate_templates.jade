@@ -16,7 +16,11 @@ script(id="editEstimateTmpl", type="text/x-jQuery-tmpl")
       td
         .field
           label Status
-          #{estimate.status}
+          select#status(name="formEstimate[status]")
+            option(value="Active") Active
+            option(value="Selected") Selected
+            option(value="Inactive") Inactive
+          label#estimateStatuslbl #{estimate.status}
     tr
       td
         input#editEstimate.btn(type='submit', value='Update')

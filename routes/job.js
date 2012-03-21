@@ -144,17 +144,16 @@ exports.edit = function (req, res) {
     , update = { name : formJob.name
                , description : formJob.description
                , scheduledDates : scheduledDatesArray
-               , status : status
+               , status : formJob.status
                }
   ;
-    Job.update(conditions, update, function (err, numAffected) {
-      if(err || numAffected == 0){
-        console.log("err: " + err);
-        return jobEditFailed();
-      }
-      //console.log("Editing SUCCEED");
-      res.redirect('/job/' + formJob.id);
-    });  
+  Job.update(conditions, update, function (err, numAffected) {
+    if(err || numAffected == 0){
+      console.log("err: " + err);
+      return jobEditFailed();
+    }
+    //console.log("Editing SUCCEED");
+    res.redirect('/job/' + formJob.id);
   });
 };
 
