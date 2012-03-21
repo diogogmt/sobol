@@ -539,3 +539,24 @@ h2.calendar_header { font-size: 56px; text-align: center; line-height: 48px; mar
 .user-card .details { width: 115px; float: right; }
 
 #add-user-form { width: 270px; margin: 0 auto; }
+
+
+/* -------------------------------------------------------------- 
+   Estimate Page
+-------------------------------------------------------------- */		
+
+#addLineItemOverlay {
+  /* overlay is hidden before loading */
+  display:none;
+
+  /* standard decorations */
+  width:400px;
+  border:10px solid #666;
+
+  /* for modern browsers use semi-transparent color on the border. nice! */
+  border:10px solid rgba(82, 82, 82, 0.698);
+
+  /* hot CSS3 features for mozilla and webkit-based browsers (rounded borders) */
+  -moz-border-radius:8px;
+  -webkit-border-radius:8px;
+}

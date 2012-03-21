@@ -7,22 +7,10 @@ script(type="text/javascript", src="/js/estimateManagement.js")
 
 script
   var estimateManagement;
- 
+
   $(document).ready(function () {
-    estimateManagement = new EstimateManagement();
- 
-    $("#addLineItem").fancybox({
-      'titlePosition'   : 'inside',
-      'transitionIn'    : 'none',
-      'transitionOut'   : 'none'
+    estimateManagement = new EstimateManagement({
+      "jobId": '#{jobID}',
+      "estimateId": '#{estimate._id}',
     });
-    var dTable = $("#lineItemTable").dataTable( {
-      "bProcessing": true,
-      "bDestroy": true,
-      "sAjaxSource": "/datatable/getLineItems/" + '#{jobID}' + "/" + '#{estimate._id}',
-      "aoColumnDefs": [
-        { "bVisible" : false, "aTargets" : [0] }
-      ]
-    });
- 
-  })
+  });

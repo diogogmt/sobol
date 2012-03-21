@@ -1,4 +1,4 @@
-script(id="editLineItemTmpl", type="text/x-jQuery-tmpl")
+script(id="editEstimateTmpl", type="text/x-jQuery-tmpl")
 
   table
     tr
@@ -27,34 +27,35 @@ script(id="editLineItemTmpl", type="text/x-jQuery-tmpl")
 script(id="addLineItemOverlayTmpl", type="text/x-jQuery-tmpl")
 
     h4 Add Estimate Line Item
-    form.form.label-inline(id='addLineItemForm', action='/estimate/addLineItem/#{jobID}/#{estimate._id}', method='post')
+    form#addLineItemForm.form.label-inline()
       table
         tr
           td
             .field
               label(for='name') Name
-              input#name.medium(name='lineItem[name]', size='20', type='text', value='')
+              input#lineItemNameTxt.medium(name='lineItem[name]', size='20', type='text', value='')
           td
             .field
               label(for='description') Description
-              input#description.medium(name='lineItem[description]', size='20', type='text', value='')
+              input#lineItemDescriptionTxt.medium(name='lineItem[description]', size='20', type='text', value='')
         tr
           td
             .field
               label(for='quantity') Quantity
-              input#quantity.medium(name='lineItem[quantity]', size='20', type='text', value='')
+              input#lineItemQuantityTxt.medium(name='lineItem[quantity]', size='20', type='text', value='')
           td
             .field
               label(for='cost') Cost
-              input#cost.medium(name='lineItem[cost]', size='20', type='text', value='')
+              input#lineItemCostTxt.medium(name='lineItem[cost]', size='20', type='text', value='')
         tr
           td
-            input#saveLineItem.btn(type='submit', value='Add')
+            input#jobID(type="hidden", value="#{jobID}")
+            input#estimateID(type="hidden", value="#{estimate._id}")
+            button#saveLineItemBtn.btn() Save
           td
 
 script(id="lineItemDataTableOverlayTmpl", type="text/x-jQuery-tmpl")
 
-  
     thead
       tr
         th ID

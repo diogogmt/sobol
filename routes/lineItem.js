@@ -32,6 +32,16 @@ exports.add = function (req, res) {
     {upsert:false,safe:true},
     function (err) {
       console.log("err: ", err);
+      if (err) {
+        res.send({
+          "err": true,
+        });
+      }
+      else {
+        res.send({
+          "err": false,
+        })
+      }
     }
   );
 };
@@ -45,7 +55,7 @@ exports.edit = function (req, res) {
   function estimateEditFailed() {
     console.log("edit estimate FAIL");
     //req.flash('addError', 'Estimate Edit failed');
-    res.render('estimate/estimateDetails/', 
+    res.render('estimate/estimateDetails/',
     {
       layout: 'includes/layout',
       title: 'Estimate',
