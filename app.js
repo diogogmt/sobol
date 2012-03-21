@@ -136,6 +136,8 @@ app.post('/media/:id/tag/delete/:id', loadUser, routes.tag.delete);
 
 // Job
 app.get('/jobs', loadUser, routes.job.all);
+app.get('/jobs/calendar', loadUser, routes.job.calendar);
+app.get('/jobs/calendarData', loadUser, routes.job.calendarData);
 app.get('/datatable/job/getCustJobs/:id', loadUser, routes.job.getCustJobs);
 app.get('/datatable/job/findAll', loadUser, routes.job.findAll);
 

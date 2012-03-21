@@ -1,0 +1,18 @@
+include ../includes/menu.jade
+#content.xfluid
+  .portlet.x12
+    .portlet-header
+      h4 Job Calendar
+    .portlet-content
+      br
+      div#calendar
+
+include ../includes/footer.jade
+
+
+script(type="text/javascript")
+  $(document).ready(function() {
+    $('#calendar').fullCalendar({
+      events: '/jobs/calendarData'
+    });
+  });

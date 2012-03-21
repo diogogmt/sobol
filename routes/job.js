@@ -49,6 +49,75 @@ exports.add = function(req, res) {
   });
 };
 
+exports.calendar = function (req, res) {
+  res.render('job/jobsCalendar',
+    {
+      layout: 'includes/layout',
+      title: 'Jobs',
+      errors: false
+    });
+};
+
+// SELF NOTE (RAFFI) - CHANGE TO ONLY FIND ACTIVE JOBS
+exports.calendarData = function (req, res) {
+  console.log("Entering calendar data route");
+  Job.find({}, function (err, jobs) {
+    if(jobs){
+      var dataSet = new Array();
+      var rangeAdded = false;
+      var start = 0;
+      var end = 0;
+      for(var i = 0; i < jobs.length; i++){
+        for(var j = 0; j < jobs[i].scheduledDates.length; j++){
+          var d = jobs[i].scheduledDates[j];
+          var yn = d.getFullYear();
+          var mn = d.getMonth();
+          var dn = d.getDate();
+          var d1 = new Date(yn,0,1,12,0,0); // noon on Jan. 1
+          var d2 = new Date(yn,mn,dn,12,0,0); // noon on input date
+          var dayOfYearA = Math.round((d2-d1)/864e5) + 1;
+
+          if(jobs[i].scheduledDates[j+1]){
+            d = jobs[i].scheduledDates[j+1];
+            yn = d.getFullYear();
+            mn = d.getMonth();
+            dn = d.getDate();
+            d1 = new Date(yn,0,1,12,0,0); // noon on Jan. 1
+            d2 = new Date(yn,mn,dn,12,0,0); // noon on input date
+            var dayOfYearB = Math.round((d2-d1)/864e5) + 1;
+
+            if(dayOfYearA + 1 != dayOfYearB){
+              dataSet.push({
+                title : jobs[i].name,
+                start: jobs[i].scheduledDates[start],
+                end: jobs[i].scheduledDates[j],
+                url: "/job/" + jobs[i]._id,
+              });
+              start = j + 1;
+            }
+          }else{
+            dataSet.push({
+              title : jobs[i].name,
+              start: jobs[i].scheduledDates[start],
+              end: jobs[i].scheduledDates[j],
+              url: "/job/" + jobs[i]._id,
+            });
+          }
+        }
+      }
+
+      var events = {
+        "events" : dataSet
+      };
+
+      res.json(dataSet);
+    }
+    else {
+      console.log("get all jobs Not success");
+    }
+  });
+};
+
 exports.edit = function (req, res) {
   //console.log("edit job route");
   var formJob = req.body.formJob;
@@ -141,14 +210,14 @@ exports.getCustJobs = function (req, res) {
 
 
 exports.details = function (req, res) {
-  //console.log("job details route");
-  //console.log("job ID: " + req.params.id);
+  console.log("job details route");
+  console.log("job ID: " + req.params.id);
 
   Job.findOne({ _id : new ObjectId(req.params.id) }, function (err, job) {
     if(!job){
       console.log("get specific job not successful");
     }else{
-      //console.log("Details job: ", job);
+      console.log("Details job: ", job);
       var breadcrumb = req.session.breadcrumb;
       breadcrumb.job = {
         id : job._id,
