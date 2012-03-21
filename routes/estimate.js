@@ -11,8 +11,8 @@ var mongoose = require('mongoose')
 exports.add = function (req, res) {
   console.log("add estimate route");
   var estimate = new Estimate(req.body.estimate);
-<<<<<<< HEAD
   var jobID = new ObjectId(req.params.id);
+
   function estimateAddFailed() {
     console.log("add estimate FAIL");
     //req.flash('addError', 'Estimate Add failed');
@@ -22,6 +22,15 @@ exports.add = function (req, res) {
       title: 'Job'
     });
   };
+
+  // Get total number of estimates for all the jobs in the system 
+  var estimateCount = 0;
+  Job.find({}, function (err, jobs) {
+   for(i = 0; i < jobs.length; i++){
+     estimateCount = estimateCount + jobs[i].estimateSet.length;
+   } 
+   estimate.quoteID = estimateCount + 1;
+  });
 
   Job.update(
     { "_id": jobID },
@@ -36,56 +45,7 @@ exports.add = function (req, res) {
         else {
           res.redirect('/job/' + jobID);
         }
-    });
-
-=======
-  var estimateCount = 0;
-  //*****************
-  // Get total number of estimates for all the jobs in the system 
-     Job.find({}, function (err, jobs) {
-      for(i = 0; i < jobs.length; i++){
-        estimateCount = estimateCount + jobs[i].estimateSet.length;
-      } 
-      estimate.quoteID = estimateCount + 1;
-      var jobID = new ObjectId(req.params.id);
-      function estimateAddFailed() {
-        console.log("add estimate FAIL");
-        //req.flash('addError', 'Estimate Add failed');
-        res.render('job/jobDetails', 
-        {
-          layout: 'includes/layout',
-          title: 'Job'
-        });
-      };
-  //*****************
-      var getCustomerName = function (i) {
-        Job.findOne({ _id : new ObjectId(req.params.id) }, function (err, job) {
-          if(job){
-            var estimateSet = job.estimateSet;
-            //console.log("Pushing Estimate into Job EstimateSet: ", estimate);
-            estimateSet.push(estimate);
-            job.save(function(err) {
-              if(err){
-                console.log("Error saving job after adding estimate");
-                return estimateAddFailed();
-              }
-              //console.log("Adding Estimate SUCCESS");
-              //req.flash('info', 'The estimate has been added');
-              res.redirect('/job/' + jobID);
-            });
-          }else{
-            console.log("finding job for add estimate - Not success");
-            return estimateAddFailed();
-          }
-        });        
-      }(estimate)
-  //*****************
-     });   
-  /*
-  Self-Note (Raffi) - Try this instead at some point:
-  Customer.update( {_id: custID }, { $push: {estimateSet: newEstimate})
-  */
->>>>>>> remotes/DennisRepo/master
+      });
 };
 
 exports.edit = function (req, res) {

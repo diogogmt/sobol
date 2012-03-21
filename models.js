@@ -129,31 +129,7 @@ exports.Customer = (function () {
 
 
 /**
-<<<<<<< HEAD
 * Line Item schema
-=======
-* Model: Job
-*/
-exports.Job = (function () {
-  //console.log("Job model");
-
- Job = new Schema({
-    'name' : String,
-    'description' : String,
-    'PID' : { type: Number, default: 0 },
-    'creationDate' : { type: Date, default: Date.now },
-    'status' : { type: String, default: "Active" },
-    'scheduleDates' : String,
-    'customerID' : ObjectId,
-    'estimateSet' : [exports.Estimate]
-  });
-
-  return db.model('Job', Job);
-})();
-
-/**
-* Model: Estimate Line Item
->>>>>>> remotes/DennisRepo/master
 */
 exports.EstimateLineItem = (function () {
  schemas.lineItem = new Schema({
@@ -189,7 +165,6 @@ exports.Estimate = (function () {
 /**
 * Job schema
 */
-<<<<<<< HEAD
 exports.Job = (function () {
  schemas.job = new Schema({
     'name' : String,
@@ -199,14 +174,6 @@ exports.Job = (function () {
     'scheduledDates' : [Date],
     'customerID' : ObjectId,
     'estimateSet' : [schemas.estimate]
-=======
-exports.Note = (function () {
-  //console.log("Note model");
-
- Note = new Schema({
-    'noteText' : String,
-    'LastModifiedDate' : { type: Date, default: Date.now },
->>>>>>> remotes/DennisRepo/master
   });
 
   return db.model('Job', schemas.job);
