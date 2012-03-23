@@ -20,7 +20,6 @@ exports.all = function (req, res) {
     });
 };
 
- 
 exports.add = function(req, res) {
   //console.log("add job route");
 
@@ -43,7 +42,7 @@ exports.add = function(req, res) {
     if (err) {
       console.log("err: " + err);
       return jobSaveFailed();
-    } 
+    }
     //console.log("creating job");
     res.redirect('/customer/' + job.customerID);
     // req.flash('info', 'Job has been added');
@@ -279,18 +278,16 @@ exports.details = function (req, res) {
 
 exports.validateJob = function (req, res, next) {
   console.log("validating the job");
-  
-var job = new Job(req.body.job);
+  var job = new Job(req.body.job);
 
   var errors = jobValidator(req.body.job, function (err) {
     if (Object.keys(err).length) {
 
      console.log("HAS ERRORS rendering create again");
      Customer.findOne({ _id : new ObjectId(req.params.id) }, function (err, customer){
-              
-              var breadcrumb = req.session.breadcrumb;  
+              var breadcrumb = req.session.breadcrumb;
               res.render('customer/custDetails',
-                { 
+                {
                     layout: 'includes/layout',
                     title: 'Customer',
                     customer: customer,
@@ -298,14 +295,12 @@ var job = new Job(req.body.job);
                     errors: false
                 }
               );
-              
       });
 
       return false;
     }
-    next();  
+    next();
   });
-  
 }
 
 
@@ -325,17 +320,16 @@ exports.validateEditJob = function (req, res, next) {
 
       req.session.breadcrumb = breadcrumb;
       res.render('job/jobDetails',
-        { 
+        {
           layout: "includes/layout",
           title: "Job",
           job: req.body.formJob,
           breadcrumb: breadcrumb,
-          errors: err 
+          errors: err
         }
       );
       return false;
     }
-    next();  
+    next();
   });
-  
 }
