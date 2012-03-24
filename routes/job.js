@@ -185,58 +185,54 @@ exports.calendarData = function (req, res) {
       while (j--) {
         dates = job.scheduledDates;
         d1 = new XDate(dates[j]).addDays(-1);
-          d2 = !!j ? new XDate(dates[j-1]) : d1;
-          if (d1.diffDays(d2) || !j) {
-            events.push({
-              title : job.name,
-              start: dates[j],
-              end: dates[end],
-              url: "/job/" + job._id,
-            });
-            end = j - 1;
-          }
+        // if j equals to 0 assign current date to d2
+        d2 = !!j ? new XDate(dates[j-1]) : d1;
+        // if the days are different or j is equal to 0 , push to the eventsSet
+        if (d1.diffDays(d2) || !j) {
+          events.push({
+            title : job.name,
+            start: dates[j],
+            end: dates[end],
+            url: "/job/" + job._id,
+          });
+          end = j - 1;
         }
       }
+    }
     res.json(events);
   });
 };
 
 
 exports.getCustJobs = function (req, res) {
-  Job.find({ customerID : new ObjectId(req.params.id) }, function (err, jobs) {
-    //console.log("The current customer is " + req.params.id);
-    if(jobs){
-      //console.log("get all this customers jobs success: " + jobs.length);
-      var dataSet = new Array();
-      for(i = 0; i < jobs.length; i++){
-        dataSet.push([
-            jobs[i]._id,
-            jobs[i].name,
-            jobs[i].description,
-            jobs[i].estimateSet.length,
-            new Date(jobs[i].creationDate).toDateString(),
-            jobs[i].status
-        ]);
-      }
-      var aaData = {
-        "aaData" : dataSet
-      };
-      res.json(aaData);
+  var custId = req.params.id || null;
+  if (!custId) {
+    // TODO: create log module
+    log("custId shouldn't be null");
+  }
+  Job.find({ "customerID": custId }, function (err, jobs) {
+    var dataSet = new Array()
+      , i = (jobs && jobs.length) || 0;
+
+    while (i--) {
+      // push an array?
+      dataSet.push([
+        jobs[i]._id,
+        jobs[i].name,
+        jobs[i].description,
+        jobs[i].estimateSet.length,
+        new Date(jobs[i].creationDate).toDateString(),
+        jobs[i].status
+      ]);
     }
-    else
-    {
-      console.log("get all this customers jobs Not success");
-    }
+    res.json({"aaData": dataSet});
   });
 };
 
 
 exports.findAll = function (req, res) {
-  //console.log("all jobs route");
   Job.find({}, function (err, jobs) {
-    //console.log("Find Job ");
-    if(jobs){
-      //console.log("get all jobs success");
+    if(jobs) {
       var dataSet = new Array();
       var innerJobs = jobs;
       for(i = 0; i < jobs.length; i++){
