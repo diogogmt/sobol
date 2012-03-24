@@ -1,4 +1,5 @@
 var mongoose = require('mongoose')
+  , XDate = require('./../xdate.js')
   , Job = require('./../models').Job
   , breadcrumbs = require('./../breadcrumbs')
   , Customer = require('./../models').Customer
@@ -8,7 +9,9 @@ var mongoose = require('mongoose')
   , jobValidator = require('./../validators.js').jobValidator
   , ObjectId = mongoose.Types.ObjectId;
 
+console.log("XDate: ", XDate);
 
+// Jobs List
 exports.all = function (req, res) {
   //console.log("all jobs route");
   //console.log("req.currentUser: %o", req.currentUser);
@@ -19,6 +22,71 @@ exports.all = function (req, res) {
       errors: false
     });
 };
+
+
+// Single Job
+exports.details = function (req, res) {
+  console.log("job details route");
+  console.log("job ID: " + req.params.id);
+  var jobId = req.params.id || 0;
+
+  Job.findOne({"_id" : new ObjectId(jobId)}, function (err, job) {
+    if (!job) {
+      console.log("get specific job not successful");
+    }
+    else {
+      console.log("job found");
+      breadcrumbs.createBreadcrumb({ customerID: job.customerID }, function (breadcrumb) {
+        console.log("breadcrumb: ", breadcrumb);
+        breadcrumb["job"] = {
+          id : job._id,
+          name : job.name
+        };
+        console.log("breadcrumb: ", breadcrumb);
+        console.log("job.scheduledDates: ", job.scheduledDates);
+        var scheduledDates = job.scheduledDates || null
+          , i = scheduledDates && scheduledDates.length
+          , date
+          dates = new Array();
+
+        while (i--) {
+          date = new Date(scheduledDates[i]);
+          dates.push((date.getMonth() + 1) + "/"
+              + date.getDate() + "/" + date.getFullYear());
+        }
+        // console.log("job.scheduledDates: ", job.scheduledDates);
+        // for (var key in job.scheduledDates) {
+        //   console.log(job.scheduledDates[key]);
+        // }
+        // if (job.scheduledDates.length > 0) {
+        //   scheduledDates = job.scheduledDates.toString().split(",");
+        //   for (var i = 0; i < scheduledDates.length; i++) {
+        //     var newDate = new Date(scheduledDates[i]);
+        //     scheduledDates[i] = (newDate.getMonth() + 1) + "/"
+        //       + newDate.getDate() + "/" + newDate.getFullYear();
+        //     console.log(scheduledDates[i]);
+        //   }
+        // }
+        // else {
+        //   scheduledDates = "";
+        // }
+        console.log("dates: ", dates);
+        console.log("scheduledDates: ", scheduledDates);
+        res.render('job/jobDetails',
+          {
+            layout: 'includes/layout',
+            title: 'Job',
+            job: job,
+            breadcrumb: breadcrumb,
+            dates: dates,
+            errors: false
+          }
+        );
+      });
+    }
+  });
+};
+
 
 exports.add = function(req, res) {
   //console.log("add job route");
@@ -49,74 +117,6 @@ exports.add = function(req, res) {
   });
 };
 
-exports.calendar = function (req, res) {
-  res.render('job/jobsCalendar',
-    {
-      layout: 'includes/layout',
-      title: 'Jobs',
-      errors: false
-    });
-};
-
-// SELF NOTE (RAFFI) - CHANGE TO ONLY FIND ACTIVE JOBS
-exports.calendarData = function (req, res) {
-  console.log("Entering calendar data route");
-  Job.find({}, function (err, jobs) {
-    if(jobs){
-      var dataSet = new Array();
-      //var rangeAdded = false;
-      for(var i = 0; i < jobs.length; i++){
-        var start = 0;
-        var end = 0;
-        for(var j = 0; j < jobs[i].scheduledDates.length; j++){
-          var d = jobs[i].scheduledDates[j];
-          var yn = d.getFullYear();
-          var mn = d.getMonth();
-          var dn = d.getDate();
-          var d1 = new Date(yn,0,1,12,0,0); // noon on Jan. 1
-          var d2 = new Date(yn,mn,dn,12,0,0); // noon on input date
-          var dayOfYearA = Math.round((d2-d1)/864e5) + 1;
-
-          if(jobs[i].scheduledDates[j+1]){
-            d = jobs[i].scheduledDates[j+1];
-            yn = d.getFullYear();
-            mn = d.getMonth();
-            dn = d.getDate();
-            d1 = new Date(yn,0,1,12,0,0); // noon on Jan. 1
-            d2 = new Date(yn,mn,dn,12,0,0); // noon on input date
-            var dayOfYearB = Math.round((d2-d1)/864e5) + 1;
-
-            if(dayOfYearA + 1 != dayOfYearB){
-              dataSet.push({
-                title : jobs[i].name,
-                start: jobs[i].scheduledDates[start],
-                end: jobs[i].scheduledDates[j],
-                url: "/job/" + jobs[i]._id,
-              });
-              start = j + 1;
-            }
-          }else{
-            dataSet.push({
-              title : jobs[i].name,
-              start: jobs[i].scheduledDates[start],
-              end: jobs[i].scheduledDates[j],
-              url: "/job/" + jobs[i]._id,
-            });
-          }
-        }
-      }
-
-      var events = {
-        "events" : dataSet
-      };
-
-      res.json(dataSet);
-    }
-    else {
-      console.log("get all jobs Not success");
-    }
-  });
-};
 
 exports.edit = function (req, res) {
   //console.log("edit job route");
@@ -153,6 +153,80 @@ exports.edit = function (req, res) {
     }
     //console.log("Editing SUCCEED");
     res.redirect('/job/' + formJob.id);
+  });
+};
+
+exports.calendar = function (req, res) {
+  res.render('job/jobsCalendar',
+    {
+      layout: 'includes/layout',
+      title: 'Jobs',
+      errors: false
+    });
+};
+
+// SELF NOTE (RAFFI) - CHANGE TO ONLY FIND ACTIVE JOBS
+exports.calendarData = function (req, res) {
+  console.log("Entering calendar data route");
+  Job.find({}, function (err, jobs) {
+    var events = new Array()
+      , i = (jobs && jobs.length) || 0
+      , j
+      , d1
+      , d2
+      , end
+      , job
+      , dates;
+
+    while (i--) {
+      j = (jobs[i].scheduledDates && jobs[i].scheduledDates.length) || 0;
+      end = j-1;
+      job = jobs[i];
+      while (j--) {
+        dates = job.scheduledDates;
+        d1 = new XDate(dates[j]).addDays(-1);
+          d2 = !!j ? new XDate(dates[j-1]) : d1;
+          if (d1.diffDays(d2) || !j) {
+            events.push({
+              title : job.name,
+              start: dates[j],
+              end: dates[end],
+              url: "/job/" + job._id,
+            });
+            end = j - 1;
+          }
+        }
+      }
+    res.json(events);
+  });
+};
+
+
+exports.getCustJobs = function (req, res) {
+  Job.find({ customerID : new ObjectId(req.params.id) }, function (err, jobs) {
+    //console.log("The current customer is " + req.params.id);
+    if(jobs){
+      //console.log("get all this customers jobs success: " + jobs.length);
+      var dataSet = new Array();
+      for(i = 0; i < jobs.length; i++){
+        dataSet.push([
+            jobs[i]._id,
+            jobs[i].name,
+            jobs[i].description,
+            jobs[i].estimateSet.length,
+            new Date(jobs[i].creationDate).toDateString(),
+            jobs[i].status
+        ]);
+      }
+      var aaData = {
+        "aaData" : dataSet
+      };
+      res.json(aaData);
+    }
+    else
+    {
+      console.log("get all this customers jobs Not success");
+    }
   });
 };
 
@@ -202,79 +276,7 @@ exports.findAll = function (req, res) {
   });
 };
 
-exports.getCustJobs = function (req, res) {
-  Job.find({ customerID : new ObjectId(req.params.id) }, function (err, jobs) {
-    //console.log("The current customer is " + req.params.id);
-    if(jobs){
-      //console.log("get all this customers jobs success: " + jobs.length);
-      var dataSet = new Array();
-      for(i = 0; i < jobs.length; i++){
-        dataSet.push([
-            jobs[i]._id,
-            jobs[i].name,
-            jobs[i].description,
-            jobs[i].estimateSet.length,
-            new Date(jobs[i].creationDate).toDateString(),
-            jobs[i].status
-        ]);
-      }
-      var aaData = {
-        "aaData" : dataSet
-      };
-      res.json(aaData);
-    }
-    else
-    {
-      console.log("get all this customers jobs Not success");
-    }
-  });
-};
 
-
-exports.details = function (req, res) {
-  console.log("job details route");
-  console.log("job ID: " + req.params.id);
-
-  Job.findOne({ _id : new ObjectId(req.params.id) }, function (err, job) {
-    if(!job) {
-      console.log("get specific job not successful");
-    }
-    else {
-      console.log("job found");
-      breadcrumbs.createBreadcrumb({ customerID: job.customerID }, function (breadcrumb) {
-        console.log("breadcrumb: ", breadcrumb);
-        breadcrumb["job"] = {
-          id : job._id,
-          name : job.name
-        };
-        console.log("breadcrumb: ", breadcrumb);
-
-        var scheduledDates;
-        if(job.scheduledDates.length > 0){
-          scheduledDates = job.scheduledDates.toString().split(",");
-          for(var i = 0; i < scheduledDates.length; i++){
-            var newDate = new Date(scheduledDates[i]);
-            scheduledDates[i] = (newDate.getMonth() + 1) + "/" + newDate.getDate() + "/" + newDate.getFullYear();
-            console.log(scheduledDates[i]);
-          }
-        }else{
-          scheduledDates = "";
-        }
-
-        res.render('job/jobDetails',
-          {
-            layout: 'includes/layout',
-            title: 'Job',
-            job: job,
-            breadcrumb: breadcrumb,
-            dates: scheduledDates,
-            errors: false
-          }
-        );
-      });
-    }
-  });
-};
 
 exports.validateJob = function (req, res, next) {
   console.log("validating the job");
