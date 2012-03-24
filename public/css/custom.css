@@ -412,13 +412,15 @@ ul.gallery { padding: 0; margin: 0; }
 	display:none;
 	
 	/* growing background image */
-	background-image:url(../images/white.png);
+	/*background-image:url(../images/white.png);*/
+	background-color:#FFFFFF;
 	
 	/* 
 		width after the growing animation finishes
 		height is automatically calculated
 	*/
-	width:640px;
+	width: 450px;
+	border: 5px solid #263849;
 	
 	/* some padding to layout nested elements nicely  */
 	padding:35px;

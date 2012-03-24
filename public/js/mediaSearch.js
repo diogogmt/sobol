@@ -164,7 +164,7 @@ MediaSearch.prototype.initOverlays = function() {
     mask: {
       color: '#fff',
       loadSpeed: 200,
-      opacity: 0.5
+      opacity: 0.8
     },
     effect: 'apple',
   });
