@@ -33,7 +33,7 @@ script(type="text/javascript")
     var dTable = $("#estimateTable").dataTable( {
       "bProcessing": true,
       "bDestroy": true,
-      "sAjaxSource": "/datatable/estimate/getJobEstimates/" + '#{job.id}',
+      "sAjaxSource": "/datatable/job/" + "#{job.id}" + "/estimates",
       "aoColumnDefs": [
         { "bVisible" : false, "aTargets" : [0] }
       ],
@@ -47,6 +47,5 @@ script(type="text/javascript")
     });
     if('#{job.PID}' > 0 || '#{job.status}' == "Inactive") {
       $("#addEstimate").toggle();
-    } 
-       
+    }
   });

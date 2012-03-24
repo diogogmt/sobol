@@ -20,54 +20,7 @@ exports.all = function (req, res) {
     });
 };
 
-exports.findAll = function (req, res) {
-  //console.log("all customers route");
-  //console.log("req.currentUser: %o", req.currentUser);
 
-  Customer.find({}, function (err, customers) {
-    //console.log("customer callback");
-    if(customers){
-      //console.log("get all customers success");
-      //console.log(customers);
-
-      var dataSet = new Array();
-      var innerCust = customers;
-      for(i = 0; i < customers.length; i++){
-        // console.log("This is CUSTOMERS: " + customers);
-        // console.log("This is INNER CUST: " + innerCust);
-        //console.log("count: " + i);
-        var countJob = function (i) {
-          Job.count({ customerID : customers[i]._id }, function (err, count) {
-            //console.log("inside count: " + i);
-            dataSet.push([
-              innerCust[i]._id,
-              innerCust[i].lastName,
-              innerCust[i].firstName,
-              innerCust[i].email,
-              innerCust[i].phone1,
-              count,
-              new Date(innerCust[i].registrationDate).toDateString(),
-              innerCust[i].status
-            ]);
-
-            //console.log("INNER CUST LENGTH: " + innerCust.length);
-            if(i == innerCust.length - 1){
-              var aaData = {
-                "aaData" : dataSet
-              };
-
-              res.json(aaData);
-            }
-          }); // END JOB COUNT
-        }(i); // END countJob
-      } // END for loop
-    }
-    else
-    {
-      console.log("get all customers Not success");
-    }
-  });
-};
 
 
 exports.add = function (req, res) {
@@ -178,56 +131,6 @@ exports.details = function (req, res) {
   });
 };
 
-
-
-exports.findActive = function (req, res) {
-  //console.log("all customers route");
-  //console.log("req.currentUser: %o", req.currentUser);
-
-  Customer.find({ status : "Active"}, function (err, customers) {
-    //console.log("customer callback");
-    if(customers){
-      //console.log("get all customers success");
-      //console.log(customers);
-
-      var dataSet = new Array();
-      var innerCust = customers;
-      for(i = 0; i < customers.length; i++){
-        // console.log("This is CUSTOMERS: " + customers);
-        // console.log("This is INNER CUST: " + innerCust);
-        //console.log("count: " + i);
-        var countJob = function (i) {
-          Job.count({ customerID : customers[i]._id }, function (err, count) {
-            
-            //console.log("inside count: " + i);
-            dataSet.push([
-              innerCust[i]._id,
-              innerCust[i].lastName,
-              innerCust[i].firstName,
-              innerCust[i].email,
-              innerCust[i].phone1,
-              count,
-              new Date(innerCust[i].registrationDate).toDateString(),
-              innerCust[i].status
-            ]);
-
-            //console.log("INNER CUST LENGTH: " + innerCust.length);
-            if(i == innerCust.length - 1){
-              var aaData = {
-                "aaData" : dataSet
-              };
-
-              res.json(aaData);
-            }
-          }); // END JOB COUNT
-        }(i); // END countJob
-      } // END for loop
-    }
-    else {
-      console.log("get all customers Not success");
-    }
-  });
-};
 
 exports.validateCustomer = function (req, res, next) {
   //console.log("validating the customer");

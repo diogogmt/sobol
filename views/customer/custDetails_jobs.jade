@@ -47,7 +47,7 @@ script(type="text/javascript")
     var dTable = $("#jobTable").dataTable( {
       "bProcessing": true,
       "bDestroy": true,
-      "sAjaxSource": "/datatable/job/getCustJobs/" + '#{customer.id}',
+      "sAjaxSource": "/datatable/customer/" + "#{customer.id}" + "/jobs",
       "aoColumnDefs": [
         { "bVisible" : false, "aTargets" : [0] }
       ],

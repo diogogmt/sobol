@@ -152,36 +152,3 @@ exports.details = function (req, res) {
   });
 };
 
-exports.getJobEstimates = function (req, res) {
-  console.log("job getJobEstimates");
-  console.log("req.params: ", req.params);
-  var jobID = req.params.id;
-  console.log("jobID: ", jobID);
-
-
-  Job.findById(new ObjectId(jobID), ["estimateSet"], function (err, job) {
-    console.log("err: ", err);
-    console.log("job: ", job);
-    if(job) {
-      var estimateSet = job.estimateSet
-        , i = estimateSet ? estimateSet.length : 0
-        , data = {
-            "aaData": new Array(),
-          };
-      while(i--) {
-        data.aaData.push([
-            estimateSet[i]._id,
-            estimateSet[i].name,
-            estimateSet[i].finalTotal,
-            new Date(estimateSet[i].creationDate).toDateString(),
-            estimateSet[i].status
-        ]);
-      }
-      res.json(data);
-    }
-    else {
-      console.log("get all this jobs estimates - Not success");
-    }
-
-  });
-};

@@ -16,7 +16,7 @@ script(type="text/javascript")
       "bProcessing": true,
       "bDestroy": true,
       //"sAjaxSource": "/datatable/customer/findAll",
-      "sAjaxSource": "/datatable/customer/findActive",
+      "sAjaxSource": "/datatable/customers?status=Active",
       "aoColumnDefs": [
         { "bVisible" : false, "aTargets" : [0] }
       ],
@@ -29,14 +29,14 @@ script(type="text/javascript")
     $("#customerTable tbody tr").live("click", function() {
       var data = dTable.fnGetData(this);
       var custID = data[0];
-      window.location = "./customer/" + custID;
+      window.location.href = "/customer/" + custID;
     });
     $('#showArchived').click(function() {
         var ajaxSourceURL;
         if($('#showArchived').is(':checked')){
-          ajaxSourceURL = "/datatable/customer/findAll";
+          ajaxSourceURL = "/datatable/customers?status=Archived";
         }else{
-          ajaxSourceURL = "/datatable/customer/findActive";
+          ajaxSourceURL = "/datatable/customers?status=Active";
         }
         var dTable = $("#customerTable").dataTable( {
           "bProcessing": true,
