@@ -57,7 +57,12 @@ MediaSearch.prototype.bindEditMediaHandler = function() {
     }
     manageEditMedia.oldTags.push(tagArray);
     var item = $("#mediaTagsTmpl").tmpl(tagCollection).appendTo(manageEditMedia.tagsList);
-    
+    $(item).find(".removeTag").click(function (e) {
+      // console.log("remove tag click");
+      $(this).parent().remove();
+      manageEditMedia.freshTags.splice(manageEditMedia.freshTags.indexOf($(this).attr("query")), 1);
+      return false;
+    });
     $(".close").click(function (e) {
       console.log("close edit overlay click");
       that.editMediaOverlay.close();

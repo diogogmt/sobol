@@ -95,9 +95,9 @@ MediaManagement.prototype.bindCreateTagHandler = function() {
 
     var item = $("#mediaTagsTmpl").tmpl(tag).appendTo(that.tagsList);
     $(item).find(".removeTag").click(function (e) {
-      // console.log("remove tag click");
-      $(this).parent().empty();
-      that.freshTags.splice(that.freshTags.indexOf($(that).attr("query")), 1);
+      //console.log("remove tag click");
+      $(this).parent().remove();
+      that.freshTags.splice(that.freshTags.indexOf($(this).attr("query")), 1);
       return false;
     });
     $(that.tagNameInput).val("");
@@ -120,7 +120,7 @@ MediaManagement.prototype.bindSelectTagHandler = function() {
  
     $(item).find(".removeTag").click( function (e) {
       console.log("remove existing tag click");
-      $(this).parent().empty();
+      $(this).parent().remove();
       that.oldTags.splice(that.oldTags.indexOf($(this).attr("query")), 1);
       $("#availableTagsTmpl").tmpl({"value": tag.name, "text": tag.name}).appendTo(that.oldTagsSelect);
       return false;

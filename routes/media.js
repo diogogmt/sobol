@@ -111,8 +111,8 @@ exports.create = function (req, res) {
   im.crop({
     srcPath: file.path,
     dstPath: thumbnail.path,
-    width: 100,
-    height: 100,
+    width: 150,
+    height: 150,
     quality: 1
   }, function(err, stdout, stderr) {
     console.log(stdout);

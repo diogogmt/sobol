@@ -326,14 +326,14 @@ ul.gallery { padding: 0; margin: 0; }
 
 .gallery li .actions
 {
-	width: 100px;
-	height: 100px;
+	width: 150px;
+	height: 150px;
 	display: block;
 	z-index: 10;
 	position: absolute;
 	text-align: center;
 	left: 0;
-	top: 0;
+	top: 40px;
 	display: none;
 	padding: 3px;
 	line-height: 100px;
