@@ -160,7 +160,8 @@ EstimateManagement.prototype.loadLineItemDataTable = function() {
   $("#lineItemTable").dataTable( {
     "bProcessing": true,
     "bDestroy": true,
-    "sAjaxSource": "/datatable/getLineItems/" + that.jobId + "/" + that.estimateId,
+    "sAjaxSource": "/datatable/job/" + that.jobId + "/estimate/" +
+       that.estimateId + "/lineItems",
     "aoColumnDefs": [
       { "bVisible" : false, "aTargets" : [0] }
      ]

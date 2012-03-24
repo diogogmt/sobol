@@ -36,32 +36,6 @@ exports.all = function (req, res) {
 
 };
 
-exports.getCustomerNotes = function (req, res) {
-  Customer.findOne({ _id : new ObjectId(req.params.id) }, function (err, customer) {
-    //console.log("The current customer is " + req.params.id);
-    if(customer){
-      console.log("Get specific customer for notes - SUCCESS");
-      var dataSet = new Array();
-      var notes = customer.noteSet;
-      for(i = 0; i < notes.length; i++){
-        dataSet.push([
-            notes[i]._id,
-            notes[i].noteText,
-            new Date(notes[i].LastModifiedDate).toDateString(),
-        ]);
-      }
-      var aaData = {
-        "aaData" : dataSet
-      };
-      res.json(aaData);
-    }
-    else 
-    {
-      console.log("get all this customers notes - Not success");
-    }
-  });
-}
-
 exports.add = function (req, res) {
   console.log("add note route");
   var note = new Note(req.body.custnote);
@@ -167,13 +141,12 @@ exports.delete = function (req, res) {
         console.log("No notes found for this customer.");
       }
     }
-  });  
+  });
 };
 
 
 exports.edit = function (req, res) {
   console.log("edit notes route");
- 
 
   Customer.findOne({ _id : new ObjectId(req.params.custid) }, function (err, customer) {
     if(!customer){
@@ -228,7 +201,6 @@ exports.edit = function (req, res) {
         console.log("No notes found for this customer.");
       }
     }
-  });  
+  });
 
 };
-

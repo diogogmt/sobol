@@ -26,8 +26,8 @@ exports.all = function (req, res) {
 
 // Single Job
 exports.details = function (req, res) {
-  console.log("job details route");
-  console.log("job ID: " + req.params.id);
+  // console.log("job details route");
+  // console.log("job ID: " + req.params.id);
   var jobId = req.params.id || 0;
 
   Job.findOne({"_id" : new ObjectId(jobId)}, function (err, job) {
@@ -35,15 +35,15 @@ exports.details = function (req, res) {
       console.log("get specific job not successful");
     }
     else {
-      console.log("job found");
+      // console.log("job found");
       breadcrumbs.createBreadcrumb({ customerID: job.customerID }, function (breadcrumb) {
-        console.log("breadcrumb: ", breadcrumb);
+        // console.log("breadcrumb: ", breadcrumb);
         breadcrumb["job"] = {
           id : job._id,
           name : job.name
         };
-        console.log("breadcrumb: ", breadcrumb);
-        console.log("job.scheduledDates: ", job.scheduledDates);
+        // console.log("breadcrumb: ", breadcrumb);
+        // console.log("job.scheduledDates: ", job.scheduledDates);
         var scheduledDates = job.scheduledDates || null
           , i = scheduledDates && scheduledDates.length
           , date
@@ -70,8 +70,8 @@ exports.details = function (req, res) {
         // else {
         //   scheduledDates = "";
         // }
-        console.log("dates: ", dates);
-        console.log("scheduledDates: ", scheduledDates);
+        // console.log("dates: ", dates);
+        // console.log("scheduledDates: ", scheduledDates);
         res.render('job/jobDetails',
           {
             layout: 'includes/layout',
@@ -204,73 +204,10 @@ exports.calendarData = function (req, res) {
 };
 
 
-exports.getCustJobs = function (req, res) {
-  var custId = req.params.id || null;
-  if (!custId) {
-    // TODO: create log module
-    log("custId shouldn't be null");
-  }
-  Job.find({ "customerID": custId }, function (err, jobs) {
-    var dataSet = new Array()
-      , i = (jobs && jobs.length) || 0;
-
-    while (i--) {
-      // push an array?
-      dataSet.push([
-        jobs[i]._id,
-        jobs[i].name,
-        jobs[i].description,
-        jobs[i].estimateSet.length,
-        new Date(jobs[i].creationDate).toDateString(),
-        jobs[i].status
-      ]);
-    }
-    res.json({"aaData": dataSet});
-  });
-};
 
 
-exports.findAll = function (req, res) {
-  Job.find({}, function (err, jobs) {
-    if(jobs) {
-      var dataSet = new Array();
-      var innerJobs = jobs;
-      for(i = 0; i < jobs.length; i++){
 
-        var getCustomerName = function (i) {
-          Customer.findOne({ _id : jobs[i].customerID }, function (err, customer) {
-            if(!customer){
-              customerName = "Undefined: Orphan Job"
-              console.log("customer is ", customerName);
-            }else{
-              customerName = customer.firstName + ", "  +  customer.lastName;
-              console.log("customer is ", customerName);
-            }
-            console.log("inner jobs are ", innerJobs[i].name);
-            dataSet.push([
-              innerJobs[i]._id,
-              innerJobs[i].name,
-              innerJobs[i].description,
-              innerJobs[i].creationDate,
-              innerJobs[i].status,
-              customerName
-            ]);
-            if(i == innerJobs.length - 1){
-              var aaData = {
-                "aaData" : dataSet
-              };
 
-              res.json(aaData);
-            }
-          })
-        }(i);
-      }
-    }
-    else {
-      console.log("get all jobs Not success");
-    }
-  });
-};
 
 
 

@@ -59,7 +59,7 @@ script(type="text/javascript")
     var dTable = $("#noteTable").dataTable( {
       "bProcessing": true,
       "bDestroy": true,
-      "sAjaxSource": "/datatable/customer/getCustomerNotes/#{customer.id}",
+      "sAjaxSource": "/datatable/customer/#{customer.id}/notes",
       "aoColumnDefs": [
         { "bVisible" : false, "aTargets" : [0] }
       ],
@@ -80,7 +80,7 @@ script(type="text/javascript")
     });
     $('#deleteNote').click(function() {
       var ID = $('#NoteID').val();
-      window.location = "/customer/#{customer.id}/note/delete/" + ID; 
+      window.location = "/customer/#{customer.id}/note/delete/" + ID;
     });
     $("#viewJobs").click(function() {
       $("#notesList").toggle();

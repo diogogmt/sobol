@@ -71,6 +71,31 @@ function loadUser(req, res, next) {
 
 // Routes
 
+
+/**
+  * Datatable routes
+  */
+
+// Get customers for /customers route
+app.get('/datatable/customers', routes.datatable.customers);
+
+// Get notes for a single customer
+app.get('/datatable/customer/:id/notes', routes.datatable.customerNotes);
+
+// Get jobs for a single customer
+app.get('/datatable/customer/:id/jobs', routes.datatable.customerJobs);
+// Get a list of all jobs
+app.get('/datatable/jobsList', routes.datatable.jobsList);
+
+// Get estimates for a single job
+app.get('/datatable/job/:id/estimates', routes.datatable.jobEstimates);
+
+// Get lines items for a single estimate
+app.get('/datatable/job/:jobId/estimate/:estimateId/lineItems',
+  routes.datatable.estimateLineItems);
+
+
+
 // Index
 app.get('/', routes.general.index);
 
@@ -87,8 +112,7 @@ app.get('/customer/:id', routes.customer.details);
 app.post('/customer/add', routes.customer.validateCustomer, routes.customer.add);
 app.post('/customer/edit', routes.customer.validateEditCustomer, routes.customer.edit);
 
-app.get('/datatable/customer/findAll', routes.customer.findAll);
-app.get('/datatable/customer/findActive', routes.customer.findActive);
+
 
 // Customer Notes
 app.get('/customer/notes/:id', routes.note.all);
@@ -98,27 +122,30 @@ app.post('/customer/:custid/note/edit/', routes.note.edit);
 
 app.get('/note/:id', routes.note.details);
 
-app.get('/datatable/customer/getCustomerNotes/:id', routes.note.getCustomerNotes);
+
 
 
 //app.post('/customer/note/edit', routes.note.edit);
 //app.get('/customer/note/:id', routes.note.details);
 
+/**
+  * Jobs Routes
+  */
 
-// Job
+// Jobs List
 app.get('/jobs', routes.job.all);
 
+// Single Job
 app.get('/job/:id', routes.job.details);
 
 app.post('/job/add/:id', routes.job.validateJob, routes.job.add);
 app.post('/job/edit', routes.job.validateEditJob, routes.job.edit);
 
 
-app.get('/datatable/job/getCustJobs/:id', routes.job.getCustJobs);
-app.get('/datatable/job/findAll', routes.job.findAll);
-
 app.get('/jobs/calendar', routes.job.calendar);
 app.get('/jobs/calendarData', routes.job.calendarData);
+
+
 
 
 
@@ -127,12 +154,11 @@ app.get('/job/:jobId/estimate/:estimateId', routes.estimate.details); // we don'
 app.post('/estimate/add/:id', routes.estimate.add);
 app.post('/estimate/edit', routes.estimate.edit);
 
-app.get('/datatable/estimate/getJobEstimates/:id', routes.estimate.getJobEstimates);
+
 
 
 // Line Item
 app.post('/lineItem/add', routes.lineItem.add);
-app.get('/datatable/getLineItems/:jobId/:estimateId', routes.lineItem.getLineItems);
 
 
 // Media
@@ -162,7 +188,7 @@ app.get('/user/reset/:id/:ts', routes.user.reset);
 
 if (!module.parent) {
   app.listen(11342);
-    console.log('Express server listening on port %d, environment: %s', 
+    console.log('Express server listening on port %d, environment: %s',
     app.address().port, app.settings.env);
   console.log('Using connect %s, Express %s, Jade %s', connect.version,
     express.version, jade.version);

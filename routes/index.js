@@ -11,6 +11,7 @@ var customer = require('./customer.js')
   ,	tag = require('./tag.js')
   ,	user = require('./user.js')
   ,	note = require('./note.js')
+  ,	datatable = require('./datatable.js');
 
 exports.customer = customer;
 exports.job = job;
@@ -21,4 +22,5 @@ exports.media = media;
 exports.tag = tag;
 exports.user = user;
 exports.note = note;
+exports.datatable = datatable;
 
