@@ -45,8 +45,19 @@ MediaSearch.prototype.bindEditMediaHandler = function() {
     $("#editMediaOverlay").empty();
     $("#editMediaOverlayTmpl").tmpl(that.media[$(this).attr("i")]).appendTo("#editMediaOverlay");
     // Listen for the overlay close event then release manageEditMedia
-    manageEditMedia = new MediaManagement({"type": EDIT_MEDIA});
+    manageEditMedia = new MediaManagement({"type": EDIT_MEDIA, "editIndex": $(this).attr("i")});
     that.editMediaOverlay.load();
+
+    var tagArray = that.media[$(this).attr("i")].tags;
+    var tagCollection = new Array();
+    for(var i = 0; i < tagArray.length; i++){
+      tagCollection.push({
+        name : tagArray[i]
+      })
+    }
+    manageEditMedia.oldTags.push(tagArray);
+    var item = $("#mediaTagsTmpl").tmpl(tagCollection).appendTo(manageEditMedia.tagsList);
+    
     $(".close").click(function (e) {
       console.log("close edit overlay click");
       that.editMediaOverlay.close();

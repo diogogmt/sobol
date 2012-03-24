@@ -27,6 +27,8 @@ var MediaManagement = function (opt) {
     break;
   }
 
+  this.editIndex = opt.editIndex || -1;
+
   this.freshTags = new Array();
   this.oldTags = new Array();
 
@@ -142,7 +144,14 @@ MediaManagement.prototype.createTagOptions = function() {
     var tags = new Array();
     tags.push({"value": 0, "text": "Select a tag"});
     for (var i = 0; i < data.length; i++) {
-      tags.push({"value": data[i], "text": data[i]});
+      if(that.editIndex != -1){
+        var tagArray = mediaSearch.media[that.editIndex].tags;
+        if($.inArray(data[i], tagArray) == -1){
+          tags.push({"value": data[i], "text": data[i]});
+        }
+      }else{
+        tags.push({"value": data[i], "text": data[i]});
+      }
     }
     // console.log(tags);
     $(that.oldTagsSelect).empty();
