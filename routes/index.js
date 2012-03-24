@@ -11,7 +11,6 @@ var customer = require('./customer.js')
   ,	tag = require('./tag.js')
   ,	user = require('./user.js')
   ,	note = require('./note.js')
-  ,	test = require('./test.js'); // this is just for generating test data, discard when done
 
 exports.customer = customer;
 exports.job = job;
