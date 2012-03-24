@@ -21,5 +21,4 @@ exports.media = media;
 exports.tag = tag;
 exports.user = user;
 exports.note = note;
-exports.test = test; // this is just for generating test data, discard when done
 
