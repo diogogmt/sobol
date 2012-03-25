@@ -1,15 +1,13 @@
 include ../../includes/menu.jade
 include job_content.jade
 include ../../includes/footer.jade
-include job_templates.jade
+//- include job_templates.jade
 
 script(type="text/javascript", src="/js/jobManagement.js")
 
 script
   var jobManagement;
-  console.log("$('#editJobBtn')" + $("#editJobBtn"));
   $(document).ready(function () {
-    console.log("document.ready");
     jobManagement = new JobManagement({
       "customerId": '#{job.customerID}',
       "jobId": '#{job._id}',
