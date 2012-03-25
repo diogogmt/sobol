@@ -55,12 +55,14 @@ MediaSearch.prototype.bindEditMediaHandler = function() {
         name : tagArray[i]
       })
     }
-    manageEditMedia.oldTags.push(tagArray);
+    manageEditMedia.oldTags = tagArray;
     var item = $("#mediaTagsTmpl").tmpl(tagCollection).appendTo(manageEditMedia.tagsList);
     $(item).find(".removeTag").click(function (e) {
       // console.log("remove tag click");
       $(this).parent().remove();
-      manageEditMedia.freshTags.splice(manageEditMedia.freshTags.indexOf($(this).attr("query")), 1);
+      console.log("OLD TAGS BEFORE: ", manageEditMedia.oldTags);
+      manageEditMedia.oldTags.splice(manageEditMedia.oldTags.indexOf($(this).attr("query")), 1);
+      console.log("OLD TAGS AFTER: ", manageEditMedia.oldTags);
       return false;
     });
     $(".close").click(function (e) {

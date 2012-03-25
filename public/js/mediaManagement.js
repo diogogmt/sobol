@@ -13,6 +13,7 @@ var MediaManagement = function (opt) {
       this.freshTagsInput = $("#freshTags-create");
       this.tagNameInput = $("#tagName-create");
       this.formUrl = "/media/create";
+      this.mode = CREATE_MEDIA;
     break;
 
     case EDIT_MEDIA:
@@ -24,6 +25,7 @@ var MediaManagement = function (opt) {
       this.freshTagsInput = $("#freshTags-edit");
       this.tagNameInput = $("#tagName-edit");
       this.formUrl = "/media/edit";
+      this.mode = EDIT_MEDIA;
     break;
   }
 
@@ -55,6 +57,7 @@ MediaManagement.prototype.bindAjaxForm = function() {
       // options are the object initialized with ajaxForm
       // maybe validate the for before submiting
       // if form is not valid return false
+      console.log("FORMDATA: ", formData);
       return true;
     },
     success: function (data) {
@@ -69,6 +72,11 @@ MediaManagement.prototype.bindAjaxForm = function() {
       $(that.tagsList).empty();
       that.createTagOptions();
       
+      if(that.mode === EDIT_MEDIA){
+        if(data.success){
+          mediaSearch.editMediaOverlay.close();
+        }
+      }
     },
   });
 };
@@ -121,7 +129,9 @@ MediaManagement.prototype.bindSelectTagHandler = function() {
     $(item).find(".removeTag").click( function (e) {
       console.log("remove existing tag click");
       $(this).parent().remove();
+      console.log("OLD TAGS BEFORE: ", that.oldTags);
       that.oldTags.splice(that.oldTags.indexOf($(this).attr("query")), 1);
+      console.log("OLD TAGS BEFORE: ", that.oldTags);
       $("#availableTagsTmpl").tmpl({"value": tag.name, "text": tag.name}).appendTo(that.oldTagsSelect);
       return false;
     });
