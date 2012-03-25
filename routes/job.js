@@ -12,8 +12,6 @@ var mongoose = require('mongoose')
 
 // Jobs List
 exports.all = function (req, res) {
-  //console.log("all jobs route");
-  //console.log("req.currentUser: %o", req.currentUser);
   res.render('job/list/jobs',
     {
       layout: 'includes/layout',
@@ -25,68 +23,46 @@ exports.all = function (req, res) {
 
 // Single Job
 exports.details = function (req, res) {
-  // console.log("job details route");
-  // console.log("job ID: " + req.params.id);
   var jobId = req.params.id || 0;
 
-  Job.findOne({"_id" : new ObjectId(jobId)}, function (err, job) {
+  Job.findById(new ObjectId(jobId), function (err, job) {
     if (!job) {
-      console.log("get specific job not successful");
+      // TODO implement ASSERTIONS. Look at how firefox does ASSERTIONS
+      console.log("job shouldn't be NULL");
+      // Redirect to 404 page
     }
-    else {
-      // console.log("job found");
-      breadcrumbs.createBreadcrumb({ customerID: job.customerID }, function (breadcrumb) {
-        // console.log("breadcrumb: ", breadcrumb);
-        breadcrumb["job"] = {
-          id : job._id,
-          name : job.name
-        };
-        // console.log("breadcrumb: ", breadcrumb);
-        // console.log("job.scheduledDates: ", job.scheduledDates);
-        var scheduledDates = job.scheduledDates || null
-          , i = scheduledDates && scheduledDates.length
-          , date
-          dates = new Array();
 
-        while (i--) {
-          date = new Date(scheduledDates[i]);
-          dates.push((date.getMonth() + 1) + "/"
-              + date.getDate() + "/" + date.getFullYear());
+    breadcrumbs.createBreadcrumb({ customerID: job.customerID }, function (breadcrumb) {
+      breadcrumb["job"] = {
+        id : job._id,
+        name : job.name
+      };
+      var scheduledDates = job.scheduledDates || null
+        , i = scheduledDates && scheduledDates.length
+        , date
+        dates = new Array();
+
+      while (i--) {
+        date = new Date(scheduledDates[i]);
+        dates.push((date.getMonth() + 1) + "/"
+            + date.getDate() + "/" + date.getFullYear());
+      }
+      res.render('job/single/job',
+        {
+          layout: 'includes/layout',
+          title: 'Job',
+          job: job,
+          breadcrumb: breadcrumb,
+          dates: dates,
+          errors: false
         }
-        // console.log("job.scheduledDates: ", job.scheduledDates);
-        // for (var key in job.scheduledDates) {
-        //   console.log(job.scheduledDates[key]);
-        // }
-        // if (job.scheduledDates.length > 0) {
-        //   scheduledDates = job.scheduledDates.toString().split(",");
-        //   for (var i = 0; i < scheduledDates.length; i++) {
-        //     var newDate = new Date(scheduledDates[i]);
-        //     scheduledDates[i] = (newDate.getMonth() + 1) + "/"
-        //       + newDate.getDate() + "/" + newDate.getFullYear();
-        //     console.log(scheduledDates[i]);
-        //   }
-        // }
-        // else {
-        //   scheduledDates = "";
-        // }
-        // console.log("dates: ", dates);
-        // console.log("scheduledDates: ", scheduledDates);
-        res.render('job/single/job',
-          {
-            layout: 'includes/layout',
-            title: 'Job',
-            job: job,
-            breadcrumb: breadcrumb,
-            dates: dates,
-            errors: false
-          }
-        );
-      });
-    }
+      );
+    });
   });
 };
 
 
+// Create new job
 exports.add = function(req, res) {
   //console.log("add job route");
 
@@ -117,6 +93,7 @@ exports.add = function(req, res) {
 };
 
 
+// Edit a job
 exports.edit = function (req, res) {
   var jobId = req.params.id || 0;
   var job = req.body.job;
