@@ -105,12 +105,14 @@ app.post('/login', routes.general.auth);
 app.get('/logout', routes.general.logout);
 
 // Customer
-
-app.get('/customers', routes.customer.all);
-
+// Customer default page
+app.get('/customers', routes.customer.default);
+// Customer details page
 app.get('/customer/:id', routes.customer.details);
-app.post('/customer/add', routes.customer.validateCustomer, routes.customer.add);
-app.post('/customer/edit', routes.customer.validateEditCustomer, routes.customer.edit);
+// Create new customer
+app.post('/customer/create', routes.customer.create);
+// Edit existing customer
+app.post('/customer/edit', routes.customer.edit);
 
 
 
@@ -139,7 +141,7 @@ app.get('/jobs', routes.job.all);
 app.get('/job/:id', routes.job.details);
 
 app.post('/job/add/:id', routes.job.validateJob, routes.job.add);
-app.post('/job/edit', routes.job.validateEditJob, routes.job.edit);
+app.post('/job/:id/edit', routes.job.edit);
 
 
 app.get('/jobs/calendar', routes.job.calendar);
@@ -151,7 +153,7 @@ app.get('/jobs/calendarData', routes.job.calendarData);
 
 // Estimate
 app.get('/job/:jobId/estimate/:estimateId', routes.estimate.details); // we don't need jobID
-app.post('/estimate/add/:id', routes.estimate.add);
+app.post('/job/:id/estimate/add', routes.estimate.add);
 app.post('/estimate/edit', routes.estimate.edit);
 
 

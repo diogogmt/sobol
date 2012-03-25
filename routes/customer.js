@@ -9,10 +9,9 @@ var mongoose = require('mongoose')
   , ObjectId = mongoose.Types.ObjectId;
 
 
-exports.all = function (req, res) {
-  // console.log("all customers route");
-  // console.log("req.currentUser: %o", req.currentUser);
-  res.render('customer/customers', 
+// Customer default page
+exports.default = function (req, res) {
+  res.render('customer/list/customers',
     {
       layout: 'includes/layout',
       title: 'Customer',
@@ -20,32 +19,16 @@ exports.all = function (req, res) {
     });
 };
 
-
-
-
-exports.add = function (req, res) {
-  //console.log("add customer route");
+// Create new customer
+exports.create = function (req, res) {
   var customer = new Customer(req.body.cust);
-  //console.log("customer: %o", req.body.cust);
-  function customerAddFailed() {
-    console.log("add customer FAIL");
-    //req.flash('addError', 'Customer Add failed');
-    res.render('customer/customers',
-    {
-      layout: 'includes/layout',
-      title: 'Customer',
-      errors: false
-    });
-  };
-
   customer.save(function(err) {
-    if (err){
-      console.log("err: " + err);
-      return customerAddFailed();
+    if (err) {
+      // TODO implement ASSERTIONS. Look at how firefox does ASSERTIONS
+      console.log("error saving customer, err: ", err);
+      // Redirect to error page
     }
-    //console.log("Adding SUCCEED");
-    //req.flash('info', 'The customer has been added');
-    res.redirect('/customers');
+    res.send();
   });
 };
 
@@ -57,7 +40,7 @@ exports.edit = function (req, res) {
   function customerEditFailed() {
     console.log("edit customer FAIL");
     //req.flash('addError', 'Customer Add failed');
-    res.render('customer/custDetails/',
+    res.render('customer/single/custDetails/',
     {
       layout: 'includes/layout',
       title: 'Customer',
@@ -118,7 +101,7 @@ exports.details = function (req, res) {
       }
       req.session.breadcrumb = breadcrumb;
 
-      res.render('customer/custDetails',
+      res.render('customer/single/custDetails',
         {
           layout: 'includes/layout',
           title: 'Customer',
@@ -139,7 +122,7 @@ exports.validateCustomer = function (req, res, next) {
     // console.log("err.length: ", Object.keys(err).length);
     if (Object.keys(err).length) {
       console.log("HAS ERRORS rendering create again");
-      res.render('customer/customers',
+      res.render('customer/list/customers',
         { 
           layout: "includes/layout",
           title: "Customer",
@@ -171,7 +154,7 @@ exports.validateEditCustomer = function (req, res, next) {
         }
       }
       req.session.breadcrumb = breadcrumb;
-      res.render('customer/custDetails',
+      res.render('customer/single/custDetails',
         { 
           layout: "includes/layout",
           title: "Customer",

@@ -4,11 +4,10 @@
       h4 Customer Management
     .portlet-content
       br
-      a#addCustomer.btn(href='#newCustomer') Add Customer
-      div(style='display: none;')
-        #newCustomer(style='width: 800px; height: 400px; overflow: auto;')
-          h4 Add Customer
-          form.form.label-inline(id='addCustForm', action='/customer/add', method='post')
+      button#createCustBtn.btn() Create new customer
+      div#createCustOverlay
+        form#createCustForm.form.label-inline()
+          h4 Create new customer
             table
               tr
                 td
@@ -84,9 +83,9 @@
                     input#phone2(name='cust[phone2]', value='', type='hidden')
               tr
                 td
-                  input#saveNewCust.btn(type='submit', value='Add')
-                  //button#saveNewCust.btn Add
+                  button#saveCustBtn.btn() Save
                 td
+                  button#cancelCustBtn.btn() Cancel
       br
       br
       input#showArchived(type='checkbox', name='showArchived')

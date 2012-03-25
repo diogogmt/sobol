@@ -10,41 +10,24 @@ var mongoose = require('mongoose')
 
 exports.add = function (req, res) {
   console.log("add estimate route");
+  console.log("req.body: ", req.body);
   var estimate = new Estimate(req.body.estimate);
-  var jobID = new ObjectId(req.params.id);
+  var jobId = new ObjectId(req.params.id);
 
-  function estimateAddFailed() {
-    console.log("add estimate FAIL");
-    //req.flash('addError', 'Estimate Add failed');
-    res.render('job/jobDetails',
-    {
-      layout: 'includes/layout',
-      title: 'Job'
-    });
-  };
+  console.log("jobId: ", jobId);
+  console.log("estimate: ", estimate);
 
-  // Get total number of estimates for all the jobs in the system 
-  var estimateCount = 0;
-  Job.find({}, function (err, jobs) {
-   for(i = 0; i < jobs.length; i++){
-     estimateCount = estimateCount + jobs[i].estimateSet.length;
-   } 
-   estimate.quoteID = estimateCount + 1;
-  });
 
   Job.update(
-    { "_id": jobID },
+    { "_id": jobId },
     { $push: {"estimateSet": estimate} },
     { upsert: false, safe:true },
       function (err) {
-        console.log("Job.update - push estimateSet");
-        console.log("err: ", err);
         if (err) {
-          estimateAddFailed();
+          // TODO implement ASSERTIONS. Look at how firefox does ASSERTIONS
+          console.log("error adding estimate to job: ", err);
         }
-        else {
-          res.redirect('/job/' + jobID);
-        }
+        res.send();
       });
 };
 

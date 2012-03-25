@@ -1,0 +1,91 @@
+#content.xfluid
+  .portlet.x12
+    .portlet-header
+      h4 Job Management
+    .portlet-content
+      div#breadCrumb.breadCrumb.module
+        ul
+          li.first
+            a(href="/customers/")
+          li
+            a(href="/customer/#{breadcrumb.cust.id}")
+              |#{breadcrumb.cust.name}
+          li.last
+            |#{breadcrumb.job.name}
+      br
+      br
+
+      form#editJobForm.form.label-inline()
+        table
+          tr
+            td
+              .field
+                label(for='name') Name
+                input#jobName.medium(name='formJob[name]', size='20',
+                  type='text', value='#{job.name}')
+                br
+                span #{errors.name}
+            td
+              .field
+                label(for='desc') Description
+                input#jobDesc.medium(name='formJob[description]', size='45',
+                  type='text', value='#{job.description}')
+                br
+                span #{errors.description}
+          tr
+            td
+              .field
+                label Creation Date
+                #{job.creationDate}
+            td
+              .field
+                label Status
+                select#jobStatus(name="formJob[status]")
+                  option(value="Active") Active
+                  option(value="Inactive") Inactive
+          tr
+            td
+            td
+              table(style='width:auto')
+                tr
+                  td
+                    .field
+                      label Scheduled Dates
+                  td(align='left')
+                    div#datepicker
+          tr
+            td
+              button#editJobBtn.btn() Update
+            td
+              input#jobScheduledDates(name='formJob[scheduledDates]',
+                value='#{job.scheduledDates}', type='hidden')
+
+      br
+
+      button#createEstimateOverlayBtn.btn() Create new estimate
+
+      div#addEstimateOverlay
+        form
+        h4 Add Estimate
+          table
+            tr
+              td
+                .field
+                  label(for='name') Name
+                  input#estimateName.medium(name='estimate[name]', size='20',
+                    type='text', value='')
+            tr
+              td
+                button#saveEstimateBtn.btn() Save
+              td
+                button#cancelEstimateBtn.btn() Cancel
+
+      table#estimateTable.display(cellpadding='0', cellspacing='0', border='0', rel='datatable')
+        thead
+          tr
+            th ID
+            th Name
+            th Final Total
+            th Created On
+            th Status
+        tbody
