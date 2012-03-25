@@ -75,7 +75,6 @@ exports.create = function (req, res) {
   , description = req.body.description
   , tags = req.body.tags ? req.body.tags.split(",") : new Array()
   , tag
-  , i
   , waitForAsync = 2
   , media = new Media();
 
@@ -144,7 +143,6 @@ exports.edit = function (req, res) {
   , tags = req.body.tags ? req.body.tags.split(",") : new Array()
   , mediaID = req.body.mediaID
   , tag
-  , i
   , waitForAsync = 2
   , update = {'name' : filename
             , 'desc' : description
