@@ -9,13 +9,12 @@ var mongoose = require('mongoose')
   , jobValidator = require('./../validators.js').jobValidator
   , ObjectId = mongoose.Types.ObjectId;
 
-console.log("XDate: ", XDate);
 
 // Jobs List
 exports.all = function (req, res) {
   //console.log("all jobs route");
   //console.log("req.currentUser: %o", req.currentUser);
-  res.render('job/jobs',
+  res.render('job/list/jobs',
     {
       layout: 'includes/layout',
       title: 'Jobs',
@@ -72,7 +71,7 @@ exports.details = function (req, res) {
         // }
         // console.log("dates: ", dates);
         // console.log("scheduledDates: ", scheduledDates);
-        res.render('job/jobDetails',
+        res.render('job/single/job',
           {
             layout: 'includes/layout',
             title: 'Job',
@@ -119,45 +118,34 @@ exports.add = function(req, res) {
 
 
 exports.edit = function (req, res) {
-  //console.log("edit job route");
-  var formJob = req.body.formJob;
-  function jobEditFailed() {
-    console.log("edit job FAIL");
-    res.render('job/jobDetails',
-    {
-      layout: 'includes/layout',
-      title: 'Job',
-      job: formJob,
-      errors: false
-    });
-  };
+  var jobId = req.params.id || 0;
+  var job = req.body.job;
 
-  var scheduledDatesArray;
-  if(formJob.scheduledDates.length > 0){
-    scheduledDatesArray = formJob.scheduledDates.split(",");
-  }else{
-    scheduledDatesArray = new Array();
-  }
-  console.log("The scheduled dates array on editing is: ", scheduledDatesArray)
-  var conditions = { _id : new ObjectId(formJob.id) }
-    , update = { name : formJob.name
-               , description : formJob.description
-               , scheduledDates : scheduledDatesArray
-               , status : formJob.status
-               }
-  ;
-  Job.update(conditions, update, function (err, numAffected) {
-    if(err || numAffected == 0){
-      console.log("err: " + err);
-      return jobEditFailed();
-    }
-    //console.log("Editing SUCCEED");
-    res.redirect('/job/' + formJob.id);
+  Job.update(
+    {"_id" : new ObjectId(jobId) },
+    {
+      "name" : job.name,
+      "description" : job.description,
+      "scheduledDates" : job.scheduledDates,
+      "status" : job.status
+    },
+    function (err, numAffected) {
+      if(err || !numAffected){
+        // TODO: create log module
+        console.log("numAffected: ", numAffected);
+        console.log("job should have been updated, err: ", err);
+      }
+      res.send();
   });
 };
 
+
+
+/**
+  * Calendar
+  */
 exports.calendar = function (req, res) {
-  res.render('job/jobsCalendar',
+  res.render('job/calendar/jobsCalendar',
     {
       layout: 'includes/layout',
       title: 'Jobs',
@@ -254,7 +242,7 @@ exports.validateEditJob = function (req, res, next) {
       }
 
       req.session.breadcrumb = breadcrumb;
-      res.render('job/jobDetails',
+      res.render('job/single/jobDetails',
         {
           layout: "includes/layout",
           title: "Job",

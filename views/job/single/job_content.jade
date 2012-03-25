@@ -1,0 +1,25 @@
+#content.xfluid
+  .portlet.x12
+    .portlet-header
+      h4 Job Management
+    .portlet-content
+      div#breadCrumb.breadCrumb.module
+        ul
+          li.first
+            a(href="/customers/")
+          li
+            a(href="/customer/#{breadcrumb.cust.id}")
+              |#{breadcrumb.cust.name}
+          li.last
+            |#{breadcrumb.job.name}
+      br
+      br
+
+      form#editJobForm.form.label-inline()
+
+      br
+
+      button#addEstimateBtn.btn() Add Estimate
+      div#addEstimateOverlay
+      
+      table#estimateTable.display(cellpadding='0', cellspacing='0', border='0', rel='datatable')

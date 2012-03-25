@@ -1,0 +1,72 @@
+script(id="editJobTmpl", type="text/x-jQuery-tmpl")
+
+  table
+    tr
+      td
+        .field
+          label(for='name') Name
+          input#jobName.medium(name='formJob[name]', size='20',
+            type='text', value='#{job.name}')
+          br
+          span #{errors.name}
+      td
+        .field
+          label(for='desc') Description
+          input#jobDesc.medium(name='formJob[description]', size='45',
+            type='text', value='#{job.description}')
+          br
+          span #{errors.description}
+    tr
+      td
+        .field
+          label Creation Date
+          #{job.creationDate}
+      td
+        .field
+          label Status
+          select#jobStatus(name="formJob[status]")
+            option(value="Active") Active
+            option(value="Inactive") Inactive
+    tr
+      td
+      td
+        table(style='width:auto')
+          tr
+            td
+              .field
+                label Scheduled Dates
+            td(align='left')
+              div#datepicker
+    tr
+      td
+        button#editJobBtn.btn() Update
+      td
+        input#jobScheduledDates(name='formJob[scheduledDates]',
+          value='#{job.scheduledDates}', type='hidden')
+
+
+script(id="addEstimateOverlayTmpl", type="text/x-jQuery-tmpl")
+
+  form
+    h4 Add Estimate
+      table
+        tr
+          td
+            .field
+              label(for='name') Name
+              input#estimateNameTxt.medium(name='estimate[name]', size='20',
+                type='text', value='')
+        tr
+          td
+            button#saveEstimateBtn.btn() Add
+
+script(id="estimateDataTableOverlayTmpl", type="text/x-jQuery-tmpl")
+
+  thead
+    tr
+      th ID
+      th Name
+      th Final Total
+      th Created On
+      th Status
+  tbody
