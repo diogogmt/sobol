@@ -3,8 +3,7 @@ script(id="editMediaOverlayTmpl", type="text/x-jQuery-tmpl")
   a.close()
   h4 Edit Media
   form#mediaForm-edit.form.label-top
-    div(style="width:85%; position:absolute;")
-      img(src="/media/${thumbnail}", style="float:right;")
+    img(src="/media/${thumbnail}", style="position:absolute; top:50px; right: 30px;")
     div.field
       label(for='filename') File Name 
       input#fileName-edit(name='filename', size='30', type='text', value='${name}')
