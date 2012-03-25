@@ -105,12 +105,14 @@ app.post('/login', routes.general.auth);
 app.get('/logout', routes.general.logout);
 
 // Customer
-
-app.get('/customers', routes.customer.all);
-
+// Customer default page
+app.get('/customers', routes.customer.default);
+// Customer details page
 app.get('/customer/:id', routes.customer.details);
-app.post('/customer/add', routes.customer.validateCustomer, routes.customer.add);
-app.post('/customer/edit', routes.customer.validateEditCustomer, routes.customer.edit);
+// Create new customer
+app.post('/customer/create', routes.customer.create);
+// Edit existing customer
+app.post('/customer/edit', routes.customer.edit);
 
 
 
