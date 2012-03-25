@@ -248,21 +248,6 @@ exports.tags = function (req, res) {
 
 function deleteMedia(mediaID, cb){
   console.log("media delete");
-  // var finish = 0;
-  // var done = function () {
-  //   if (++finish === 2) {
-  //     Media.remove( { "_id": new ObjectId(mediaID) }, function (err) {
-  //       // Do something if error happens
-  //       //return res.redirect("/media");
-  //       if(err){
-  //         cb(false);
-  //       }else{
-  //         cb(true);
-  //       }
-  //     });
-  //   }
-  // };
-
   Media.findOne( {"_id": new ObjectId(mediaID) }, function (err, media) {
     gridfs.unlink(media.src, function () {
       gridfs.unlink(media.thumbnail, function () {
