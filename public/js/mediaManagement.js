@@ -13,6 +13,7 @@ var MediaManagement = function (opt) {
       this.freshTagsInput = $("#freshTags-create");
       this.tagNameInput = $("#tagName-create");
       this.formUrl = "/media/create";
+      this.mode = CREATE_MEDIA;
     break;
 
     case EDIT_MEDIA:
@@ -24,8 +25,11 @@ var MediaManagement = function (opt) {
       this.freshTagsInput = $("#freshTags-edit");
       this.tagNameInput = $("#tagName-edit");
       this.formUrl = "/media/edit";
+      this.mode = EDIT_MEDIA;
     break;
   }
+
+  this.editIndex = opt.editIndex || -1;
 
   this.freshTags = new Array();
   this.oldTags = new Array();
@@ -53,6 +57,7 @@ MediaManagement.prototype.bindAjaxForm = function() {
       // options are the object initialized with ajaxForm
       // maybe validate the for before submiting
       // if form is not valid return false
+      console.log("FORMDATA: ", formData);
       return true;
     },
     success: function (data) {
@@ -67,6 +72,11 @@ MediaManagement.prototype.bindAjaxForm = function() {
       $(that.tagsList).empty();
       that.createTagOptions();
       
+      if(that.mode === EDIT_MEDIA){
+        if(data.success){
+          mediaSearch.editMediaOverlay.close();
+        }
+      }
     },
   });
 };
@@ -93,9 +103,9 @@ MediaManagement.prototype.bindCreateTagHandler = function() {
 
     var item = $("#mediaTagsTmpl").tmpl(tag).appendTo(that.tagsList);
     $(item).find(".removeTag").click(function (e) {
-      // console.log("remove tag click");
-      $(this).parent().empty();
-      that.freshTags.splice(that.freshTags.indexOf($(that).attr("query")), 1);
+      //console.log("remove tag click");
+      $(this).parent().remove();
+      that.freshTags.splice(that.freshTags.indexOf($(this).attr("query")), 1);
       return false;
     });
     $(that.tagNameInput).val("");
@@ -118,7 +128,7 @@ MediaManagement.prototype.bindSelectTagHandler = function() {
  
     $(item).find(".removeTag").click( function (e) {
       console.log("remove existing tag click");
-      $(this).parent().empty();
+      $(this).parent().remove();
       that.oldTags.splice(that.oldTags.indexOf($(this).attr("query")), 1);
       $("#availableTagsTmpl").tmpl({"value": tag.name, "text": tag.name}).appendTo(that.oldTagsSelect);
       return false;
@@ -142,7 +152,14 @@ MediaManagement.prototype.createTagOptions = function() {
     var tags = new Array();
     tags.push({"value": 0, "text": "Select a tag"});
     for (var i = 0; i < data.length; i++) {
-      tags.push({"value": data[i], "text": data[i]});
+      if(that.editIndex != -1){
+        var tagArray = mediaSearch.media[that.editIndex].tags;
+        if($.inArray(data[i], tagArray) == -1){
+          tags.push({"value": data[i], "text": data[i]});
+        }
+      }else{
+        tags.push({"value": data[i], "text": data[i]});
+      }
     }
     // console.log(tags);
     $(that.oldTagsSelect).empty();

@@ -123,29 +123,13 @@ EstimateManagement.prototype.initOverlays = function() {
   var that = this;
 
   $(that.addLineItemOverlay).overlay({
-    // custom top position
-    top: 260,
     // some mask tweaks suitable for facebox-looking dialogs
     mask: {
       // you might also consider a "transparent" color for the mask
       color: '#fff',
       // load mask a little faster
-      loadSpeed: 200
-    },
-    // disable this for modal dialog-type of overlays
-    closeOnClick: false,
-  });
-  this.addLineItemOverlayObj = $(that.addLineItemOverlay).overlay({});
-
-  $(that.addLineItemOverlay).overlay({
-    // custom top position
-    top: 260,
-    // some mask tweaks suitable for facebox-looking dialogs
-    mask: {
-      // you might also consider a "transparent" color for the mask
-      color: '#fff',
-      // load mask a little faster
-      loadSpeed: 200
+      loadSpeed: 200,
+      opacity: 0.8
     },
     // disable this for modal dialog-type of overlays
     closeOnClick: false,

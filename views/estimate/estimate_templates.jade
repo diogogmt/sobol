@@ -7,7 +7,9 @@ script(id="editEstimateTmpl", type="text/x-jQuery-tmpl")
           label(for='name') Name
           input#name.medium(name='formEstimate[name]', size='20', type='text', value='#{estimate.name}')
       td
-
+        .field
+          label Total Cost
+          #{estimate.finalTotal}
     tr
       td
         .field

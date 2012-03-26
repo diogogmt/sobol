@@ -75,7 +75,6 @@ exports.create = function (req, res) {
   , description = req.body.description
   , tags = req.body.tags ? req.body.tags.split(",") : new Array()
   , tag
-  , i
   , waitForAsync = 2
   , media = new Media();
 
@@ -111,8 +110,8 @@ exports.create = function (req, res) {
   im.crop({
     srcPath: file.path,
     dstPath: thumbnail.path,
-    width: 100,
-    height: 100,
+    width: 150,
+    height: 150,
     quality: 1
   }, function(err, stdout, stderr) {
     console.log(stdout);
@@ -135,7 +134,84 @@ exports.edit = function (req, res) {
   console.log("req.body", req.body);
   console.log("req.files", req.files);
 
-  res.send(req.body);
+  var options
+  , thumbnail
+  , finish = 0
+  , file
+  , filename = req.body.filename
+  , description = req.body.description
+  , tags = req.body.tags ? req.body.tags.split(",") : new Array()
+  , mediaID = req.body.mediaID
+  , tag
+  , waitForAsync = 2
+  , update = {'name' : filename
+            , 'desc' : description
+            , 'tags' : tags}
+
+  var done = function () {
+    console.log("Entering DONE function");
+    if (++finish === waitForAsync) {
+      console.log("Entering DONE function -- UPDATE TIME");
+      var conditions = { _id : new ObjectId(mediaID) }
+      Media.update(conditions, update, function (err, numAffected) {
+        if(err || numAffected == 0){
+          res.send({'success' : false});
+        }else{
+          res.send({'success' : true});
+        }
+      });
+    }
+  };
+
+  if(!req.files){ // There is no new media to upload, so just save the fields
+    waitForAsync = 1;
+    done();
+  }else{
+    console.log("There is a new file to upload");
+    file = req.files.file;
+    options = {
+      "content_type": file.type,
+      metadata: {
+        "info": "something ustag 7eful",
+      },
+    };
+
+    // TODO
+    // What if  filename already exists?
+    thumbnail = {
+      path: "uploads/thumbnail_" + filename,
+      filename: "thumbnail_" + filename,
+    };
+    // Remove the old media files from the db
+    deleteMedia(mediaID, function (err){
+      if(err){
+        // error management
+        res.send({'error': true});
+      }else{
+        // Create and save new media files
+        im.crop({
+          srcPath: file.path,
+          dstPath: thumbnail.path,
+          width: 150,
+          height: 150,
+          quality: 1
+        }, function(err, stdout, stderr) {
+          console.log(stdout);
+          console.log(stderr);
+          console.log(err);
+          gridfs.putFile(filename, file.path, options, function(err, result) {
+            update.src = result._id;
+            done();
+          });
+
+          gridfs.putFile(thumbnail.filename, thumbnail.path, options, function(err, result) {
+            update.thumbnail = result._id;
+            done();
+          });
+        });
+      }
+    });
+  }
 };
 
 exports.save = function (req, res) {
@@ -143,27 +219,21 @@ exports.save = function (req, res) {
 };
 
 exports.delete = function (req, res) {
-	console.log("media delete");
-	var mediaID = req.body.mediaID
-		,	finish = 0;
-	var done = function () {
-    if (++finish === 2) {
+  var mediaID = req.body.mediaID;
+	deleteMedia(mediaID, function (err){
+    if(err){
+      // error management
+      res.send({'error': true});
+    }else{
       Media.remove( { "_id": new ObjectId(mediaID) }, function (err) {
-        // Do something if error happens
-        return res.redirect("/media");
-			});
+        if(err){
+          res.send({'error': true});
+        }else{
+          res.send();
+        }
+      });
     }
-	};
-
-	Media.findOne( {"_id": new ObjectId(mediaID) }, function (err, media) {
-		gridfs.unlink(media.src, function () {
-			done();
-		});
-		gridfs.unlink(media.thumbnail, function () {
-			done();
-		});
-	});
-
+  });
 };
 
 
@@ -171,5 +241,16 @@ exports.tags = function (req, res) {
   console.log("media tags");
   Media.distinct("tags", {}, function (err, media) {
     res.send(media);
+  });
+};
+
+function deleteMedia(mediaID, cb){
+  console.log("media delete");
+  Media.findOne( {"_id": new ObjectId(mediaID) }, function (err, media) {
+    gridfs.unlink(media.src, function () {
+      gridfs.unlink(media.thumbnail, function () {
+        cb();
+      });
+    });
   });
 };

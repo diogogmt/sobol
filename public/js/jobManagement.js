@@ -23,20 +23,20 @@ JobManagement.prototype.initOverlays = function() {
   var that = this;
 
   $(that.addEstimateOverlay).overlay({
-    top: 260,
     mask: {
       color: '#fff',
-      loadSpeed: 200
+      loadSpeed: 200,
+      opacity: 0.8
     },
     closeOnClick: false,
   });
   this.addEstimateOverlayObj = $("#addEstimateOverlay").overlay({});
 
   $(that.addEstimateOverlay).overlay({
-    top: 260,
     mask: {
       color: '#fff',
-      loadSpeed: 200
+      loadSpeed: 200,
+      opacity: 0.8
     },
     closeOnClick: false,
   });

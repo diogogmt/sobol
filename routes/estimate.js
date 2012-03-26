@@ -109,6 +109,17 @@ exports.details = function (req, res) {
             break;
           }
         }
+
+        // Calculate final total of estimate's line items
+        var finalTotal = 0;
+        var lineItems = estimate.lineItemSet;
+        console.log("LINE ITEM COUNT: " + lineItems.length);
+        for(var i = 0; i < lineItems.length; i++){
+          finalTotal += (lineItems[i].quantity * lineItems[i].cost);
+        }
+        estimate.finalTotal = finalTotal;
+        console.log("ESTIMATE FINAL TOTAL: " + finalTotal);
+
         breadcrumbs.createBreadcrumb({ customerID: job.customerID }, function (breadcrumb) {
           breadcrumb["job"] = {
             id : job._id,
