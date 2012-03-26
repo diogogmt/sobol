@@ -403,16 +403,14 @@ ul.gallery { padding: 0; margin: 0; }
 }
 
 
-
-
 /* the overlayed element */
-.apple_overlay {
+.overlay {
 	
 	/* initially overlay is hidden */
 	display:none;
 	
 	/* growing background image */
-	/*background-image:url(../images/white.png);*/
+	background-image:none;
 	background-color:#FFFFFF;
 	
 	/* 
@@ -430,7 +428,7 @@ ul.gallery { padding: 0; margin: 0; }
 }
 
 /* default close button positioned on upper right corner */
-.apple_overlay .close {
+.overlay .close {
 	background-image:url(../images/close.png);
 	position:absolute; right:5px; top:5px;
 	cursor:pointer;
@@ -542,27 +540,6 @@ h2.calendar_header button.next { left: 25px; }
 
 #add-user-form { width: 270px; margin: 0 auto; }
 
- 
-/* -------------------------------------------------------------- 
-   Estimate Page
--------------------------------------------------------------- */		
-
-#addLineItemOverlay {
-  /* overlay is hidden before loading */
-  display:none;
-
-  /* standard decorations */
-  width:400px;
-  border:10px solid #666;
-
-  /* for modern browsers use semi-transparent color on the border. nice! */
-  border:10px solid rgba(82, 82, 82, 0.698);
-
-  /* hot CSS3 features for mozilla and webkit-based browsers (rounded borders) */
-  -moz-border-radius:8px;
-  -webkit-border-radius:8px;
-}
-
 /* -------------------------------------------------------------- 
    Jobs Page
 -------------------------------------------------------------- */
@@ -602,20 +579,4 @@ h2.calendar_header button.next { left: 25px; }
 
 .ui-datepicker { 
 	width: 15em !important;
-}
-
-#addEstimateOverlay {
-  /* overlay is hidden before loading */
-  display:none;
-
-  /* standard decorations */
-  width:400px;
-  border:10px solid #666;
-
-  /* for modern browsers use semi-transparent color on the border. nice! */
-  border:10px solid rgba(82, 82, 82, 0.698);
-
-  /* hot CSS3 features for mozilla and webkit-based browsers (rounded borders) */
-  -moz-border-radius:8px;
-  -webkit-border-radius:8px;
 }

@@ -172,7 +172,6 @@ MediaSearch.prototype.initOverlays = function() {
       loadSpeed: 200,
       opacity: 0.8
     },
-    effect: 'apple',
   });
   that.viewMediaOverlay = $("#viewMediaOverlay").overlay({});
 
@@ -182,7 +181,6 @@ MediaSearch.prototype.initOverlays = function() {
       loadSpeed: 200,
       opacity: 0.8
     },
-    effect: 'apple',
   });
   that.editMediaOverlay = $("#editMediaOverlay").overlay({});
 };
