@@ -5,87 +5,87 @@
     .portlet-content
       br
       button#createCustBtn.btn() Create new customer
-      div#createCustOverlay
+      div#createCustOverlay.apple_overlay
         form#createCustForm.form.label-inline()
           h4 Create new customer
-            table
-              tr
-                td
-                  .field
-                    label(for='lname') First name
-                    input#firstName.medium(name='cust[firstName]', size='20', type='text', value='')
-                    br
-                    span #{errors.firstName}
-                td
-                  .field
-                    label(for='lname') Last name
-                    input#lastName.medium(name='cust[lastName]', size='20', type='text', value='')
-                    br
-                    span #{errors.lastName}
-              tr
-                td
-                  .field
-                    label(for='address1') Address 1
-                    input#address1.large(name='cust[address1]', value='', size='20', type='text')
-                    br
-                    span #{errors.address1}
-                td
-                  .field
-                    label(for='address1') Address 2
-                    input#address2.large(name='cust[address2]', value='', size='20', type='text')
-              tr
-                td
-                  .field
-                    label(for='country') Country
-                    input#country.small(name='cust[country]', value='', size='20', type='text')
-                td
-                  .field
-                    label(for='province') Province
-                    input#province.small(name='cust[province]', value='', size='20', type='text')
-              tr
-                td
-                  .field
-                    label(for='city') City
-                    input#city.small(name='cust[city]', value='', size='20', type='text')
-                td
-                  .field
-                    label(for='postal') Postal Code
-                    input#postal.small(name='cust[postal]', value='', size='20', type='text')
-              tr
-                td
-                  .field.phone_field
-                    label(for='tel1a') Telephone 1
-                    input#tel1a.xsmall(name='cust[tel1a]', value='', size='3', maxlength='3', type='text')
-                    | -
-                    input#tel1b.xsmall(name='cust[tel1b]', size='3', value='', maxlength='3', type='text')
-                    | -
-                    input#tel1c.xsmall(name='cust[tel1c]', size='4', value='', maxlength='4', type='text')
-                    br
-                    span #{errors.phone}
-                td
-                  .field.phone_field
-                    label(for='tel2a') Telephone 2
-                    input#tel2a.xsmall(name='cust[tel2a]', value='', size='3', maxlength='3', type='text')
-                    | -
-                    input#tel2b.xsmall(name='cust[tel2b]', size='3', value='', maxlength='3', type='text')
-                    | -
-                    input#tel2c.xsmall(name='cust[tel2c]', size='4', value='', maxlength='4', type='text')
-              tr
-                td
-                  .field
-                    label(for='email') Email
-                    input#email.medium(name='cust[email]', value='', size='20', type='text')
-                    br
-                    span #{errors.email}
-                td
-                  .field
-                    input#phone1(name='cust[phone1]', value='', type='hidden')
-                    input#phone2(name='cust[phone2]', value='', type='hidden')
-              tr
-                td
-                  button#saveCustBtn.btn() Save
-                td
-                  button#cancelCustBtn.btn() Cancel
+          table
+            tr
+              td
+                .field
+                  label(for='lname') First name
+                  input#firstName.medium(name='cust[firstName]', size='20', type='text', value='')
+                  br
+                  span #{errors.firstName}
+              td
+                .field
+                  label(for='lname') Last name
+                  input#lastName.medium(name='cust[lastName]', size='20', type='text', value='')
+                  br
+                  span #{errors.lastName}
+            tr
+              td
+                .field
+                  label(for='address1') Address 1
+                  input#address1.large(name='cust[address1]', value='', size='20', type='text')
+                  br
+                  span #{errors.address1}
+              td
+                .field
+                  label(for='address1') Address 2
+                  input#address2.large(name='cust[address2]', value='', size='20', type='text')
+            tr
+              td
+                .field
+                  label(for='country') Country
+                  input#country.small(name='cust[country]', value='', size='20', type='text')
+              td
+                .field
+                  label(for='province') Province
+                  input#province.small(name='cust[province]', value='', size='20', type='text')
+            tr
+              td
+                .field
+                  label(for='city') City
+                  input#city.small(name='cust[city]', value='', size='20', type='text')
+              td
+                .field
+                  label(for='postal') Postal Code
+                  input#postal.small(name='cust[postal]', value='', size='20', type='text')
+            tr
+              td
+                .field.phone_field
+                  label(for='tel1a') Telephone 1
+                  input#tel1a.xsmall(name='cust[tel1a]', value='', size='3', maxlength='3', type='text')
+                  | -
+                  input#tel1b.xsmall(name='cust[tel1b]', size='3', value='', maxlength='3', type='text')
+                  | -
+                  input#tel1c.xsmall(name='cust[tel1c]', size='4', value='', maxlength='4', type='text')
+                  br
+                  span #{errors.phone}
+              td
+                .field.phone_field
+                  label(for='tel2a') Telephone 2
+                  input#tel2a.xsmall(name='cust[tel2a]', value='', size='3', maxlength='3', type='text')
+                  | -
+                  input#tel2b.xsmall(name='cust[tel2b]', size='3', value='', maxlength='3', type='text')
+                  | -
+                  input#tel2c.xsmall(name='cust[tel2c]', size='4', value='', maxlength='4', type='text')
+            tr
+              td
+                .field
+                  label(for='email') Email
+                  input#email.medium(name='cust[email]', value='', size='20', type='text')
+                  br
+                  span #{errors.email}
+              td
+                .field
+                  input#phone1(name='cust[phone1]', value='', type='hidden')
+                  input#phone2(name='cust[phone2]', value='', type='hidden')
+            tr
+              td
+                button#saveCustBtn.btn() Save
+              td
+                button#cancelCustBtn.btn() Cancel
       br
       br
       input#showArchived(type='checkbox', name='showArchived')

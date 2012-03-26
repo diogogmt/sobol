@@ -39,11 +39,12 @@ CustomerManagement.prototype.createHandlers = function() {
 
 CustomerManagement.prototype.initOverlay = function() {
 	$("#createCustOverlay").overlay({
-    top: 260,
     mask: {
       color: '#fff',
-      loadSpeed: 200
+      loadSpeed: 200,
+      opacity: 0.8
     },
+    effect: 'apple',
     closeOnClick: false,
   });
 };

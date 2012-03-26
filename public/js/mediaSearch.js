@@ -60,9 +60,7 @@ MediaSearch.prototype.bindEditMediaHandler = function() {
     $(item).find(".removeTag").click(function (e) {
       // console.log("remove tag click");
       $(this).parent().remove();
-      console.log("OLD TAGS BEFORE: ", manageEditMedia.oldTags);
       manageEditMedia.oldTags.splice(manageEditMedia.oldTags.indexOf($(this).attr("query")), 1);
-      console.log("OLD TAGS AFTER: ", manageEditMedia.oldTags);
       return false;
     });
     $(".close").click(function (e) {

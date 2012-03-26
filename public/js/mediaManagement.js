@@ -129,9 +129,7 @@ MediaManagement.prototype.bindSelectTagHandler = function() {
     $(item).find(".removeTag").click( function (e) {
       console.log("remove existing tag click");
       $(this).parent().remove();
-      console.log("OLD TAGS BEFORE: ", that.oldTags);
       that.oldTags.splice(that.oldTags.indexOf($(this).attr("query")), 1);
-      console.log("OLD TAGS BEFORE: ", that.oldTags);
       $("#availableTagsTmpl").tmpl({"value": tag.name, "text": tag.name}).appendTo(that.oldTagsSelect);
       return false;
     });
