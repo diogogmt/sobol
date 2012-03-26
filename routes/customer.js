@@ -40,7 +40,7 @@ exports.edit = function (req, res) {
   function customerEditFailed() {
     console.log("edit customer FAIL");
     //req.flash('addError', 'Customer Add failed');
-    res.render('customer/single/custDetails/',
+    res.render('customer/details/custDetails/',
     {
       layout: 'includes/layout',
       title: 'Customer',
@@ -87,8 +87,26 @@ exports.edit = function (req, res) {
 };
 
 exports.details = function (req, res) {
-  //console.log("customer details route");
-  Customer.findOne({ _id : new ObjectId(req.params.id) }, function (err, customer) {
+  console.log("customer details route");
+  var custId = req.params.id || 0
+    , objId = null;
+  console.log("custId: ", custId);
+  if (!custId) {
+    // TODO implement ASSERTIONS. Look at how firefox does ASSERTIONS
+    console.log("custId shouldn be null")
+    // redirect to 404
+    return;
+  }
+  try {
+    objId = new ObjectId(custId);
+  }
+  catch (e) {
+    // TODO implement ASSERTIONS. Look at how firefox does ASSERTIONS
+    console.log("Error creating objectId: ", e);
+    return
+  }
+  // Validate custId before creating ObjectId
+  Customer.findById(new ObjectId(custId), function (err, customer) {
     if(!customer){
       console.log("get specific customer not successful");
     }
@@ -101,7 +119,7 @@ exports.details = function (req, res) {
       }
       req.session.breadcrumb = breadcrumb;
 
-      res.render('customer/single/custDetails',
+      res.render('customer/details/custDetails',
         {
           layout: 'includes/layout',
           title: 'Customer',

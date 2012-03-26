@@ -64,31 +64,22 @@ exports.details = function (req, res) {
 
 // Create new job
 exports.add = function(req, res) {
-  //console.log("add job route");
-
-  var job = new Job(req.body.job);
-  job.customerID = new ObjectId(req.params.id);
-  //console.log("job: %o", job);
-  function jobSaveFailed() {
-    console.log("failed creating job");
-    req.session.breadcrumb = breadcrumb;
-    res.render('customer/custDetails/',
-    {
-      layout: 'includes/layout',
-      title: 'Customer',
-      errors: false,
-      breadcrumb: breadcrumb,
-    });
+  console.log("add job route");
+  var custId = req.params.id || 0;
+  if (!custId) {
+    // TODO implement ASSERTIONS. Look at how firefox does ASSERTIONS
+    console.log("custId shouldn be null")
+    // redirect to 404
+    return;
   }
+  console.log("req.body: ", req.body);
+  var job = new Job(req.body.job);
+  job.customerID = new ObjectId(custId);
+
+  console.log("job: ", job);
 
   job.save(function(err) {
-    if (err) {
-      console.log("err: " + err);
-      return jobSaveFailed();
-    }
-    //console.log("creating job");
-    res.redirect('/customer/' + job.customerID);
-    // req.flash('info', 'Job has been added');
+    err ? res.send({"error": true}) : res.send({"error": false});
   });
 };
 

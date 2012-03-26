@@ -38,53 +38,29 @@ exports.all = function (req, res) {
 
 exports.add = function (req, res) {
   console.log("add note route");
-  var note = new Note(req.body.custnote);
-  var custID = new ObjectId(req.params.id);
-  function estimateAddFailed() {
-    console.log("add note FAIL");
-    res.render('customer/custDetails',
+  var custId = new ObjectId(req.params.id);
+  if (!custId) {
+    // TODO implement ASSERTIONS. Look at how firefox does ASSERTIONS
+    console.log("custId shouldn be null")
+    // redirect to 404
+    return;
+  }
+  var note = new Note(req.body.note);
+  console.log("custId: ", custId);
+  console.log("note: ", note);
+  Customer.update(
+    {"_id": custId},
     {
-      layout: 'includes/layout',
-      title: 'Customer',
-      customer: formCustomer,
-      errors: false
-    });
-  };
-
-  Customer.findOne({ _id : new ObjectId(req.params.id) }, function (err, customer) {
-    if(customer){
-      var noteSet = customer.noteSet;
-      console.log("Pushing Note into Customer NoteSet: ", note);
-      noteSet.push(note);
-      customer.save(function(err) {
-        if(err){
-          console.log("Error saving customer after adding note");
-          return noteAddFailed();
-        }
-        console.log("Adding note SUCCESS");
-        var breadcrumb = {
-          cust : {
-            id : customer._id,
-            name : customer.firstName + " " + customer.lastName
-          }
-        }
-        req.session.breadcrumb = breadcrumb;
-        res.render('customer/custDetails',
-          {
-            layout: 'includes/layout',
-            title: 'Customer',
-            customer: customer,
-            breadcrumb: breadcrumb,
-            errors: false
-          }
-        );
-
-
-      });
-    }else{
-      console.log("finding customer for add note - Not success");
+      $push: {
+        "noteSet": note,
+      }
+    },
+    {upsert:true,safe:true},
+    function (err) {
+      console.log("err: ", err);
+      err ? res.send({"error": true}) : res.send({"error": false});
     }
-  });
+  );
 };
 
 
@@ -128,7 +104,7 @@ exports.delete = function (req, res) {
         }
       }
       req.session.breadcrumb = breadcrumb;
-      res.render('customer/custDetails',
+      res.render('customer/details/custDetails',
         {
           layout: 'includes/layout',
           title: 'Customer',
@@ -188,7 +164,7 @@ exports.edit = function (req, res) {
         }
       }
       req.session.breadcrumb = breadcrumb;
-      res.render('customer/custDetails',
+      res.render('customer/details/custDetails',
         {
           layout: 'includes/layout',
           title: 'Customer',

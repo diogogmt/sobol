@@ -1,10 +1,10 @@
-var CustomerManagement = function (opt) {
+var CustomerList = function (opt) {
 	this.initOverlay();
-	this.loadCustDataTable("Active");
+	this.loadCustDataTable();
 	this.createHandlers();
 };
 
-CustomerManagement.prototype.createHandlers = function() {
+CustomerList.prototype.createHandlers = function() {
 	var that = this;
 	$("#createCustBtn").click(function (e) {
 		$("#createCustOverlay").overlay().load();
@@ -24,11 +24,8 @@ CustomerManagement.prototype.createHandlers = function() {
 	});
 
 	$('#showArchived').click(function() {
-        status = $('#showArchived').is(':checked')
-				        ? "Archived"
-				        : "Active"
-				that.loadCustDataTable(status);
-    });
+		that.loadCustDataTable();
+  });
 
 	$("#customerTable tbody tr").live("click", function() {
       var data = $("#customerTable").dataTable().fnGetData(this);
@@ -37,7 +34,7 @@ CustomerManagement.prototype.createHandlers = function() {
     });
 };
 
-CustomerManagement.prototype.initOverlay = function() {
+CustomerList.prototype.initOverlay = function() {
 	$("#createCustOverlay").overlay({
     top: 260,
     mask: {
@@ -48,7 +45,10 @@ CustomerManagement.prototype.initOverlay = function() {
   });
 };
 
-CustomerManagement.prototype.loadCustDataTable = function(status) {
+CustomerList.prototype.loadCustDataTable = function(status) {
+	status = $('#showArchived').is(':checked')
+         ? "Archived"
+         : "Active"
 	$("#customerTable").dataTable( {
     "bProcessing": true,
     "bDestroy": true,
@@ -61,7 +61,7 @@ CustomerManagement.prototype.loadCustDataTable = function(status) {
   });
 };
 
-CustomerManagement.prototype.createCust = function() {
+CustomerList.prototype.createCust = function() {
 	var that = this;
 	$.ajax({
     url: "/customer/create",
@@ -83,11 +83,11 @@ CustomerManagement.prototype.createCust = function() {
   }); // END ajax
 }
 
-CustomerManagement.prototype.validateCust = function() {
+CustomerList.prototype.validateCust = function() {
 	return true;
 }
 
-CustomerManagement.prototype.getFormData = function() {
+CustomerList.prototype.getFormData = function() {
 	return {
 		"cust": {
 			"firstName": $("#firstName").val(),

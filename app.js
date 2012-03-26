@@ -118,7 +118,7 @@ app.post('/customer/edit', routes.customer.edit);
 
 // Customer Notes
 app.get('/customer/notes/:id', routes.note.all);
-app.post('/customer/note/add/:id', routes.note.add);
+app.post('/customer/:id/notes/add', routes.note.add);
 app.get('/customer/:custid/note/delete/:noteid', routes.note.delete);
 app.post('/customer/:custid/note/edit/', routes.note.edit);
 
@@ -140,7 +140,7 @@ app.get('/jobs', routes.job.all);
 // Single Job
 app.get('/job/:id', routes.job.details);
 
-app.post('/job/add/:id', routes.job.validateJob, routes.job.add);
+app.post('/customer/:id/jobs/add',routes.job.add);
 app.post('/job/:id/edit', routes.job.edit);
 
 

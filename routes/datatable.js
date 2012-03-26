@@ -44,10 +44,13 @@ exports.customers = function (req, res) {
 };
 
 exports.customerJobs = function (req, res) {
-  var custId = req.params.id || null;
+  var custId = req.params.id === "0" || !req.params.id
+             ? null
+             : req.params.id;
+  console.log("custId: ", custId);
   if (!custId) {
     // TODO: create log module
-    log("custId shouldn't be null");
+    console.log("custId shouldn't be null");
   }
   Job.find({ "customerID": custId }, function (err, jobs) {
     var dataSet = new Array()
