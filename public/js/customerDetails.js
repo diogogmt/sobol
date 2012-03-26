@@ -130,7 +130,6 @@ CustomerDetails.prototype.initOverlay = function() {
       loadSpeed: 200,
       opacity: 0.8,
     },
-    effect: 'apple',
     closeOnClick: false,
   });
 
@@ -140,7 +139,6 @@ CustomerDetails.prototype.initOverlay = function() {
       loadSpeed: 200,
       opacity: 0.8,
     },
-    effect: 'apple',
     closeOnClick: false,
   });
 };
