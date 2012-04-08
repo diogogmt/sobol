@@ -1,0 +1,72 @@
+script(id="editEstimateTmpl", type="text/x-jQuery-tmpl")
+
+  table
+    tr
+      td
+        .field
+          label(for='name') Name
+          input#name.medium(name='formEstimate[name]', size='20', type='text', value='#{estimate.name}')
+      td
+        .field
+          label Total Cost
+          #{estimate.finalTotal}
+    tr
+      td
+        .field
+          label Creation Date
+          #{estimate.creationDate}
+      td
+        .field
+          label Status
+          select#status(name="formEstimate[status]")
+            option(value="Active") Active
+            option(value="Selected") Selected
+            option(value="Inactive") Inactive
+          label#estimateStatuslbl #{estimate.status}
+    tr
+      td
+        input#editEstimate.btn(type='submit', value='Update')
+      td
+        input#id(name='formEstimate[id]', value='#{estimate._id}', type='hidden')
+
+
+script(id="addLineItemOverlayTmpl", type="text/x-jQuery-tmpl")
+
+    h4 Add Estimate Line Item
+    form#addLineItemForm.form.label-inline()
+      table
+        tr
+          td
+            .field
+              label(for='name') Name
+              input#lineItemNameTxt.medium(name='lineItem[name]', size='20', type='text', value='')
+          td
+            .field
+              label(for='description') Description
+              input#lineItemDescriptionTxt.medium(name='lineItem[description]', size='20', type='text', value='')
+        tr
+          td
+            .field
+              label(for='quantity') Quantity
+              input#lineItemQuantityTxt.medium(name='lineItem[quantity]', size='20', type='text', value='')
+          td
+            .field
+              label(for='cost') Cost
+              input#lineItemCostTxt.medium(name='lineItem[cost]', size='20', type='text', value='')
+        tr
+          td
+            input#jobID(type="hidden", value="#{jobID}")
+            input#estimateID(type="hidden", value="#{estimate._id}")
+            button#saveLineItemBtn.btn() Save
+          td
+
+script(id="lineItemDataTableOverlayTmpl", type="text/x-jQuery-tmpl")
+
+    thead
+      tr
+        th ID
+        th Name
+        th Description
+        th Quantity
+        th Cost
+    tbody

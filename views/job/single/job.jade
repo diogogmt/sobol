@@ -1,0 +1,16 @@
+include ../../includes/menu.jade
+include job_content.jade
+include ../../includes/footer.jade
+//- include job_templates.jade
+
+script(type="text/javascript", src="/js/jobManagement.js")
+
+script
+  var jobManagement;
+  $(document).ready(function () {
+    jobManagement = new JobManagement({
+      "customerId": '#{job.customerID}',
+      "jobId": '#{job._id}',
+      "dates": '#{dates}',
+    });
+  });

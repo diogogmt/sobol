@@ -1,0 +1,16 @@
+script(id="createUpdateNoteOverlayTmpl", type="text/x-jQuery-tmpl")
+
+  form#createUpdateNoteForm.form.label-inline
+    input#editNoteID.large(name='note[id]', size='20', type='hidden', value='${id}')
+    h4 ${mode} Note
+    table
+    tr
+     td
+       .field
+        label(for='noteText') Note Text
+        textarea#noteContent.large(name='note[text]')
+          ${content}
+    tr
+      td
+        button#saveNoteBtn.btn Save
+        button#cancelNoteBtn.btn Cancel

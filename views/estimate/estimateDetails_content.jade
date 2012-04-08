@@ -1,0 +1,28 @@
+#content.xfluid
+  .portlet.x12
+    .portlet-header
+      h4 Estimate Management
+    .portlet-content
+      div#breadCrumb.breadCrumb.module
+        ul
+          li.first
+            a(href="/customers/")
+          li
+            a(href="/customer/#{breadcrumb.cust.id}")
+              |#{breadcrumb.cust.name}
+          li
+            a(href="/job/#{breadcrumb.job.id}")
+              |#{breadcrumb.job.name}
+          li.last
+            |#{breadcrumb.estimate.name}
+      br
+      br
+
+      form#editEstimateForm.form.label-inline(action='/estimate/edit', method='post')
+
+      br
+
+      button#addLineItemBtn.btn() Add Line Item
+      div#addLineItemOverlay.overlay
+      
+      table#lineItemTable.display(cellpadding='0', cellspacing='0', border='0', rel='datatable')

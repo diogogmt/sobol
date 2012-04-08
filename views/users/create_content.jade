@@ -1,0 +1,29 @@
+#login
+  h1#title
+    a(href='') Slate Admin
+  #login-body.clearfix
+    form#login_form(action='/user/create', method='post')
+      .content_front
+        .pad
+          .field
+            label Username:
+            div
+              span.input
+                input#login_email.text(name='user[username]', value=user.username || '')
+                span #{errors.username}
+          .field
+            label Email:
+            div
+              span.input
+                input#login_email.text(name='user[email]', value=user.email || '')
+                span #{errors.email}
+          .field
+            label Password:
+            div
+              span.input
+                input#login_email.text(name='user[password]', type='password')
+                br
+                span #{errors.password}
+          .field
+            div
+              button.btn(type='submit') Create and Login

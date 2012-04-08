@@ -1,0 +1,179 @@
+#content.xfluid
+  .portlet.x12
+    .portlet-header
+      h4 Customer Management
+    .portlet-content
+      div#breadCrumb.breadCrumb.module
+        ul
+          li.first
+            a(href="/customers/")
+          li.last
+            |#{breadcrumb.cust.name}
+      br
+      br
+      form.form.label-inline(id='editCustForm', action='/customer/edit', method='post')
+        table
+          tr
+            td
+              .field
+                label(for='lname') First name
+                input#firstName.medium(name='cust[firstName]', size='20', type='text', value='#{customer.firstName}')
+                br
+                span #{errors.firstName}
+            td
+              .field
+                label(for='lname') Last name
+                input#lastName.medium(name='cust[lastName]', size='20', type='text', value='#{customer.lastName}')
+                br
+                span #{errors.lastName}
+          tr
+            td
+              .field
+                label(for='address1') Address 1
+                input#address1.large(name='cust[address1]', value='#{customer.address1}', type='text')
+                br
+                span #{errors.address1}
+            td
+              .field
+                label(for='address1') Address 2
+                input#address2.large(name='cust[address2]', value='#{customer.address2}', type='text')
+          tr
+            td
+              .field
+                label(for='country') Country
+                input#country.small(name='cust[country]', value='#{customer.country}', size='20', type='text')
+            td
+              .field
+                label(for='province') Province
+                input#province.small(name='cust[province]', value='#{customer.province}', size='20', type='text')
+          tr
+            td
+              .field
+                label(for='city') City
+                input#city.small(name='cust[city]', value='#{customer.city}', size='20', type='text')
+            td
+              .field
+                label(for='postal') Postal Code
+                input#postal.small(name='cust[postal]', value='#{customer.postal}', size='20', type='text')
+          tr
+            td
+              .field.phone_field
+                label(for='tel1a') Telephone 1
+                input#tel1a.xsmall(name='cust[tel1a]', value='', size='3', maxlength='3', type='text')
+                | -
+                input#tel1b.xsmall(name='cust[tel1b]', size='3', value='', maxlength='3', type='text')
+                | -
+                input#tel1c.xsmall(name='cust[tel1c]', size='4', value='', maxlength='4', type='text')
+                br
+                span #{errors.phone}
+            td
+              .field.phone_field
+                label(for='tel2a') Telephone 2
+                input#tel2a.xsmall(name='cust[tel2a]', value='', size='3', maxlength='3', type='text')
+                | -
+                input#tel2b.xsmall(name='cust[tel2b]', size='3', value='', maxlength='3', type='text')
+                | -
+                input#tel2c.xsmall(name='cust[tel2c]', size='4', value='', maxlength='4', type='text')
+          tr
+            td
+              .field
+                label(for='email') Email
+                input#email.medium(name='cust[email]', value='#{customer.email}', size='20', type='text')
+                br
+                span #{errors.email}
+            td
+              .field
+                input#phone1(name='cust[phone1]', value='', type='hidden')
+                input#phone2(name='cust[phone2]', value='', type='hidden')
+                input#id(name='cust[id]', value='#{customer._id}', type='hidden')
+          tr
+            td
+              .field
+                label Registration Date
+                #{customer.registrationDate}
+            td
+              .field
+                label Status
+                select#custStatus(name="cust[status]")
+                  option(value="Active", selected=('#{customer.status}' == "Active")) Active
+                  option(value="Inactive", selected=('#{customer.status}' == "Inactive")) Inactive
+          tr
+            td
+              input#editCust.btn(type='submit', value='Update')
+            td
+
+
+      div
+        |View
+        br
+        |Jobs
+        input#viewJobs(type="radio", name="viewDataTable", checked="checked")
+        br
+        |Notes
+        input#viewNotes(type="radio", name="viewDataTable")
+
+      br
+
+
+      // create new job overlay
+      div#createJobOverlay.overlay
+        h4 Add Job
+        form#createJobForm.form.label-inline
+          table
+            tr
+              td
+                .field
+                  label(for='name') Job Name
+                  input#jobName.medium(name='job[name]', size='20', type='text')
+                  span #{errors.name}
+            tr
+              td
+                .field
+                  label(for='description') Job Description
+                  input#jobDesc.large(name='job[description]', size='20', type='text')
+                  span #{errors.description}
+            tr
+              td
+                button#saveJobBtn.btn Save
+                button#cancelJobBtn.btn Cancel
+
+      // Create/Update note overlay
+      div#createUpdateNoteOverlay.overlay
+
+      button#createJobBtn.btn Create new Job
+      br
+      button#createNoteBtn.btn Create new Note
+      br
+      // Jobs datatable
+      div#jobList
+        table#jobTable.display(cellpadding='0', cellspacing='0', border='0',
+          rel='datatable')
+          thead
+            tr
+              th ID
+              th Name
+              th Description
+              th Estimates
+              th Created On
+              th Status
+        tbody
+
+      br
+
+
+      // Notes datatable
+      div#notesList(style='display: none;')
+        table#noteTable.display( width = '100%', cellpadding='0', cellspacing='0',
+          border='0', rel='datatable')
+          thead
+            tr
+              th ID
+              th Note
+              th Last Modified On
+        tbody
+
+
+
+
+
+

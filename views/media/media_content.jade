@@ -1,0 +1,62 @@
+#content.xfluid
+  a(name='line')
+  #gallery_wrapper.portlet.x8
+    .portlet-header
+      h4 Image Gallery
+
+    .portlet-content
+      div#tagscope
+        form#magicboxform(name="magicboxform", action="")
+            input#addtagType(name="tagtype", value="tag", type="hidden")
+            input#addFilterInput(name="addFilter", value="Add Filter",
+              type="text")
+            button#searchMediaBtn.btn 
+              |Search
+            button#resetSearchBtn.btn 
+              |Clear Filters
+        div#searchTags.tagList
+      br
+      br
+      ul#mediaList.gallery
+      
+
+  div.portlet.x4
+    div.portlet-header
+      h4 Upload File
+    div.portlet-content
+      form#mediaForm-create.form.label-top
+        div.field
+          label(for='filename') File Name 
+          input#fileName(name='filename', size='30', type='text', value='')
+        div.field
+          label(for='description') Description 
+          input#description(name='description', size='30', type='text', value='')
+        div.field.clearfix
+          label(for='file') File Upload 
+          input#file.file(name="file", style='opacity: 0;', size='35', type='file')
+
+        div.field
+          label(for='tags') Tags 
+          div#tagsList-create.field
+
+        div.field
+          select#selectTags-create
+            option(value="default") Select a tag
+
+        div.field
+          input#tagName-create(name='tagName', size='20',
+            type='text', value='tag 7')
+          button#createTagBtn-create.btn Add Tag
+
+        input#freshTags-create(name='tags', type='hidden', value='')
+
+        div.field
+        .buttonrow
+          button#submitMediaBtn-create.btn Upload File
+
+div#viewMediaOverlay.overlay
+div#editMediaOverlay.overlay
+
+
+
+

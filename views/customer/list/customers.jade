@@ -1,0 +1,11 @@
+include ../../includes/menu.jade
+include customers_content.jade
+include ../../includes/footer.jade
+
+script(type="text/javascript", src="/js/customerList.js")
+
+script(type="text/javascript")
+  var custList;
+  $(document).ready(function() {
+    cust = new CustomerList();
+  });

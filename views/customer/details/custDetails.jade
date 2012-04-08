@@ -1,0 +1,32 @@
+include ../../includes/menu.jade
+include custDetails_content.jade
+include custDetails_template.jade
+include ../../includes/footer.jade
+
+script(type="text/javascript", src="/public/js/customerDetails.js")
+
+script(type="text/javascript")
+  var custDetails;
+  $(document).ready(function (e) {
+    custDetails = new CustomerDetails({
+      "custId": "#{customer.id}",
+    });
+    // Parse the phone number back to split fields
+    var phoneString = '#{customer.phone1}';
+    var phoneArray = phoneString.split("-");
+    $('#tel1a').val(phoneArray[0]);
+    $('#tel1b').val(phoneArray[1]);
+    $('#tel1c').val(phoneArray[2]);
+    phoneString = '#{customer.phone2}';
+    phoneArray = phoneString.split("-");
+    $('#tel2a').val(phoneArray[0]);
+    $('#tel2b').val(phoneArray[1]);
+    $('#tel2c').val(phoneArray[2]);
+    // On edit form submit
+    $('#editCustForm').submit(function() {
+      $('#phone1').val($('#tel1a').val() + '-' + $('#tel1b').val() + '-' + $('#tel1c').val());
+      $('#phone2').val($('#tel2a').val() + '-' + $('#tel2b').val() + '-' + $('#tel2c').val());
+    });
+    $('#custStatus').val('#{customer.status}');
+  });
+

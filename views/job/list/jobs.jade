@@ -1,0 +1,34 @@
+include ../../includes/menu.jade
+#content.xfluid
+  .portlet.x12
+    .portlet-header
+      h4 Job Management
+    .portlet-content
+      br
+      table#jobTable.display(cellpadding='0', cellspacing='0', border='0', rel='datatable')
+        thead
+          tr
+          th ID
+          th Name
+          th Description
+          th Created On
+          th Status
+          th Customer
+        tbody
+
+include ../../includes/footer.jade
+
+
+script(type="text/javascript")
+  $(document).ready(function() {
+
+    var dTable = $("#jobTable").dataTable( {
+      "bProcessing": true,
+      "bDestroy": true,
+      "sAjaxSource": "/datatable/jobsList",
+      "aoColumnDefs": [
+        { "bVisible" : false, "aTargets" : [0] }
+      ],
+      "aaSorting": [[6, "desc"], [1, "asc"]]
+    });
+  });
