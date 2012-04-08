@@ -1,7 +1,7 @@
 {
     "name": "application-name"
-  , "version": "0.0.2"
-  , "gimmesmellStatus": "poop" 
+  , "version": "0.0.3"
+  , "morePoop?": "YES"
   , "private": true
   , "dependencies": {
       "express": "2.5.0"
